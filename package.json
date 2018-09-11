@@ -11,11 +11,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:js": "run-s lint bundle",
     "build:css": "run-s scss autoprefixer",
-    "build:html": "cp src/index.html dist",
+    "build:static": "cp -r src/static/ dist",
     "build": "run-p build:*",
     "watch:js": "onchange src/js/**.js -- npm run build:js",
     "watch:css": "onchange src/scss/**.scss -- npm run build:css",
-    "watch:html": "onchange src/index.html -- npm run build:html",
+    "watch:static": "onchange src/static/** -- npm run build:static",
     "watch": "run-p watch:*",
     "clean": "rm -r dist; mkdir dist"
   },
