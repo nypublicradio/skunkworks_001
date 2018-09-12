@@ -1,8 +1,27 @@
 /*global require */
-let mainTemplate = require("./templates/main.hbs");
-let districtTemplate = require("./templates/district.hbs");
 
-let mainEl = document.querySelector('main');
+document.addEventListener('DOMContentLoaded', function () {
+  const $ = document.querySelector.bind(document);
 
+  function init() {
+    loadAddressEntryView();
+  }
 
-mainEl.innerHTML = mainTemplate({});
+  function loadAddressEntryView() {
+    let mainTemplate = require("./templates/main.hbs");
+    let mainEl = $('main');
+    mainEl.innerHTML = mainTemplate({});
+
+    //setup events
+    document.addEventListener('submit', $('.address-form__form'), () => {
+      loadDistrictDetailView();
+      return false;
+    });
+  }
+
+  function loadDistrictDetailView() {
+
+  }
+
+  init();
+});
