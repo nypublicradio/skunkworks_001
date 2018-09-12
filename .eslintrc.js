@@ -7,6 +7,10 @@ module.exports = {
       "jsx": true
     }
   },
+  "env": {
+    "browser": true,
+    "es6":  true
+  },
   "rules": {
     "semi": 2
   }
