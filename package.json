@@ -23,8 +23,10 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "autoprefixer": "^9.1.5",
     "babel-loader": "^8.0.2",
+    "browser-sync": "^2.24.7",
     "eslint": "^5.5.0",
     "handlebars": "^4.0.12",
     "handlebars-loader": "^1.7.0",
