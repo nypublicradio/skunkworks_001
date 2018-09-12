@@ -1,0 +1,44 @@
+@mixin link-button($button-color) {
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px;
+  background-color: $button-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 340px;
+  margin: 0 auto;
+  transition: 125ms ease opacity;
+
+  &:hover,
+  &:active {
+    border-color: rgba($darkgray, 0.2);
+    color: $gray;
+    opacity: 1;
+  }
+
+  &[disabled] {
+    opacity: 0.15;
+    cursor: not-allowed;
+  }
+
+  .touchevents &:hover {
+    border-color: initial;
+    color: initial;
+  }
+
+  > * {
+    pointer-events: none;
+  }
+}
+
+@mixin separator {
+  &:after {
+    border-bottom: 4px solid #de1e3d;
+    content: '';
+    display: block;
+    margin: 24px auto 32px;
+    width: 70px;
+  }
+}

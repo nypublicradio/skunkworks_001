@@ -1,7 +1,24 @@
-<h1>How Does Your Block Vote?</h1>
-<h2>lorem ipsum...</h2>
-<form class="address-form">
-  <label class="address-form__label">Enter your address</label>
-  <input id="address-form__input" class="address-form__input" place>
-  <button id="address-form__button" class="address-form__button">send</button>
-</form>
+<div class="map__container">
+  <svg class="map__contents">
+    <rect width="100%" height="632" style="fill:rgb(20,20,165);stroke-width:3;stroke:rgb(0,0,0)" />
+  </svg>
+  <div class="map__overlay"></div>
+  <div class="map__foreground">
+    <div class="address-form">
+      <h1 class="address-form__heading">Do your Neighbors Vote?</h1>
+      <p class="subheading address-form__subheading">lorem ipsum...</p>
+      <form class="address-form__form">
+        <label class="address-form__label" for="address-form__input">Enter your address below</label>
+        <input id="address-form__input" class="address-form__input" placeholder="123 Broadway, New York, NY">
+        <button id="address-form__button" class="address-form__button">send</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="need-help">
+  <h2 class="need-help__heading inverse">Need Help Voting?</h2>
+  <p>lorem ipsum...</p>
+  <a class="link-button">Know Your Rights</a>
+  <a class="link-button">Ask A Reporter</a>
+</div>
