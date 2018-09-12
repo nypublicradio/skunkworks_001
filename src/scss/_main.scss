@@ -1,0 +1,57 @@
+@import 'mixins';
+
+.map__container {
+  position: relative;
+  width: 100%;
+  height: 630px;
+  > .map__contents,
+  > .map__overlay,
+  > .map__foreground {
+    position: absolute;
+    width: 100%;
+    height: 630px;
+  }
+  .map__overlay {
+    background: rgba(#333,0.7);
+  }
+  .map__foreground {
+    padding: 10px 17px;
+  }
+}
+
+.address-form {
+  padding-top: 11px;
+  color: #fff;
+  .address-form__heading {
+    font-family: $font-montserrat;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.29;
+    margin-bottom: 8px;
+  }
+  .address-form__subheading {
+    @include separator;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  .address-form__label {
+    margin-bottom: 8px;
+    text-align: center;
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .address-form__input {
+    width: 75%;
+    height: 48px;
+    padding: 12px;
+    background-color: #ffffff;
+    border: solid 2px #dddddd;
+    font-size: 18px;
+    line-height: 1.5;
+    &::placeholder {
+      font-style: italic;
+      color: #dfdfdf;
+    }
+  }
+}

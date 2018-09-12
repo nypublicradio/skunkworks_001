@@ -5,4 +5,4 @@ let districtTemplate = require("./templates/district.hbs");
 let mainEl = document.querySelector('main');
 
 
-mainEl.innerHTML = mainTemplate();
+mainEl.innerHTML = mainTemplate({});

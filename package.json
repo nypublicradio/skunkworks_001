@@ -13,7 +13,7 @@
     "build:css": "run-s scss autoprefixer",
     "build:static": "cp -r src/static/ dist",
     "build": "run-p build:*",
-    "watch:js": "onchange src/js/**.js -- npm run build:js",
+    "watch:js": "onchange src/js/** -- npm run build:js",
     "watch:css": "onchange src/scss/**.scss -- npm run build:css",
     "watch:static": "onchange src/static/** -- npm run build:static",
     "watch": "run-p watch:*",
