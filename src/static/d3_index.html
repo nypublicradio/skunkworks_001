@@ -18,6 +18,7 @@ text {
   font-family: sans-serif;
   font-weight: 500;
   fill: grey;
+  text-transform: uppercase;
 }
 
 </style>
@@ -26,6 +27,7 @@ text {
 <svg></svg>
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="/data/neighb_coords.js"></script>
 <script>
 
 var width = 960,
@@ -39,27 +41,11 @@ var color = d3.scale.linear()
   .clamp(true)
   .range(['#fff', '#409A99']);
 
-var address_coordinates = [-74.0127715, 40.6787399];
+// var address_coordinates = [-74.0127715, 40.6787399];
+var address_coordinates = [-73.999914, 40.726932];
 
 // add a dot at address coordinates
 var clickPoint;
-
-// var red_hook_coordinates = [-74.0118402, 40.6770508];
-
-// to do - font + real coordinates for all neighborhoods
-var neighbs = [
-  {
-    name: 'CARROLL GARDENS',
-    coords: [-74.0008956, 40.6794714]
-  },
-  {
-    name: 'RED HOOK',
-    coords: [-74.0118402, 40.6770508]
-  }
-];
-
-// add neighborhood names based on coordinates, using list
-//  try one (text at coordinate)
 
 var projection = d3.geo.mercator()
   .scale(450000)
@@ -86,15 +72,7 @@ var g = svg.append('g');
 var mapLayer = g.append('g')
   .classed('map-layer', true);
 
-// g.append("text")
-//     .text("RED HOOK")
-//     .attr('x', projection(red_hook_coordinates)[0])
-//     .attr('y', projection(red_hook_coordinates)[1])
-//     .attr("text-anchor","middle")
-//     .attr('font-size','6pt');
-
-
-
+// Label neighborhoods using neighb_coords.js file
 g.selectAll("text")
   .data(neighbs).enter()
     .append('text')
