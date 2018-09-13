@@ -21,6 +21,16 @@ body {
   padding: 0;
 }
 
+button {
+  display: inline-block;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
 h1,
 h2,
 h3,

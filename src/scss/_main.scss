@@ -1,62 +1,139 @@
 @import 'mixins';
 
-.map__container {
-  position: relative;
-  width: 100%;
-  height: 630px;
-  > .map__contents,
-  > .map__overlay,
-  > .map__foreground {
-    position: absolute;
-    width: 100%;
-    height: 630px;
-  }
-  .map__overlay {
-    background: rgba(#333, 0.7);
-  }
-  .map__foreground {
-    padding: 10px 17px;
-  }
+.gothamist-logo {
+  display: block;
+  margin: 80px auto 24px auto;
 }
 
 .address-form {
   padding-top: 11px;
-  color: #fff;
-  .address-form__heading {
-    font-family: $font-montserrat;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 1.29;
-    margin-bottom: 8px;
-  }
-  .address-form__subheading {
-    @include separator;
-    margin-bottom: 30px;
-    text-align: center;
-  }
-  .address-form__label {
-    margin-bottom: 8px;
-    text-align: center;
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-  }
-  .address-form__input {
-    width: 75%;
-    height: 48px;
-    padding: 12px;
-    background-color: #ffffff;
-    border: solid 2px #dddddd;
-    font-size: 18px;
-    line-height: 1.5;
-    &::placeholder {
-      font-style: italic;
-      color: #dfdfdf;
-    }
+}
+
+.address-form__heading {
+  font-family: $font-montserrat;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.29;
+  margin-bottom: 8px;
+}
+.address-form__subheading {
+  margin-bottom: 24px;
+  text-align: center;
+}
+.address-form__form {
+  background-color: $lightgray;
+  margin: 16px;
+  padding: 18px 18px 33px 18px;
+}
+.address-form__label {
+  margin-bottom: 8px;
+  text-align: center;
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+.address-form__input-wrapper {
+  @include one-line-form;
+}
+
+.district-details__eyebrow-link {
+  display: block;
+  margin: 30px auto 24px auto;
+  width: 219px;
+  height: 40px;
+  border: double 4px #333333;
+  font-size: 16px;
+  font-family: Montserrat;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+.district-details h1 {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.33;
+  margin-bottom: 20px;
+}
+
+.nav-tabs {
+  height: 30px;
+  border-bottom: solid 1px #dddddd;
+  margin: 0 25px 32px;
+}
+
+.nav-tabs__list {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  list-style: none;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.nav-tabs__item {
+  height: 30px;
+  padding: 0 8px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.43;
+  border-bottom: solid 2px transparent;
+  &.active {
+    border-bottom: solid 2px #de1e3d;
   }
 }
 
-.link-button {
-  @include link-button($blue);
-  margin-bottom: 12px;
+.district-ranking__scores {
+  justify-content: space-between;
+  display: flex;
+  margin: 0 50px 45px 50px;
 }
+
+.district-ranking__scores > div {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 50px;
+  text-align: left;
+}
+
+.district-ranking__grade {
+  flex-basis: 40px;
+}
+.district-ranking__emoji {
+  flex-basis: 80px;
+}
+.district-ranking__score-text {
+  flex-grow: 1;
+}
+
+.extra-credit {
+  background: $lightgray;
+  padding: 24px 16px;
+}
+
+.extra-credit__list {
+  list-style: none;
+  counter-reset: extra-credit;
+  padding-left: 40px;
+}
+.extra-credit__list-item {
+  counter-increment: extra-credit;
+  display: block;
+  position: relative;
+  margin-bottom: 32px;
+}
+.extra-credit__list-item::before {
+  content: counter(extra-credit) ". ";
+  font-family: Montserrat;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.21;
+  position: absolute;
+  left: -30px;
+}
+

@@ -3,15 +3,31 @@
 document.addEventListener('DOMContentLoaded', function () {
   const $ = document.querySelector.bind(document);
   const geocoder = new google.maps.Geocoder();
+  function insertTemplate(element, templateString) {
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = templateString;
+    element.appendChild(wrapper);
+  }
 
   function init() {
+    let districtMatch = document.location.pathname.match(/(\d{5})\/$/);
+    if (districtMatch && districtMatch[1]) {
+      let district = {
+        id: districtMatch[1],
+        grade: 'A',
+        img: 'a',
+        scoretext: 'Okay'
+      }
+      loadDistrictDetailView(district, false);
+      return;
+    }
     loadAddressEntryView();
   }
 
   function loadAddressEntryView() {
     let mainTemplate = require("./templates/main.hbs");
     let mainEl = $('main');
-    mainEl.innerHTML = mainTemplate({});
+    insertTemplate(mainEl, mainTemplate({}));
 
     //setup events
     $('.address-form__form').addEventListener('submit', e => {
@@ -34,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function getDistrict(lat, lng) {
     return Promise.resolve({
-      id: '20045'
+      id: '23002'
     });
   }
 
@@ -73,8 +89,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function loadDistrictDetailView(district) {
-    window.history.pushState(district, '', `${district.id}/`);
+  function loadDistrictDetailView(district, navigatedHere=true) {
+    if(navigatedHere) {
+      window.history.pushState(district, '', `/${district.id}/`);
+    }
+    let districtTemplate = require("./templates/district-details.hbs");
+    let mainEl = $('main');
+    mainEl.innerHTML = districtTemplate(district);
   }
 
   init();
