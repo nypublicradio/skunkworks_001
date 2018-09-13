@@ -1,4 +1,67 @@
-<h1>District {{district-number}}</h1>
-<h2>#{{district-ranking}} of #{{district-ranking-max}}</h2>
+<div class="district-details">
+<a class="district-details__eyebrow-link">Does Your Block Vote?</a>
+<h1>District #{{id}}</h1>
+{{!-- map here --}}
+<svg class="map"></svg>
+{{!-- map here --}}
+<nav class="nav-tabs">
+  <ul class="nav-tabs__list">
+    <li class="nav-tabs__item active" data-tab="summary">Summary</li>
+    <li class="nav-tabs__item" data-tab="best">Best Block</li>
+    <li class="nav-tabs__item" data-tab="worst">Worst Block</li>
+  </ul>
+</nav>
+<section class="tab-contents active" data-tab="summary">
+  <div class="district-ranking">
+    <div class="district-ranking__scores">
+      <div class="district-ranking__grade">
+        {{grade}}
+      </div>
+      <div class="district-ranking__emoji">
+        <img class="district-ranking__emoji-image" alt="Gothamist."
+src="/i/grade_emoji_{{img}}@2x.png" width=50 height=50
+srcset="/i/grade_emoji_{{img}}.png 1x,
+        /i/grade_emoji_{{img}}@2x.png 2x,
+        /i/grade_emoji_{{img}}@3x.png 3x">
+      </div>
+      <div class="district-ranking__score-text">
+        {{scoretext}}
+      </div>
+    </div>
+    <div class="district-ranking__chart">
+      [=|===|==|====]
+    </div>
+    <p class="district-ranking__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  </div>
+  <div class="district-ranking__sharing">
 
+  </div>
+</section>
+<section class="tab-contents" data-tab="best">
+</section>
+<section class="tab-contents" data-tab="worst">
+</section>
 
+<form class="address-form__form">
+  <label class="address-form__label" for="address-form__input">View A Different Address</label>
+  <div class="address-form__input-wrapper">
+    <input id="address-form__input" class="address-form__input" placeholder="123 Broadway, New York, NY">
+    <button type="submit" id="address-form__button" class="address-form__button"><img class="address-form__button-image" alt="Submit."
+src="/i/arrow_right@2x.png" width=23 height=16
+srcset="/i/arrow_right.png 1x,
+        /i/arrow_right@2x.png 2x,
+        /i/arrow_right@3x.png 3x"></button>
+  </div>
+</form>
+
+<div class="extra-credit">
+  <h2 class="extra-credit__heading">Does Your Block Need Some Extra Credit?</h2>
+  <ol class="extra-credit__list">
+    <li class="extra-credit__list-item">Share your district’s turnout score with your friends - encourage them to look up their own blocks! 
+    <li class="extra-credit__list-item">Print out this customized poster, and hang it up in your window, or distribute it to your neighbors.
+      <a class="button" onclick="javascript:document.print();">Get the Print Out</a>
+    <li class="extra-credit__list-item">Learn about your local races from our Voting Guide, and talk to your neighbors and ask them to vote: studies show that people who publicly commit to voting usually do.
+  </ol>
+</div>
+
+</div>
