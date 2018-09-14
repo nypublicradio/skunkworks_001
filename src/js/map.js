@@ -1,20 +1,24 @@
-/* global d3 */
+/* global d3 neighbs*/
 class Map {
-  constructor() {
+  constructor(width=960, height=500) {
     this.features = [];
+    this.width = width;
+    this.height = height;
+    this.centered = null;
+    this.path = null;
+    this.mapLayer = null;
   }
-  init(lat=-73.999914, lon=40.726932, district) {
+  init(lat=-73.999914, lon=40.726932) {
     return new Promise((resolve, reject) => {
-      var width = 960,
-          height = 500,
-          centered;
+      var width = this.width,
+          height = this.height;
 
       // var address_coordinates = [-74.0127715, 40.6787399];
       // x, y = projection(address_coordinates)
 
       // from turnout_by_district, get color and fill for all districts
       var ed_data;
-      d3.json('../data/turnout_by_district.json', function(error, edData){
+      d3.json('../data/turnout_by_district.json', (error, edData) => {
         ed_data = edData;
       });
 
@@ -44,6 +48,7 @@ class Map {
       if (lat && lon) {
       projection = d3.geoMercator()
         .scale(450000)
+        .center(address_coordinates)
         .translate([width / 2, height / 2]);
       } else {
 
@@ -53,7 +58,7 @@ class Map {
         .translate([width / 2, height / 2]);
       }
 
-      var path = d3.geoPath()
+      this.path = d3.geoPath()
         .projection(projection);
 
       // Set svg width & height
@@ -66,55 +71,52 @@ class Map {
         .attr('class', 'background')
         .attr('width', width)
         .attr('height', height)
-        .on('click', clicked);
+        .on('click', this.clicked.bind(this));
 
-      var g = svg.append('g');
+      var g = this.g = svg.append('g');
 
-      var mapLayer = g.append('g')
+      this.mapLayer = g.append('g')
         .classed('map-layer', true);
 
-
       // Label neighborhoods using neighb_coords.js file
-      g.selectAll("text")
+      this.g.selectAll("text")
         .data(neighbs).enter()
           .append('text')
-          .text(function(d){return d.name})
-          .attr('x', function(d){return projection(d.coords)[0]})
-          .attr('y', function(d){return projection(d.coords)[1]})
+          .text(d => d.name)
+          .attr('x', d => projection(d.coords)[0])
+          .attr('y', d => projection(d.coords)[1])
           .attr("text-anchor","middle")
           .attr('font-size','6pt');
 
       // Load map data
-      var features;
       d3.json('/data/districts.geojson', (error, mapData) => {
-        features = mapData.features;
-        this.features = features;
+        this.features = mapData.features;
 
         // Draw each ed as a path
-        mapLayer.selectAll('path')
-            .data(features)
+        this.mapLayer.selectAll('path')
+            .data(this.features)
           .enter().append('path')
-            .attr('d', path)
+            .attr('d', this.path)
             .attr('vector-effect', 'non-scaling-stroke')
             .style('fill', fillFn)
             // .attr('district', isDistrict)
             .on('mouseover', mouseover)
             .on('mouseout', mouseout)
-            .on('click', clicked);
+            .on('click', this.clicked.bind(this));
 
         // clickPoint = mapLayer.selectAll('circle')
         //   .data([address_coordinates]).enter()
         //   .append('circle')
-        //   .attr('cx', function (d) { return projection(d)[0]; })
-        //   .attr('cy', function (d) { return projection(d)[1]; })
+        //   .attr('cx', d => projection(d)[0])
+        //   .attr('cy', d => projection(d)[1])
         //   .attr('r', '4px')
         //   .attr('fill', 'pink')
         //   .attr('stroke', 'pink')
 
-        var x = projection(address_coordinates)[0];
-        var y = projection(address_coordinates)[1];
+        // var x = projection(address_coordinates)[0];
+        // var y = projection(address_coordinates)[1];
 
-        getDistrict(address_coordinates);
+        this.getDistrict(address_coordinates);
 
         if (error) {
           reject(error);
@@ -123,20 +125,6 @@ class Map {
         }
       });
 
-      function getDistrict(address_coordinates){
-        var return_val = "not found"
-        features.forEach(function (d) {
-          if (d3.geoContains(d, address_coordinates)){
-            console.log(d);
-            return_val = d.properties.elect_dist;
-            // click d
-            clicked(d);
-            d.fillFn
-          }
-        });
-        return return_val;
-      }
-
       // Get ed color
       function fillFn(d){
         var ed = d.properties.elect_dist;
@@ -144,63 +132,73 @@ class Map {
         if (ed_data[ed]){
           hex_color = ed_data[ed].color_option2;
         }
-        return hex_color
+        return hex_color;
       }
 
-
-      // When clicked, zoom in
-      function clicked(d) {
-        var x, y, k;
-        console.log(d && d.properties.elect_dist)
-        district = d && d.properties.elect_dist
-        // Compute centroid of the selected path
-        if (d && centered !== d) {
-          var centroid = path.centroid(d);
-          x = centroid[0];
-          y = centroid[1];
-          k = 4;
-          centered = d;
-        } else {
-          x = width / 2;
-          y = height / 2;
-          k = 1;
-          centered = null;
-        }
-
-        // Highlight the clicked ed
-        mapLayer.selectAll('path')
-          // .style('stroke', function(d){
-          //   return d.properties.elect_dist == district ? '#da6229' : '#fff';
-          // })
-          // .style('stroke-width', function(d){
-          //   return d.properties.elect_dist == district ? '10px' : null;
-          // })
-          .style('fill-opacity', function(d){
-            return d.properties.elect_dist != district ? .5 : null;
-          });
-
-
-        console.log(x,y,k,centered);
-        // Zoom
-        g.transition()
-          .duration(750)
-          .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
-      }
-
-      this.clicked = clicked;
-
-      function mouseover(d){
+      function mouseover(/*d*/){
         // Highlight hovered ed
         // d3.select(this).style('fill', 'orange');
       }
 
-      function mouseout(d){
+      function mouseout(/*d*/){
         // Reset ed color
         // mapLayer.selectAll('path')
         //   .style('fill', function(d){return centered && d===centered ? '#D5708B' : fillFn(d);});
-
       }
     });
+  }
+
+
+  getDistrict(address_coordinates){
+    var return_val = "not found";
+    this.features.forEach((d) => {
+      if (d3.geoContains(d, address_coordinates)){
+        return_val = d.properties.elect_dist;
+        // click d
+        this.clicked(d);
+        d.fillFn;
+      }
+    });
+    return return_val;
+  }
+
+  // When clicked, zoom in
+  clicked(d) {
+    var x, y, k;
+    console.log(d && d.properties.elect_dist);
+    this.district = d && d.properties.elect_dist;
+    // Compute centroid of the selected path
+    if (d && this.centered !== d) {
+      var centroid = this.path.centroid(d);
+      x = centroid[0];
+      y = centroid[1];
+      k = 4;
+      this.centered = d;
+    } else {
+      x = this.width / 2;
+      y = this.height / 2;
+      k = 1;
+      this.centered = null;
+    }
+
+    // Highlight the clicked ed
+    this.mapLayer.selectAll('path')
+      // .style('stroke', function(d){
+      //   return d.properties.elect_dist == district ? '#da6229' : '#fff';
+      // })
+      // .style('stroke-width', function(d){
+      //   return d.properties.elect_dist == district ? '10px' : null;
+      // })
+      .style('fill-opacity', (d) => {
+        return d.properties.elect_dist != this.district ? .5 : null;
+      });
+
+    // Zoom
+    let w = this.width;
+    let h = this.height;
+    this.g.transition()
+      .duration(750)
+      .attr('transform', 'translate(' + w / 2 + ',' + h / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
   }
 
   goToDistrict(district_id){
