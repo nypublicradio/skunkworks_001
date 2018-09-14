@@ -214,6 +214,7 @@ turnout_df_2016['2016_rank'] = range(1, len(turnout_df_2016) + 1)
 turnout_df_2016.rename(columns={'percent': '2016_percent'}, inplace=True)
 turnout_df_2016 = turnout_df_2016[['elect_dist', '2016_rank', '2016_percent']]
 
+
 turnout_df = turnout_df.merge(turnout_df_2016, on='elect_dist', how='left')
 turnout_df[['2016_rank', '2016_percent']] = turnout_df[['2016_rank', '2016_percent']].fillna('Not Available')
 
@@ -227,6 +228,13 @@ with open('../src/static/data/turnout_by_district.json', 'w') as fp:
 
 
 
+
+
+# average turnout per borough
+# max rank for whole city
+# max rank for each borough
+# average percent for each borough
+# max rank for whole city 2016
 
 
 
