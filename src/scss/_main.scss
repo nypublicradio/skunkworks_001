@@ -34,13 +34,37 @@
 }
 .address-form__input-wrapper {
   @include one-line-form;
+  margin-bottom: 12px;
+}
+.address-form__errors {
+  text-align: center;
+  color: $red;
+  font-weight: 600;
+  font-size: 14px;
+}
+.address-form__multiples {
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+.address-form__multiples p {
+  margin-bottom: 12px;
+}
+.address-form__multiples a {
+  color: $blue;
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+  text-decoration: underline;
+  margin-bottom: 16px;
+  cursor: pointer;
 }
 
 .district-details__eyebrow-link {
   display: block;
+  color: $blue;
   margin: 30px auto 24px auto;
   width: 219px;
-  height: 40px;
   border: double 4px #333333;
   font-size: 16px;
   font-family: Montserrat;
@@ -93,6 +117,10 @@
   margin: 0 50px 45px 50px;
 }
 
+.district-ranking__text {
+  margin: 0 16px 40px 16px;
+}
+
 .district-ranking__scores > div {
   font-family: Montserrat;
   font-size: 24px;
@@ -114,6 +142,7 @@
 .extra-credit {
   background: $lightgray;
   padding: 24px 16px;
+  margin-bottom: 40px;
 }
 
 .extra-credit__list {
@@ -137,3 +166,44 @@
   left: -30px;
 }
 
+.email-updates__heading {
+  margin: 0 16px 16px;
+}
+
+.email-updates__description {
+  margin: 0 16px 20px;
+}
+
+
+.email-form__input-wrapper {
+  margin: 0 16px 16px;
+  @include one-line-form;
+}
+
+.sharing__heading  {
+  margin-bottom: 16px;
+}
+.sharing__icons {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 auto 30px auto;
+  max-width: 400px;
+  a {
+    color: black;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}
+
+.footer {
+  background: $lightgray;
+  padding: 16px;
+  font-size: 12px;
+  line-height: 1.67;
+  text-align: center;
+}
+
+.footer__data-credits {
+  margin-bottom: 8px;
+}

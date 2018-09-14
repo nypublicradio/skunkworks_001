@@ -28,21 +28,41 @@ document.addEventListener('DOMContentLoaded', function () {
     let mainTemplate = require("./templates/main.hbs");
     let mainEl = $('main');
     insertTemplate(mainEl, mainTemplate({}));
+    bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+  }
 
-    //setup events
-    $('.address-form__form').addEventListener('submit', e => {
-      $('.address-form__form').classList.add('loading');
+  function bindAddressFormEvents(form, errors, multiples) {
+    $(form).addEventListener('submit', e => {
+      $(form).classList.add('loading');
+      $(errors).innerHTML = '';
+      $(multiples).innerHTML = '';
       e.preventDefault();
       let address = $('.address-form__input').value;
       lookupAddress(address).then(result => {
-        console.log('result! ', result);
         getDistrict(result.lat, result.lng).then(district => {
           loadDistrictDetailView(district);
         });
-        $('.address-form__form').classList.remove('loading');
+        $(form).classList.remove('loading');
       }).catch(error => {
         console.log('error! ', error);
-        $('.address-form__form').classList.remove('loading');
+        if(error.error === 'multiple locations') {
+          let question = document.createElement('p');
+          question.innerText = 'Did you mean...'
+          $(multiples).appendChild(question);
+          error.results.forEach(result => {
+            console.log(result)
+            getDistrict(result.geometry.location.lat(), result.geometry.location.lng())
+            .then(district => {
+              let link = document.createElement('a');
+              link.innerText = result.formatted_address;
+              link.href = `/${district.id}`;
+              $(multiples).appendChild(link);
+            });
+          });
+        } else {
+          $(errors).innerText = 'Invalid Address';
+        }
+        $(form).classList.remove('loading');
       });
       return false;
     });
@@ -58,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const inNYC = ({address_components}) => address_components
       .filter(a => a.types.includes('administrative_area_level_2'))
       .find(n => n.long_name.match(/(Kings|Queens|New York|Richmond|Bronx) County/));
-    console.log('address: ', address);
     return new Promise((resolve, reject) => {
       geocoder.geocode({
         address,
@@ -71,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (status !== 'OK') {
           reject({error: `bad status: ${status}`})
         } else if (results.length > 1) {
-          reject({error: 'mu  bltiple locations', results})
+          reject({error: 'multiple locations', results})
         } else if (!inNYC(results[0])) {
           reject({error: 'out of bounds'})
         } else {
@@ -96,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let districtTemplate = require("./templates/district-details.hbs");
     let mainEl = $('main');
     mainEl.innerHTML = districtTemplate(district);
+    bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
   }
 
   init();
