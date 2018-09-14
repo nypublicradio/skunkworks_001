@@ -46,9 +46,6 @@ def get_count_voted_by_district(filename):
     # df = df[~df['Unit Name'].isin(["Public Counter", "Manually Counted Emergency", "Absentee / Military"])]
     df = df[~df['Unit Name'].isin(["Public Counter"])]
     counts_df = df[['elect_dist', 'tally']].groupby('elect_dist')['tally'].sum().reset_index()
-    print("COUNTS VOTED")
-    print(len(counts_df))
-    print(counts_df.columns)
     return counts_df, list(election_districts)
 
 def convert_registered_csv_to_df(csv_filename):
@@ -84,8 +81,6 @@ def convert_registered_csv_to_df(csv_filename):
         page_df['ELECTION DIST'] = page_df[''] + ' ' + page_df['ELECTION DIST']
         page_dfs.append(page_df)
     df = pd.concat(page_dfs)
-    print("Generated df from csvs")
-    print(csv_filename, len(df))
     return df
 
 def get_count_registered_by_district(dfs, boroughs):
@@ -111,9 +106,6 @@ def get_count_registered_by_district(dfs, boroughs):
         clean_dfs.append(df)
         i += 1
     ed_data = pd.concat(clean_dfs)
-    print("Count registered")
-    print(ed_data.columns)
-    print(len(ed_data))
     return ed_data, list(election_districts)
 
 def get_voter_turnout(year='2016', election_name="presidential"):
@@ -212,6 +204,8 @@ borough_ranking.sort_values('ratio', inplace=True, ascending=False)
 borough_ranking['rank'] = range(1, len(borough_ranking) + 1)
 # citywide average as percent
 borough_ranking['city_wide_avg'] = 100*turnout_df.ratio.mean()
+print("City wide average")
+print(100*turnout_df.ratio.mean())
 
 # 2016 - district, rank, percent
 turnout_df_2016 = get_voter_turnout('2016', 'presidential')
@@ -230,15 +224,6 @@ with open('turnout_by_district.json', 'w') as fp:
     json.dump(turnout_dict_final, fp)
 with open('../src/static/data/turnout_by_district.json', 'w') as fp:
     json.dump(turnout_dict_final, fp)
-
-
-# d3 to do:
-# get rid of dot
-# try mapping colors
-
-
-# could add conditional string - "below" or "above" with comparison to avg
-
 
 
 
