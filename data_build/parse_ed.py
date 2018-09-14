@@ -33,6 +33,7 @@ def get_count_voted_by_district(filename):
     # Combine assembly district and election district (with leading zeros)
     # to get standardized 5 digit election district
     df['elect_dist'] = df['AD'].astype(str) + df['ED'].astype(str).str.zfill(3)
+    election_districts = df.elect_dist.unique()
     # There is a status column 'EDAD Status' that mostly had INPLAY but also has "COMBINED INTO 058/64"
     # let's figure out where to count it
     # For now I'll just sum across district
@@ -48,7 +49,7 @@ def get_count_voted_by_district(filename):
     print("COUNTS VOTED")
     print(len(counts_df))
     print(counts_df.columns)
-    return counts_df
+    return counts_df, list(election_districts)
 
 def convert_registered_csv_to_df(csv_filename):
     """ Converts messy csv files of pages of tables to a useable dataframe
@@ -91,6 +92,7 @@ def get_count_registered_by_district(dfs, boroughs):
     # Parse each df (1 for each county) to get total registered by district
     # and concat into one df
     # Returns number of eligible voters in each district in NYC for given year
+    election_districts = []
     clean_dfs = []
     i = 0
     for df in dfs:
@@ -98,6 +100,7 @@ def get_count_registered_by_district(dfs, boroughs):
         # Get election district from column
         df['elect_dist'] = df['ELECTION DIST'].str.extract('(\d+)')
         df = df[~df.elect_dist.isnull()]
+        election_districts.extend(df.elect_dist.unique())
         df = df[df.STATUS=='Total']
         df = df[['TOTAL', 'elect_dist']]
         df['TOTAL'] = df['TOTAL'].map(lambda x: ''.join([char for char in x if char != ',']))
@@ -111,7 +114,7 @@ def get_count_registered_by_district(dfs, boroughs):
     print("Count registered")
     print(ed_data.columns)
     print(len(ed_data))
-    return ed_data
+    return ed_data, list(election_districts)
 
 def get_voter_turnout(year='2016', election_name="presidential"):
     """ From year yyyy return df of voter turnout
@@ -119,7 +122,7 @@ def get_voter_turnout(year='2016', election_name="presidential"):
     """
     # Get count voted by district as df
     # csv_filename = '2014_csv/BronxED_nov14.csv'
-    voted_count_df = get_count_voted_by_district('data/' + count_votes_file + year)
+    voted_count_df, election_districts_voted = get_count_voted_by_district('data/' + count_votes_file + year)
     voted_count_df['election'] = election_name
     # Get number registered by district as df
     registered_files = ['data/' + year + '_csv/' + fn + year[-2:] + '.csv' for fn in registered_votes_files]
@@ -133,12 +136,19 @@ def get_voter_turnout(year='2016', election_name="presidential"):
         'Richmond': 'Staten Island'
     }
     boroughs = [counties_to_boroughs[county] for county in counties]
-    registered_count_df = get_count_registered_by_district(reg_dfs, boroughs)
+    registered_count_df, election_districts_reg = get_count_registered_by_district(reg_dfs, boroughs)
+
+    all_election_districts = election_districts_voted + election_districts_reg
+    all_election_districts = list(set(all_election_districts))
+    all_election_districts = [str(x)+"\n" for x in all_election_districts]
+    all_election_districts.sort()
+    with open('../src/static/data/election_districts.txt', 'w') as f:
+        f.writelines(all_election_districts)
     # registered_count_df['TOTAL'].sum() = 4927362
     # Compute percent
     turnout_df = registered_count_df.merge(voted_count_df, on='elect_dist', how='outer')
 
-    dead_election_districts = turnout_df[turnout_df.tally==0].elect_dist.unique()
+    # dead_election_districts = turnout_df[turnout_df.tally==0].elect_dist.unique()
     turnout_df = turnout_df[turnout_df.tally > 0]
 
     turnout_df = turnout_df[turnout_df.num_registered > 100]
@@ -218,7 +228,8 @@ turnout_dict = turnout_df.to_dict(orient='records')
 turnout_dict_final = {row['elect_dist']: row for row in turnout_dict}
 with open('turnout_by_district.json', 'w') as fp:
     json.dump(turnout_dict_final, fp)
-
+with open('../src/static/data/turnout_by_district.json', 'w') as fp:
+    json.dump(turnout_dict_final, fp)
 
 
 # d3 to do:
