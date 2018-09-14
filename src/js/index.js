@@ -1,4 +1,5 @@
 /*global require google*/
+import Map from './map';
 
 document.addEventListener('DOMContentLoaded', function () {
   const $ = document.querySelector.bind(document);
@@ -112,10 +113,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if(navigatedHere) {
       window.history.pushState(district, '', `/${district.id}/`);
     }
-    let districtTemplate = require("./templates/district-details.hbs");
+    let mapTemplate = require("./templates/district-details.hbs");
+
+    let districtMapTemplate = require("./templates/district-map.hbs");
+    let districtDetailsTemplate = require("./templates/district-details.hbs");
     let mainEl = $('main');
-    mainEl.innerHTML = districtTemplate(district);
-    bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+    mainEl.innerHTML = districtMapTemplate(district);
+    //bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+    let map = new Map();
+    map.init()
+    .then(_ => map.goToDistrict(district.id));
   }
 
   init();
