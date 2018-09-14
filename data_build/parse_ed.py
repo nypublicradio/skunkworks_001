@@ -1,4 +1,5 @@
 import csv
+import json
 import tempfile
 
 import numpy as np
@@ -86,7 +87,7 @@ def convert_registered_csv_to_df(csv_filename):
     print(csv_filename, len(df))
     return df
 
-def get_count_registered_by_district(dfs, counties):
+def get_count_registered_by_district(dfs, boroughs):
     # Parse each df (1 for each county) to get total registered by district
     # and concat into one df
     # Returns number of eligible voters in each district in NYC for given year
@@ -102,8 +103,8 @@ def get_count_registered_by_district(dfs, counties):
         df['TOTAL'] = df['TOTAL'].map(lambda x: ''.join([char for char in x if char != ',']))
         df['TOTAL'] = pd.to_numeric(df['TOTAL'])
         df.rename(columns={'TOTAL': 'num_registered'}, inplace=True)
-        df['county'] = counties[i]
-        print(counties[i], len(df))
+        df['borough'] = boroughs[i]
+        print(boroughs[i], len(df))
         clean_dfs.append(df)
         i += 1
     ed_data = pd.concat(clean_dfs)
@@ -124,9 +125,15 @@ def get_voter_turnout(year='2016', election_name="presidential"):
     registered_files = ['data/' + year + '_csv/' + fn + year[-2:] + '.csv' for fn in registered_votes_files]
     reg_dfs = [convert_registered_csv_to_df(file) for file in registered_files]
     counties = [fn.split('ED')[0] for fn in registered_votes_files]
-    print(counties)
-    # import ipdb; ipdb.set_trace()
-    registered_count_df = get_count_registered_by_district(reg_dfs, counties)
+    counties_to_boroughs = {
+        'Bronx': 'Bronx',
+        'Kings': 'Brooklyn',
+        'NewYork': 'Manhattan',
+        'Queens': 'Queens',
+        'Richmond': 'Staten Island'
+    }
+    boroughs = [counties_to_boroughs[county] for county in counties]
+    registered_count_df = get_count_registered_by_district(reg_dfs, boroughs)
     # registered_count_df['TOTAL'].sum() = 4927362
     # Compute percent
     turnout_df = registered_count_df.merge(voted_count_df, on='elect_dist', how='outer')
@@ -137,8 +144,8 @@ def get_voter_turnout(year='2016', election_name="presidential"):
     turnout_df = turnout_df[turnout_df.num_registered > 100]
     turnout_df['ratio'] = turnout_df['tally'] / turnout_df['num_registered']
 
-    for county in turnout_df.county.unique():
-        print(county, turnout_df[turnout_df.county==county].tally.sum()/turnout_df[turnout_df.county==county].num_registered.sum())
+    for borough in turnout_df.borough.unique():
+        print(borough, turnout_df[turnout_df.borough==borough].tally.sum()/turnout_df[turnout_df.borough==borough].num_registered.sum())
 
     turnout_df['percent'] = turnout_df['ratio']*100
     turnout_df['percent'] = turnout_df['percent'].round()
@@ -148,16 +155,16 @@ def get_voter_turnout(year='2016', election_name="presidential"):
 
 
 turnout_df = get_voter_turnout('2014', 'gubernatorial')
-# get avg ratio and then
+
+# rank by borough
+turnout_df.sort_values(['borough', 'ratio'], inplace=True, ascending=[True, False])
+turnout_df['rank_by_borough'] = turnout_df.groupby('borough').cumcount() + 1
+
 # get rank
 turnout_df.sort_values('ratio', inplace=True, ascending=False)
 turnout_df['rank'] = range(1, len(turnout_df) + 1)
 
-
-# rank by borough
-
-# ----- add this
-
+# It's important that ratio is sorted in descending order to assign grades
 # compute grades based on a curve
 scale = len(turnout_df)
 curved_grading_system = {
@@ -169,48 +176,57 @@ curved_grading_system = {
     'F': round(.90*scale) - round(.75*scale),
     'F-': scale - round(.90*scale),
 }
+# dark blue - pale yellow : color scheme
+# from http://colorbrewer2.org/?type=sequential&scheme=YlGnBu&n=3#type=sequential&scheme=YlGnBu&n=7
+hex_codes_1 = ['#0c2c84', '#225ea8', '#1d91c0', '#41b6c4', '#7fcdbb', '#c7e9b4', '#ffffcc']
+hex_codes_2 = ['#08589e', '#2b8cbe', '#4eb3d3', '#7bccc4', '#a8ddb5', '#ccebc5', '#f0f9e8']
+
 grades = []
-for grade in ['A+', 'A', 'B', 'C', 'D', 'F', 'F-']:
+colors_option1 = []
+colors_option2 = []
+for i, grade in enumerate(['A+', 'A', 'B', 'C', 'D', 'F', 'F-']):
     grades.extend([grade]*curved_grading_system[grade])
+    colors_option1.extend([hex_codes_1[i]]*curved_grading_system[grade])
+    colors_option2.extend([hex_codes_2[i]]*curved_grading_system[grade])
 turnout_df['grade'] = grades
-
-# add color from letter grade
-
-
+turnout_df['color_option1'] = colors_option1
+turnout_df['color_option2'] = colors_option2
 
 # ranking of borough
 # which borough got the most voters out?
-borough_tally = turnout_df[['tally', 'county']].groupby('county')['tally'].sum().reset_index()
-borough_voters = turnout_df[['county', 'num_registered']].groupby('county')['num_registered'].sum().reset_index()
-borough_ranking = borough_tally.merge(borough_voters, on='county')
+borough_tally = turnout_df[['tally', 'borough']].groupby('borough')['tally'].sum().reset_index()
+borough_voters = turnout_df[['borough', 'num_registered']].groupby('borough')['num_registered'].sum().reset_index()
+borough_ranking = borough_tally.merge(borough_voters, on='borough')
 borough_ranking['ratio'] = borough_ranking['tally']/borough_ranking['num_registered']
 borough_ranking.sort_values('ratio', inplace=True, ascending=False)
 borough_ranking['rank'] = range(1, len(borough_ranking) + 1)
 # citywide average as percent
 borough_ranking['city_wide_avg'] = 100*turnout_df.ratio.mean()
 
-
-# could add conditional string - "below" or "above" with comparison to avg
-
 # 2016 - district, rank, percent
 turnout_df_2016 = get_voter_turnout('2016', 'presidential')
 turnout_df_2016.sort_values('ratio', inplace=True, ascending=False)
-turnout_df_2016['rank'] = range(1, len(turnout_df_2016) + 1)
-turnout_df_2016 = turnout_df_2016[['elect_dist', 'rank', 'percent']]
+turnout_df_2016['2016_rank'] = range(1, len(turnout_df_2016) + 1)
+turnout_df_2016.rename(columns={'percent': '2016_percent'}, inplace=True)
+turnout_df_2016 = turnout_df_2016[['elect_dist', '2016_rank', '2016_percent']]
 
+turnout_df = turnout_df.merge(turnout_df_2016, on='elect_dist', how='left')
+turnout_df[['2016_rank', '2016_percent']] = turnout_df[['2016_rank', '2016_percent']].fillna('Not Available')
 
-# make json file
-# turnout_dict =
+# Make json file
+turnout_dict = turnout_df.to_dict(orient='records')
+turnout_dict_final = {row['elect_dist']: row for row in turnout_dict}
+with open('turnout_by_district.json', 'w') as fp:
+    json.dump(turnout_dict_final, fp)
 
-
-
-import ipdb; ipdb.set_trace()
 
 
 # d3 to do:
 # get rid of dot
 # try mapping colors
 
+
+# could add conditional string - "below" or "above" with comparison to avg
 
 
 
