@@ -1,5 +1,10 @@
 @import 'mixins';
 
+main {
+  max-width: 800px;
+  margin: auto;
+}
+
 .gothamist-logo {
   display: block;
   margin: 80px auto 24px auto;
