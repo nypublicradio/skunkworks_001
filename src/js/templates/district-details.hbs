@@ -1,4 +1,3 @@
-<div class="district-details">
 <section class="tab-contents active" data-tab="summary">
   <div class="district-ranking">
     <div class="district-ranking__scores">
@@ -7,18 +6,14 @@
       </div>
       <div class="district-ranking__emoji">
         <img class="district-ranking__emoji-image" alt="Gothamist."
-src="/i/grade_emoji_{{img}}@2x.png" width=50 height=50
-srcset="/i/grade_emoji_{{img}}.png 1x,
-        /i/grade_emoji_{{img}}@2x.png 2x,
-        /i/grade_emoji_{{img}}@3x.png 3x">
-      </div>
-      <div class="district-ranking__score-text">
-        {{scoretext}}
+src="/i/grade_emoji_{{emoji}}@2x.png" width=80 height=80
+srcset="/i/grade_emoji_{{emoji}}.png 1x,
+        /i/grade_emoji_{{emoji}}@2x.png 2x,
+        /i/grade_emoji_{{emoji}}@3x.png 3x">
       </div>
     </div>
     <p class="district-ranking__text">
-      Based on the 2016 and 2014 elections, your district ranked 50th out of 5681 districts for voting across the city: 78% of registered voters in your district voted, compared to 40% city-wide.  Your district ranked 35th out of 1000 in Brooklyn, where on average 50% of registered voters turned out, and among boughroughs 1st out of 5th for Brooklyn, where an average of 60% of registered voters turned out.
-  </p>
+Based on the last gubernatorial election, your district ranked {{rank}} out of 5681 districts for voting across the city: {{percent}}% of registered voters in your district voted, compared to 23% city-wide.  Your district ranked #{{rank_by_borough}} out of _{{tktk}}_ in {{borough}}, where on average _{{tktk}}_% of registered voters turned out.  In the last presidential election, your district was ranked {{2016_rank}} out of _{{tktk}}_ with {{2016_percent}}% of registered voters casting ballots.</p>
   </div>
   <div class="district-ranking__sharing">
     <h2 class="sharing__heading">Share Your Score</h2>

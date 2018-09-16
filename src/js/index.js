@@ -2,30 +2,33 @@
 import Map from './map';
 
 document.addEventListener('DOMContentLoaded', function () {
+  var currentView;
   const $ = document.querySelector.bind(document);
   const geocoder = new google.maps.Geocoder();
-  function insertTemplate(element, templateString) {
+  function insertTemplate(targetElement, templateString, id='') {
     let wrapper = document.createElement('div');
+    wrapper.id = id;
     wrapper.innerHTML = templateString;
-    element.appendChild(wrapper);
+    if (targetElement.childNodes.length === 0) {
+      targetElement.appendChild(wrapper);
+    } else {
+      targetElement.replaceChild(wrapper, targetElement.firstChild);
+    }
+
   }
 
   function init() {
     let districtMatch = document.location.pathname.match(/(\d{5})\/$/);
     if (districtMatch && districtMatch[1]) {
-      let district = {
-        id: districtMatch[1],
-        grade: 'A',
-        img: 'a',
-        scoretext: 'Okay'
-      }
-      loadDistrictDetailView(district, false);
-      return;
+      return getDistrictData(districtMatch[1])
+      .then(loadDistrictDetailView);
+    } else {
+      loadAddressEntryView();
     }
-    loadAddressEntryView();
   }
 
   function loadAddressEntryView() {
+    let currentView = 'home';
     let mainTemplate = require("./templates/main.hbs");
     let mainEl = $('main');
     insertTemplate(mainEl, mainTemplate({}));
@@ -70,9 +73,41 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function getDistrict(lat, lng) {
-    return Promise.resolve({
-      id: '23002'
+    return findDistrictByCoords(lat, lng)
+      .then(getDistrictData);
+  }
+
+  function findDistrictByCoords(lat, lng) {
+    return new Promise((resolve, reject) => {
+      console.log(lat, lng);
+      d3.json(`${window.location.origin}/data/districts.geojson`, (error, mapData) => {
+        if (error) {
+          reject(error);
+        };
+        let districts = mapData.features.filter(feature => {
+          return d3.geoContains(feature, [lng, lat]);
+        });
+        if (districts.length > 0) {
+          resolve(districts[0].properties["elect_dist"]);
+        } else {
+          reject(error)
+        };
+      })
     });
+  }
+
+  function getDistrictData(electDist) {
+    return new Promise((resolve, reject) => {
+      d3.json(`${window.location.origin}/data/turnout_by_district.json`, (error, edData) => {
+        if (error) {
+          reject(error);
+        } else {
+          let data = edData[electDist];
+          data.emoji = data.grade && data.grade.toLowerCase() || '';
+          resolve(data);
+        }
+      });
+    })
   }
 
   function lookupAddress(address) {
@@ -109,20 +144,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function loadDistrictDetailView(district, navigatedHere=true) {
-    if(navigatedHere) {
-      window.history.pushState(district, '', `/${district.id}/`);
+  function loadDistrictDetails(districtId) {
+    let detailsEl = $('.district-details');
+    let districtDetailsTemplate = require("./templates/district-details.hbs");
+    getDistrictData(districtId).then(district => {
+      $('.election-district').innerText = districtId;
+      insertTemplate(detailsEl, districtDetailsTemplate(district));
+      bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+    });
+  }
+
+  function loadDistrictDetailView(district) {
+    if(currentView === 'home') {
+      window.history.pushState(district, '', `/${district.elect_dist}/`);
     }
+    currentView = 'details';
     let mapTemplate = require("./templates/district-details.hbs");
 
     let districtMapTemplate = require("./templates/district-map.hbs");
-    let districtDetailsTemplate = require("./templates/district-details.hbs");
     let mainEl = $('main');
-    mainEl.innerHTML = districtMapTemplate(district);
-    //bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
-    let map = new Map();
+    insertTemplate(mainEl, districtMapTemplate(district));
+
+    let map = new Map(loadDistrictDetails);
     map.init()
-    .then(_ => map.goToDistrict(district.id));
+    .then(_ => map.goToDistrict(district.elect_dist));
   }
 
   init();
