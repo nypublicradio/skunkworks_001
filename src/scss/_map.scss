@@ -8,6 +8,20 @@
   stroke: #fff;
 }
 
+.selected-map-layer {
+  fill-opacity: 0;
+  stroke: yellow;
+  stroke-width: 1px;
+}
+
+.map {
+  display: block;
+  margin: 0 auto 40px auto;
+  width: 100%;
+  height: 360px;
+  max-width: 800px;
+}
+
 text {
   font-family: sans-serif;
   font-weight: 500;

@@ -1,12 +1,13 @@
 /* global d3 neighbs*/
 class Map {
-  constructor(width=960, height=500) {
+  constructor(changeDistrict) {
     this.features = [];
-    this.width = width;
-    this.height = height;
+    this.width = document.querySelector('svg').clientWidth;
+    this.height = 360;
     this.centered = null;
     this.path = null;
     this.mapLayer = null;
+    this.changeDistrict = changeDistrict;
   }
   init(lat=-73.999914, lon=40.726932) {
     return new Promise((resolve, reject) => {
@@ -14,7 +15,7 @@ class Map {
           height = this.height;
 
       // var address_coordinates = [-74.0127715, 40.6787399];
-      // x, y = projection(address_coordinates)
+      // x, y = this.projection(address_coordinates)
 
       // from turnout_by_district, get color and fill for all districts
       var ed_data;
@@ -44,22 +45,21 @@ class Map {
       // var clickPoint;
 
       var address_coordinates = [lat, lon];
-      var projection;
       if (lat && lon) {
-      projection = d3.geoMercator()
+      this.projection = d3.geoMercator()
         .scale(450000)
         .center(address_coordinates)
         .translate([width / 2, height / 2]);
       } else {
 
-      projection = d3.geoMercator()
+      this.projection = d3.geoMercator()
         .scale(450000)
         .center(address_coordinates)
         .translate([width / 2, height / 2]);
       }
 
       this.path = d3.geoPath()
-        .projection(projection);
+        .projection(this.projection);
 
       // Set svg width & height
       var svg = d3.select('svg')
@@ -78,13 +78,16 @@ class Map {
       this.mapLayer = g.append('g')
         .classed('map-layer', true);
 
+      this.selectedDistrictLayer = g.append('g')
+          .classed('selected-map-layer', true);
+
       // Label neighborhoods using neighb_coords.js file
       this.g.selectAll("text")
         .data(neighbs).enter()
           .append('text')
           .text(d => d.name)
-          .attr('x', d => projection(d.coords)[0])
-          .attr('y', d => projection(d.coords)[1])
+          .attr('x', d => this.projection(d.coords)[0])
+          .attr('y', d => this.projection(d.coords)[1])
           .attr("text-anchor","middle")
           .attr('font-size','6pt');
 
@@ -107,16 +110,16 @@ class Map {
         // clickPoint = mapLayer.selectAll('circle')
         //   .data([address_coordinates]).enter()
         //   .append('circle')
-        //   .attr('cx', d => projection(d)[0])
-        //   .attr('cy', d => projection(d)[1])
+        //   .attr('cx', d => this.projection(d)[0])
+        //   .attr('cy', d => this.projection(d)[1])
         //   .attr('r', '4px')
         //   .attr('fill', 'pink')
         //   .attr('stroke', 'pink')
 
-        // var x = projection(address_coordinates)[0];
-        // var y = projection(address_coordinates)[1];
+        // var x = this.projection(address_coordinates)[0];
+        // var y = this.projection(address_coordinates)[1];
 
-        this.getDistrict(address_coordinates);
+        // this.getDistrict(address_coordinates);
 
         if (error) {
           reject(error);
@@ -167,6 +170,13 @@ class Map {
     var x, y, k;
     console.log(d && d.properties.elect_dist);
     this.district = d && d.properties.elect_dist;
+
+    this.selectedDistrictLayer.selectAll('path')
+      .data([d])
+      .enter().append('path')
+        .attr('d', this.path)
+
+
     // Compute centroid of the selected path
     if (d && this.centered !== d) {
       var centroid = this.path.centroid(d);
@@ -180,18 +190,23 @@ class Map {
       k = 1;
       this.centered = null;
     }
+    if (d && d.properties && d.properties.elect_dist) {
+      this.changeDistrict(d.properties.elect_dist);
+    }
 
     // Highlight the clicked ed
-    this.mapLayer.selectAll('path')
+    // this.mapLayer.selectAll('path')
       // .style('stroke', function(d){
-      //   return d.properties.elect_dist == district ? '#da6229' : '#fff';
+      //   return d.properties.elect_dist == this_district ? '#da6229' : '#fff';
       // })
       // .style('stroke-width', function(d){
-      //   return d.properties.elect_dist == district ? '10px' : null;
+      //   return d.properties.elect_dist == this_district ? '10px' : null;
       // })
-      .style('fill-opacity', (d) => {
-        return d.properties.elect_dist != this.district ? .5 : null;
-      });
+
+      // .style('fill-opacity', (d) => {
+      //   return d.properties.elect_dist != this_district ? .5 : null;
+      // })
+      // ;
 
     // Zoom
     let w = this.width;

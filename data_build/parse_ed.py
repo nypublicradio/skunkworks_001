@@ -166,7 +166,7 @@ turnout_df['rank_by_borough'] = turnout_df.groupby('borough').cumcount() + 1
 turnout_df.sort_values('ratio', inplace=True, ascending=False)
 turnout_df['rank'] = range(1, len(turnout_df) + 1)
 
-# It's important that ratio is sorted in descending order to assign grades
+# It's important that ratio is sorted in descending order (done directly above) to assign grades
 # compute grades based on a curve
 scale = len(turnout_df)
 curved_grading_system = {
@@ -202,25 +202,50 @@ borough_ranking = borough_tally.merge(borough_voters, on='borough')
 borough_ranking['ratio'] = borough_ranking['tally']/borough_ranking['num_registered']
 borough_ranking.sort_values('ratio', inplace=True, ascending=False)
 borough_ranking['rank'] = range(1, len(borough_ranking) + 1)
+
 # citywide average as percent
-borough_ranking['city_wide_avg'] = 100*turnout_df.ratio.mean()
-print("City wide average")
-print(100*turnout_df.ratio.mean())
+avg_percent = turnout_df.percent.mean()
+
+# max rank for whole city
+max_rank_overall = turnout_df['rank'].max()
+
+overall_data = dict()
+boroughs = borough_ranking.borough.unique()
+for borough in boroughs:
+    # max rank for each borough
+    max_rank_borough = turnout_df[turnout_df['borough']==borough]['rank_by_borough'].max()
+    # average percent per borough
+    avg_percent_borough = turnout_df[turnout_df['borough']==borough]['percent'].mean()
+    overall_data[borough] = {
+        'max_rank': str(max_rank_borough),
+        'avg_percent': '%g'%(round(avg_percent_borough, 1))
+    }
 
 # 2016 - district, rank, percent
 turnout_df_2016 = get_voter_turnout('2016', 'presidential')
+# citywide average as percent
+avg_percent_2016 = turnout_df_2016.percent.mean()
 turnout_df_2016.sort_values('ratio', inplace=True, ascending=False)
 turnout_df_2016['2016_rank'] = range(1, len(turnout_df_2016) + 1)
+# max rank for whole city 2016
+max_rank_overall_2016 = turnout_df_2016['2016_rank'].max()
 turnout_df_2016.rename(columns={'percent': '2016_percent'}, inplace=True)
 turnout_df_2016 = turnout_df_2016[['elect_dist', '2016_rank', '2016_percent']]
-
-
+# add columns 2016_rank, 2016_percent to turnout df
 turnout_df = turnout_df.merge(turnout_df_2016, on='elect_dist', how='left')
 turnout_df[['2016_rank', '2016_percent']] = turnout_df[['2016_rank', '2016_percent']].fillna('Not Available')
 
 # Make json file
 turnout_dict = turnout_df.to_dict(orient='records')
 turnout_dict_final = {row['elect_dist']: row for row in turnout_dict}
+# add overall data
+turnout_dict_final['overall_data'] = {
+    'avg_percent_2014': '%g'%(round(avg_percent, 1)),
+    'max_rank_2014': str(max_rank_overall),
+    'avg_percent_2016': '%g'%(round(avg_percent_2016, 1)),
+    'max_rank_2016': str(max_rank_overall_2016),
+    'by_borough_2014': overall_data
+}
 with open('turnout_by_district.json', 'w') as fp:
     json.dump(turnout_dict_final, fp)
 with open('../src/static/data/turnout_by_district.json', 'w') as fp:
@@ -230,11 +255,7 @@ with open('../src/static/data/turnout_by_district.json', 'w') as fp:
 
 
 
-# average turnout per borough
-# max rank for whole city
-# max rank for each borough
-# average percent for each borough
-# max rank for whole city 2016
+
 
 
 

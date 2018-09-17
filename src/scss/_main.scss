@@ -1,5 +1,10 @@
 @import 'mixins';
 
+main {
+  max-width: 800px;
+  margin: auto;
+}
+
 .gothamist-logo {
   display: block;
   margin: 80px auto 24px auto;
@@ -114,30 +119,22 @@
 .district-ranking__scores {
   justify-content: space-between;
   display: flex;
-  margin: 0 50px 45px 50px;
-}
 
-.district-ranking__text {
-  margin: 0 16px 40px 16px;
-}
-
-.district-ranking__scores > div {
-  font-family: Montserrat;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 50px;
-  text-align: left;
+  margin: 0 auto 45px auto;
+  max-width: 200px;
 }
 
 .district-ranking__grade {
-  flex-basis: 40px;
+  font-family: Montserrat;
+  font-size: 45px;
+  font-weight: 600;
+  line-height: 80px;
 }
+
 .district-ranking__emoji {
-  flex-basis: 80px;
+
 }
-.district-ranking__score-text {
-  flex-grow: 1;
-}
+
 
 .extra-credit {
   background: $lightgray;
