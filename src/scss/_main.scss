@@ -177,6 +177,20 @@ main {
   @include one-line-form;
 }
 
+.email-form__optin-checkbox {
+  display: block;
+  padding: 5px 10px 0 0;
+}
+
+.email-form__optin {
+  margin: 20px;
+  display: flex;
+}
+
+.email-form__optin-message {
+  margin: 0;
+}
+
 .sharing__heading  {
   margin-bottom: 16px;
 }
