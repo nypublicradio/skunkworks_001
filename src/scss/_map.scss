@@ -8,6 +8,12 @@
   stroke: #fff;
 }
 
+.selected-map-layer {
+  fill-opacity: 0;
+  stroke: yellow;
+  stroke-width: 1px;
+}
+
 .map {
   display: block;
   margin: 0 auto 40px auto;

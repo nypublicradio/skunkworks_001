@@ -78,6 +78,9 @@ class Map {
       this.mapLayer = g.append('g')
         .classed('map-layer', true);
 
+      this.selectedDistrictLayer = g.append('g')
+          .classed('selected-map-layer', true);
+
       // Label neighborhoods using neighb_coords.js file
       this.g.selectAll("text")
         .data(neighbs).enter()
@@ -116,7 +119,7 @@ class Map {
         // var x = this.projection(address_coordinates)[0];
         // var y = this.projection(address_coordinates)[1];
 
-        this.getDistrict(address_coordinates);
+        // this.getDistrict(address_coordinates);
 
         if (error) {
           reject(error);
@@ -167,6 +170,13 @@ class Map {
     var x, y, k;
     console.log(d && d.properties.elect_dist);
     this.district = d && d.properties.elect_dist;
+
+    this.selectedDistrictLayer.selectAll('path')
+      .data([d])
+      .enter().append('path')
+        .attr('d', this.path)
+
+
     // Compute centroid of the selected path
     if (d && this.centered !== d) {
       var centroid = this.path.centroid(d);
@@ -185,16 +195,18 @@ class Map {
     }
 
     // Highlight the clicked ed
-    this.mapLayer.selectAll('path')
+    // this.mapLayer.selectAll('path')
       // .style('stroke', function(d){
-      //   return d.properties.elect_dist == district ? '#da6229' : '#fff';
+      //   return d.properties.elect_dist == this_district ? '#da6229' : '#fff';
       // })
       // .style('stroke-width', function(d){
-      //   return d.properties.elect_dist == district ? '10px' : null;
+      //   return d.properties.elect_dist == this_district ? '10px' : null;
       // })
-      .style('fill-opacity', (d) => {
-        return d.properties.elect_dist != this.district ? .5 : null;
-      });
+
+      // .style('fill-opacity', (d) => {
+      //   return d.properties.elect_dist != this_district ? .5 : null;
+      // })
+      // ;
 
     // Zoom
     let w = this.width;
