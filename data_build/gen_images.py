@@ -40,14 +40,14 @@ def draw_and_save_img(district, grade, district_percent):
 
     # add map
     map_pic = Image.open(image_dir + 'screenshot.png').convert("RGBA")
-    area = (0, 160, 960, 660)
+    area = (103, 167, 910, 527)
     cropped_img = map_pic.crop(area)
     # resize map image
-    basewidth = 800
+    basewidth = 807
     wpercent = (basewidth/float(cropped_img.size[0]))
     hsize = int((float(cropped_img.size[1])*float(wpercent)))
     cropped_img = cropped_img.resize((basewidth, hsize), Image.ANTIALIAS)
-    background.paste(cropped_img, (670, 230), cropped_img)
+    background.paste(cropped_img, (670, 250), cropped_img)
 
     #Add static text
     my_block_text = Image.open(image_dir + "my_block_text.png").convert("RGBA")
@@ -123,13 +123,11 @@ with open('turnout_by_district.json', 'r') as f:
 districts = [x for x in turnout_data.keys()]
 districts.sort()
 
-# for district in districts:
-for district in districts[:5]:
+for district in districts:
     print(district)
     grade = turnout_data[district]['grade']
     grade = grade.replace("+", "Plus")
     grade = grade.replace("-", "Minus")
-    print(grade)
     district_percent = turnout_data[district]['percent']
 
     save_screenshot(district)
