@@ -8,7 +8,21 @@ from depot.manager import DepotManager
 
 
 """
-Before running - make the following changes to map.js
+This is a script to generate the images used for sharing.
+Images are saved as src/static/<district_number>/share_image.png
+The map view of the district is generated using phantomjs and selenium
+to screenshot a cropped map displayed on the url: http://localhost:3000/<district_number>/ for each district.
+Using data in turnout_by_district.json:
+    The plots are generated using the percent turnout
+    The emoji and grade are chosen from the folder based on the grade
+
+To run this script:
+
+npm install
+npm run build
+npm run watch
+
+Make the following changes to map.js
 
     // .duration(750)                               <-- change duration value
     .duration(0)
@@ -18,10 +32,11 @@ Before running - make the following changes to map.js
       x = centroid[0];
       y = centroid[1];
       // k = 4;                                     <-- change magnification factor
-      k = 2.8;
+      k = 2.2;
+
+python3 gen_images.py
 """
 
-overall_percent = 23.2    # can get this from the json file
 image_dir = './image_generation_parts/'
 
 def save_screenshot(district):
@@ -32,7 +47,7 @@ def save_screenshot(district):
     time.sleep(2)
     driver.save_screenshot('./image_generation_parts/screenshot.png')
 
-def draw_and_save_img(district, grade, district_percent):
+def draw_and_save_img(district, grade, district_percent, overall_percent):
     # Add emoji_image
     background = Image.open(image_dir + "background.png")
     emoji_img = Image.open(image_dir + "Emoji_Grade_Images/-g-All-{}.png".format(grade)).convert("RGBA")
@@ -117,6 +132,7 @@ def draw_and_save_img(district, grade, district_percent):
 
 with open('turnout_by_district.json', 'r') as f:
     turnout_data = json.loads(f.read())
+    overall_percent = float(turnout_data['overall_data']['avg_percent_2014'])
 
 # iterate through all districts
 # for distict in turnout_data:
@@ -131,5 +147,5 @@ for district in districts:
     district_percent = turnout_data[district]['percent']
 
     save_screenshot(district)
-    draw_and_save_img(district, grade, district_percent)
+    draw_and_save_img(district, grade, district_percent, overall_percent)
 

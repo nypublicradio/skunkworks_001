@@ -34,12 +34,10 @@ def get_count_voted_by_district(filename):
     # to get standardized 5 digit election district
     df['elect_dist'] = df['AD'].astype(str) + df['ED'].astype(str).str.zfill(3)
     election_districts = df.elect_dist.unique()
-    # There is a status column 'EDAD Status' that mostly had INPLAY but also has "COMBINED INTO 058/64"
-    # let's figure out where to count it
-    # For now I'll just sum across district
+    # NOTE: There is a status column 'EDAD Status' that mostly had INPLAY but also has "COMBINED INTO 058/64"
+    # We are ignoring this
     df.rename(columns={'Tally': 'tally'}, inplace=True)
     # Clean commas from tally and convert to numeric to sum
-
     df['tally'] = df['tally'].astype(str).map(lambda x: ''.join([char for char in x if char != ',']))
     df['tally'] = pd.to_numeric(df['tally'])
     # Only sum tally for votes where unit name not in public counter, manually counted emergency, absentee/military
@@ -113,10 +111,9 @@ def get_voter_turnout(year='2016', election_name="presidential"):
         include percent voted, grade, rank, #voters, #registered
     """
     # Get count voted by district as df
-    # csv_filename = '2014_csv/BronxED_nov14.csv'
     voted_count_df, election_districts_voted = get_count_voted_by_district('data/' + count_votes_file + year)
     voted_count_df['election'] = election_name
-    # Get number registered by district as df
+    # Get number registered by district as df (csv_filename = '2014_csv/BronxED_nov14.csv')
     registered_files = ['data/' + year + '_csv/' + fn + year[-2:] + '.csv' for fn in registered_votes_files]
     reg_dfs = [convert_registered_csv_to_df(file) for file in registered_files]
     counties = [fn.split('ED')[0] for fn in registered_votes_files]
@@ -129,7 +126,7 @@ def get_voter_turnout(year='2016', election_name="presidential"):
     }
     boroughs = [counties_to_boroughs[county] for county in counties]
     registered_count_df, election_districts_reg = get_count_registered_by_district(reg_dfs, boroughs)
-
+    # combine list of all election districts from both data sources
     all_election_districts = election_districts_voted + election_districts_reg
     all_election_districts = list(set(all_election_districts))
     all_election_districts = [str(x)+"\n" for x in all_election_districts]
@@ -139,18 +136,18 @@ def get_voter_turnout(year='2016', election_name="presidential"):
     # registered_count_df['TOTAL'].sum() = 4927362
     # Compute percent
     turnout_df = registered_count_df.merge(voted_count_df, on='elect_dist', how='outer')
-
-    # dead_election_districts = turnout_df[turnout_df.tally==0].elect_dist.unique()
+    # filter out inactive districts for which data is less reliable
     turnout_df = turnout_df[turnout_df.tally > 0]
-
     turnout_df = turnout_df[turnout_df.num_registered > 100]
     turnout_df['ratio'] = turnout_df['tally'] / turnout_df['num_registered']
-
-    for borough in turnout_df.borough.unique():
-        print(borough, turnout_df[turnout_df.borough==borough].tally.sum()/turnout_df[turnout_df.borough==borough].num_registered.sum())
-
     turnout_df['percent'] = turnout_df['ratio']*100
     turnout_df['percent'] = turnout_df['percent'].round()
+
+    # what percent of the borough overall voted:
+    # for borough in turnout_df.borough.unique():
+    #     number_of_voters_in_borough = turnout_df[turnout_df.borough==borough].tally.sum()
+    #     number_registered_in_borough = turnout_df[turnout_df.borough==borough].num_registered.sum()
+    #     print(borough, number_of_voters_in_borough/number_registered_in_borough)
 
     turnout_df.to_csv('voter_turnout_' + election_name + year)
     return turnout_df
@@ -183,6 +180,7 @@ curved_grading_system = {
 hex_codes_1 = ['#0c2c84', '#225ea8', '#1d91c0', '#41b6c4', '#7fcdbb', '#c7e9b4', '#ffffcc']
 hex_codes_2 = ['#08589e', '#2b8cbe', '#4eb3d3', '#7bccc4', '#a8ddb5', '#ccebc5', '#f0f9e8']
 
+# create columns for grade and color
 grades = []
 colors_option1 = []
 colors_option2 = []
