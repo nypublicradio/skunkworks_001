@@ -14,35 +14,11 @@ class Map {
       var width = this.width,
           height = this.height;
 
-      // var address_coordinates = [-74.0127715, 40.6787399];
-      // x, y = this.projection(address_coordinates)
-
       // from turnout_by_district, get color and fill for all districts
       var ed_data;
       d3.json('../data/turnout_by_district.json', (error, edData) => {
         ed_data = edData;
       });
-
-      // d3.select(this).style('fill', 'orange');
-      // g.selectAll("text")
-      //   .data(neighbs).enter()
-      //
-
-
-      // Given coordinates, get district
-       // x, y = projection(address_coordinates)
-
-
-      // outline district in bold and zoom in
-
-
-      // add zoom buttons (plus, minus)
-      // navigation?
-
-
-
-      // add a dot at address coordinates
-      // var clickPoint;
 
       var address_coordinates = [lat, lon];
       if (lat && lon) {
@@ -102,24 +78,7 @@ class Map {
             .attr('d', this.path)
             .attr('vector-effect', 'non-scaling-stroke')
             .style('fill', fillFn)
-            // .attr('district', isDistrict)
-            .on('mouseover', mouseover)
-            .on('mouseout', mouseout)
             .on('click', this.clicked.bind(this));
-
-        // clickPoint = mapLayer.selectAll('circle')
-        //   .data([address_coordinates]).enter()
-        //   .append('circle')
-        //   .attr('cx', d => this.projection(d)[0])
-        //   .attr('cy', d => this.projection(d)[1])
-        //   .attr('r', '4px')
-        //   .attr('fill', 'pink')
-        //   .attr('stroke', 'pink')
-
-        // var x = this.projection(address_coordinates)[0];
-        // var y = this.projection(address_coordinates)[1];
-
-        // this.getDistrict(address_coordinates);
 
         if (error) {
           reject(error);
@@ -138,44 +97,23 @@ class Map {
         return hex_color;
       }
 
-      function mouseover(/*d*/){
-        // Highlight hovered ed
-        // d3.select(this).style('fill', 'orange');
-      }
-
-      function mouseout(/*d*/){
-        // Reset ed color
-        // mapLayer.selectAll('path')
-        //   .style('fill', function(d){return centered && d===centered ? '#D5708B' : fillFn(d);});
-      }
     });
   }
 
-
-  getDistrict(address_coordinates){
-    var return_val = "not found";
-    this.features.forEach((d) => {
-      if (d3.geoContains(d, address_coordinates)){
-        return_val = d.properties.elect_dist;
-        // click d
-        this.clicked(d);
-        d.fillFn;
-      }
-    });
-    return return_val;
-  }
 
   // When clicked, zoom in
   clicked(d) {
     var x, y, k;
-    console.log(d && d.properties.elect_dist);
-    this.district = d && d.properties.elect_dist;
+    this.district = d && d.properties && d.properties.elect_dist;
 
-    this.selectedDistrictLayer.selectAll('path')
-      .data([d])
-      .enter().append('path')
-        .attr('d', this.path)
-
+    if (this.district) {
+      var thisPath = this.path(d);
+      var selected = this.selectedDistrictLayer.selectAll('path')
+        .data([d])
+        .enter().append('path')
+          .attr('d', thisPath);
+      document.querySelector('.selected-map-layer path').setAttribute('d', thisPath);
+    }
 
     // Compute centroid of the selected path
     if (d && this.centered !== d) {
@@ -193,20 +131,6 @@ class Map {
     if (d && d.properties && d.properties.elect_dist) {
       this.changeDistrict(d.properties.elect_dist);
     }
-
-    // Highlight the clicked ed
-    // this.mapLayer.selectAll('path')
-      // .style('stroke', function(d){
-      //   return d.properties.elect_dist == this_district ? '#da6229' : '#fff';
-      // })
-      // .style('stroke-width', function(d){
-      //   return d.properties.elect_dist == this_district ? '10px' : null;
-      // })
-
-      // .style('fill-opacity', (d) => {
-      //   return d.properties.elect_dist != this_district ? .5 : null;
-      // })
-      // ;
 
     // Zoom
     let w = this.width;
