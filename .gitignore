@@ -6,3 +6,6 @@ npm-debug.log
 package-lock.json
 yarn.lock
 /src/static/[0-9]*/
+ghostdriver.log
+.venv
+screenshot.png

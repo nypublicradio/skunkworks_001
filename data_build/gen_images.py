@@ -136,7 +136,7 @@ with open('turnout_by_district.json', 'r') as f:
 
 # iterate through all districts
 # for distict in turnout_data:
-districts = [x for x in turnout_data.keys()]
+districts = [x for x in turnout_data.keys() if x!= 'overall_data']
 districts.sort()
 
 for district in districts:
