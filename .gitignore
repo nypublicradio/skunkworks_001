@@ -5,3 +5,4 @@ npm-debug.log
 .sass-cache
 package-lock.json
 yarn.lock
+/src/static/[0-9]*/
