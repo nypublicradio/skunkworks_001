@@ -14,7 +14,6 @@ import pandas as pd
 # then opened in excel and saved as csv --
 # if prompted click "save active sheet" (the others are empty)
 
-# for readme - explain folder structure (original excels)
 
 count_votes_file = 'votes_ed_level_'
 registered_votes_files = [
@@ -149,7 +148,6 @@ def get_voter_turnout(year='2016', election_name="presidential"):
     #     number_registered_in_borough = turnout_df[turnout_df.borough==borough].num_registered.sum()
     #     print(borough, number_of_voters_in_borough/number_registered_in_borough)
 
-    turnout_df.to_csv('voter_turnout_' + election_name + year)
     return turnout_df
 
 
@@ -244,7 +242,7 @@ turnout_dict_final['overall_data'] = {
     'max_rank_2016': str(max_rank_overall_2016),
     'by_borough_2014': overall_data
 }
-with open('turnout_by_district.json', 'w') as fp:
+with open('./parsed_data/turnout_by_district.json', 'w') as fp:
     json.dump(turnout_dict_final, fp)
 with open('../src/static/data/turnout_by_district.json', 'w') as fp:
     json.dump(turnout_dict_final, fp)

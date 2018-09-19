@@ -1,5 +1,6 @@
 import json
 import os
+import os.path
 import time
 
 from PIL import Image, ImageDraw, ImageFont
@@ -38,68 +39,58 @@ python3 gen_images.py
 """
 
 image_dir = './image_generation_parts/'
+grey = (223, 223, 223)
+charcoal = (51, 51, 51)
+blue = (30, 102, 202)
 
 def save_screenshot(district):
     depot = DepotManager.get()
     driver = webdriver.PhantomJS()
     driver.set_window_size(1024, 768) # set the window size that you need
     driver.get('http://localhost:3000/{}/'.format(district))
-    time.sleep(2)
+    time.sleep(5)
     driver.save_screenshot('./image_generation_parts/screenshot.png')
 
-def draw_and_save_img(district, grade, district_percent, overall_percent):
-    # Add emoji_image
-    background = Image.open(image_dir + "background.png")
-    emoji_img = Image.open(image_dir + "Emoji_Grade_Images/-g-All-{}.png".format(grade)).convert("RGBA")
-    background.paste(emoji_img, (130, 230), emoji_img)
 
+def save_cropped_map_image(district):
+    save_screenshot(district)
     # add map
     map_pic = Image.open(image_dir + 'screenshot.png').convert("RGBA")
-    area = (103, 167, 910, 527)
+    area = (113, 166, 913, 526)
     cropped_img = map_pic.crop(area)
     # resize map image
-    basewidth = 807
+    basewidth = 800
     wpercent = (basewidth/float(cropped_img.size[0]))
     hsize = int((float(cropped_img.size[1])*float(wpercent)))
     cropped_img = cropped_img.resize((basewidth, hsize), Image.ANTIALIAS)
-    background.paste(cropped_img, (670, 250), cropped_img)
+    cropped_img.save(image_dir + '/ed_map_screenshots/map_{}.png'.format(district))
 
-    #Add static text
-    my_block_text = Image.open(image_dir + "my_block_text.png").convert("RGBA")
-    comparing_text = Image.open(image_dir + "comparing_turnout_text.png").convert("RGBA")
-    background.paste(comparing_text, (100, 730), comparing_text)
-    background.paste(my_block_text, (1350, 755), my_block_text)
 
+def draw_boxplots(district, district_percent, overall_percent, base_image, corner_x, corner_y):
     # Draw box plots
-    draw = ImageDraw.Draw(background)
-
-    grey = (223, 223, 223)
-    charcoal = (51, 51, 51)
-    blue = (30, 102, 202)
+    draw = ImageDraw.Draw(base_image)
 
     box_w, box_h = 800, 70
-    corner_x = 533
-    corner1_y = 760
     color_width1 = 8*district_percent
     line_width = 3
     # First bar (how your district did)
-    draw.rectangle((corner_x, corner1_y, corner_x + box_w, corner1_y + box_h), fill=grey)
-    draw.rectangle((corner_x, corner1_y, corner_x + color_width1, corner1_y + box_h), fill=blue)
+    draw.rectangle((corner_x, corner_y, corner_x + box_w, corner_y + box_h), fill=grey)
+    draw.rectangle((corner_x, corner_y, corner_x + color_width1, corner_y + box_h), fill=blue)
     # draw little line
     draw.rectangle((
         corner_x + color_width1,
-        corner1_y - 35,
+        corner_y - 35,
         corner_x + color_width1 + line_width,
-        corner1_y + box_h
+        corner_y + box_h
     ), fill=charcoal)
     # add percent text
-    draw = ImageDraw.Draw(background)
+    draw = ImageDraw.Draw(base_image)
     font = ImageFont.truetype(image_dir + "OpenSans-Regular.ttf", 24)
     district_percent_text = '%g'%(round(district_percent, 1))
-    draw.text((corner_x + color_width1 -10, corner1_y - 75), "{}%".format(district_percent_text), charcoal, font=font)
+    draw.text((corner_x + color_width1 -10, corner_y - 75), "{}%".format(district_percent_text), charcoal, font=font)
 
     # Second bar
-    corner2_y = corner1_y + box_h + 14
+    corner2_y = corner_y + box_h + 14
     color_width2 = 8 * overall_percent
     draw.rectangle((corner_x, corner2_y, corner_x + box_w, corner2_y + box_h), fill=grey)
     draw.rectangle((corner_x, corner2_y, corner_x + color_width2, corner2_y + box_h), fill=charcoal)
@@ -111,11 +102,33 @@ def draw_and_save_img(district, grade, district_percent, overall_percent):
         corner2_y + box_h + 35
     ), fill=charcoal)
     # add percent text
-    draw = ImageDraw.Draw(background)
+    draw = ImageDraw.Draw(base_image)
     font = ImageFont.truetype(image_dir + "OpenSans-Regular.ttf", 24)
     overall_percent_text = '%g'%(round(overall_percent, 1))
     draw.text((corner_x + color_width2 - 10, corner2_y + 108), "{}%".format(overall_percent_text), charcoal, font=font)
 
+
+def draw_and_save_img(district, grade, district_percent, overall_percent):
+    # Add emoji_image
+    background = Image.open(image_dir + "background.png")
+    emoji_img = Image.open(image_dir + "Emoji_Grade_Images/-g-All-{}.png".format(grade)).convert("RGBA")
+    background.paste(emoji_img, (130, 230), emoji_img)
+
+    # get map image and add to background
+    map_pic = Image.open(image_dir + '/ed_map_screenshots/map_{}.png'.format(district))
+    background.paste(map_pic, (670, 250), map_pic)
+
+    #Add static text
+    my_district_text = Image.open(image_dir + "my_district_text.png").convert("RGBA")
+    comparing_text = Image.open(image_dir + "comparing_turnout_text.png").convert("RGBA")
+    background.paste(comparing_text, (100, 730), comparing_text)
+    background.paste(my_district_text, (1345, 763), my_district_text)
+
+    corner_x = 533
+    corner_y = 760
+    draw_boxplots(district, district_percent, overall_percent, background, corner_x, corner_y)
+
+    draw = ImageDraw.Draw(background)
     # draw divider line
     draw.rectangle((
         102,
@@ -135,17 +148,40 @@ with open('turnout_by_district.json', 'r') as f:
     overall_percent = float(turnout_data['overall_data']['avg_percent_2014'])
 
 # iterate through all districts
-# for distict in turnout_data:
+# for district in turnout_data:
 districts = [x for x in turnout_data.keys() if x!= 'overall_data']
 districts.sort()
 
-for district in districts:
-    print(district)
-    grade = turnout_data[district]['grade']
-    grade = grade.replace("+", "Plus")
-    grade = grade.replace("-", "Minus")
-    district_percent = turnout_data[district]['percent']
 
-    save_screenshot(district)
-    draw_and_save_img(district, grade, district_percent, overall_percent)
+for district in districts:
+    district_percent = turnout_data[district]['percent']
+    directory = '../src/static/{}'.format(district)
+
+    # Generate map screenshots to be used in share images
+    # It is a good idea to visually QA the image icons and make sure they images look good
+    # before adding map screenshots to share images
+    if not os.path.isfile(image_dir + '/ed_map_screenshots/map_{}.png'.format(district)):
+        save_cropped_map_image(district)
+
+    # Generate box plots
+    # Saved as a separate file for use on district url and in share image
+    # if not os.path.isfile(directory + '/{}_plots.png'.format(district)):
+    #     background = Image.open(image_dir + "background.png")
+    #     chart_background = background.resize((844, 310))
+    #     # save boxplots image
+    #     draw_boxplots(district, district_percent, overall_percent, chart_background, 21, 77)
+
+    #     if not os.path.exists(directory):
+    #         os.makedirs(directory)
+    #     chart_background.save(directory + '/{}_plots.png'.format(district))
+    #     print(district, "saved plots")
+
+    # if not os.path.isfile('../src/static/{}/share_image.png'.format(district)):
+    #     print(district, "adding share image")
+    #     grade = turnout_data[district]['grade']
+    #     grade = grade.replace("+", "Plus")
+    #     grade = grade.replace("-", "Minus")
+
+    #     save_screenshot(district)
+    #     draw_and_save_img(district, grade, district_percent, overall_percent)
 
