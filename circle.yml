@@ -63,11 +63,13 @@ jobs:
   deploy-demo:
     environment:
       AWS_BUCKET: gothamist-project-demo
+      ENV: DEMO
     <<: *deploy_static
 
   deploy-prod:
     environment:
       AWS_BUCKET: gothamist-project-prod
+      ENV: PROD
     <<: *deploy_static
 
 workflows:
