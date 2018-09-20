@@ -35,8 +35,12 @@ deploy_static: &deploy_static
         command: |
           npm run build
           export PATH=~/.local/bin:$PATH
+          env | sed -n "s/^${ENV}_//p" > .env
+          export $(<.env)
+
           aws s3 sync ./dist/ s3://$AWS_BUCKET/$AWS_S3_KEY --acl public-read --cache-control max-age=3600
           aws s3 cp ./dist/index.html s3://$AWS_BUCKET/$AWS_S3_KEY/index.html --acl public-read --cache-control max-age=0
+          aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT --paths "/*"
 
 version: 2
 
