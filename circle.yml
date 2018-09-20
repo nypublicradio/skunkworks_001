@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: circle/node:10
+    - image: circleci/node:10
 
 node_key: &node_key
   key: node-{{ checksum "package.json" }}
