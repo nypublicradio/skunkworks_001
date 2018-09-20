@@ -15,7 +15,12 @@ srcset="{{assetPath}}i/grade_emoji_{{emoji}}.png 1x,
     <p class="district-ranking__text">
 Based on the last gubernatorial election, your district <b>ranked {{rank}} out of 5681 districts</b> for voting across the city: <b>{{percent}}% of registered voters in your district voted, compared to 23% city-wide.</b></p>
 
-<p class="district-ranking__text">Your district ranked #{{rank_by_borough}} out of _{{tktk}}_ in {{borough}}, where on average _{{tktk}}_% of registered voters turned out.  In the last presidential election, your district was ranked {{2016_rank}} out of _{{tktk}}_ with {{2016_percent}}% of registered voters casting ballots.</p>
+<p class="district-ranking__text">Your district ranked #{{rank_by_borough}} out
+  of {{borough_data_2014.max_rank}} in {{borough}}, where on average
+  {{borough_data_2014.avg_percent}}% of registered voters turned out.  In the last presidential
+  election, your district was ranked {{2016_rank}} out of
+  {{borough_data_2016.max_rank}} with {{2016_percent}}% of registered voters
+  casting ballots.</p>
   </div>
   <div class="district-ranking__sharing">
     <h2 class="sharing__heading">Share Your Score</h2>
