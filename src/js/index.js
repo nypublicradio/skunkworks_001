@@ -33,7 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
     currentView = 'home';
     let mainTemplate = require("./templates/main.hbs");
     let mainEl = $('main');
-    insertTemplate(mainEl, mainTemplate({}));
+    insertTemplate(mainEl, mainTemplate({
+      assetPath: ASSET_PATH,
+    }));
     bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
   }
 
@@ -155,7 +157,10 @@ document.addEventListener('DOMContentLoaded', function () {
         window.history.pushState(district, '', `${window.location.origin}/${district.elect_dist}/`);
       }
       $('.election-district').innerText = districtId;
-      insertTemplate(detailsEl, districtDetailsTemplate(district));
+      insertTemplate(detailsEl, districtDetailsTemplate({
+        ...district,
+        assetPath: ASSET_PATH,
+      }));
       bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
     });
   }
@@ -166,7 +171,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let districtMapTemplate = require("./templates/district-map.hbs");
     let mainEl = $('main');
-    insertTemplate(mainEl, districtMapTemplate(district));
+    insertTemplate(mainEl, districtMapTemplate({
+      ...district,
+      assetPath: ASSET_PATH,
+    }));
 
     let map = new Map(loadDistrictDetails);
     map.init()
