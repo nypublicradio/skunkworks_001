@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
           resolve(districts[0].properties["elect_dist"]);
         } else {
           reject(error)
-        };
+        }
       })
     });
   }
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
           resolve(data);
         }
       });
-    })
+    });
   }
 
   function lookupAddress(address) {
@@ -129,11 +129,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (results.length === 0) {
           reject({error: 'no results'});
         } else if (status !== 'OK') {
-          reject({error: `bad status: ${status}`})
+          reject({error: `bad status: ${status}`});
         } else if (results.length > 1) {
-          reject({error: 'multiple locations', results})
+          reject({error: 'multiple locations', results});
         } else if (!inNYC(results[0])) {
-          reject({error: 'out of bounds'})
+          reject({error: 'out of bounds'});
         } else {
           let [{
             formatted_address: formattedAddress,
@@ -141,11 +141,11 @@ document.addEventListener('DOMContentLoaded', function () {
           }] = results;
 
           resolve({
+            ...latlng.toJSON(),
             formattedAddress,
-            ...latlng.toJSON()
           });
         }
-      })
+      });
     });
   }
 
@@ -167,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function loadDistrictDetailView(district) {
     currentView = 'details';
-    let mapTemplate = require("./templates/district-details.hbs");
 
     let districtMapTemplate = require("./templates/district-map.hbs");
     let mainEl = $('main');
@@ -178,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let map = new Map(loadDistrictDetails);
     map.init()
-    .then(_ => map.goToDistrict(district.elect_dist));
+    .then(() => map.goToDistrict(district.elect_dist));
   }
 
   init();
