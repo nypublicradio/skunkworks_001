@@ -1,5 +1,6 @@
 /* eslint-env node */
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: ['@babel/polyfill', './src/js/index.js'],
@@ -20,10 +21,13 @@ module.exports = {
       {
         test: /\.hbs$/,
         loader: "handlebars-loader"
-      }
+      },
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'src/static/index.html'),
+      AWS_S3_KEY: process.env.AWS_S3_KEY || '',
+    }),
+  ],
 };
-
-
-
