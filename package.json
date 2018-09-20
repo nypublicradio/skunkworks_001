@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "repo": "https://github.com/nypublicradio/skunkworks_001",
   "scripts": {
     "autoprefixer": "postcss -u autoprefixer -r dist/css/*",
     "bundle": "webpack --config webpack.config.js --mode development",
