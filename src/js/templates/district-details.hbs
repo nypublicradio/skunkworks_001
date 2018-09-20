@@ -12,6 +12,15 @@ srcset="{{assetPath}}i/grade_emoji_{{emoji}}.png 1x,
         {{assetPath}}i/grade_emoji_{{emoji}}@3x.png 3x">
       </div>
     </div>
+    <div class="district-ranking__context-container">
+      <div class="district-ranking__context-image-container">
+        <img class="district-ranking__context-img" alt="Vote rank graph for election district #{{id}}" src="{{id}}_plots.png" />
+      </div>
+      <div class="district-ranking__context-text">
+        <p>My District</p>
+        <p>Citywide</p>
+      </div>
+    </div>
     <p class="district-ranking__text">
 Based on the last gubernatorial election, your district <b>ranked {{rank}} out of 5681 districts</b> for voting across the city: <b>{{percent}}% of registered voters in your district voted, compared to 23% city-wide.</b></p>
 
