@@ -16,7 +16,7 @@ class Map {
 
       // from turnout_by_district, get color and fill for all districts
       var ed_data;
-      d3.json(`${window.location.origin}${ASSET_PATH}/data/turnout_by_district.json`, (error, edData) => {
+      d3.json(`${window.location.origin}${ASSET_PATH}data/turnout_by_district.json`, (error, edData) => {
         ed_data = edData;
       });
 
@@ -68,7 +68,7 @@ class Map {
           .attr('font-size','6pt');
 
       // Load map data
-      d3.json(`${window.location.origin}${ASSET_PATH}/data/districts.geojson`, (error, mapData) => {
+      d3.json(`${window.location.origin}${ASSET_PATH}data/districts.geojson`, (error, mapData) => {
         this.features = mapData.features;
 
         // Draw each ed as a path

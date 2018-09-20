@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       loadAddressEntryView();
     }
-    d3.json(`${window.location.origin}${ASSET_PATH}/data/districts.geojson`);
-    d3.json(`${window.location.origin}${ASSET_PATH}/data/turnout_by_district.json`);
+    d3.json(`${window.location.origin}${ASSET_PATH}data/districts.geojson`);
+    d3.json(`${window.location.origin}${ASSET_PATH}data/turnout_by_district.json`);
   }
 
   function loadAddressEntryView() {
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function findDistrictByCoords(lat, lng) {
     return new Promise((resolve, reject) => {
       console.log(lat, lng);
-      d3.json(`${window.location.origin}${ASSET_PATH}/data/districts.geojson`, (error, mapData) => {
+      d3.json(`${window.location.origin}${ASSET_PATH}data/districts.geojson`, (error, mapData) => {
         if (error) {
           reject(error);
         };
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function getDistrictData(electDist) {
     return new Promise((resolve, reject) => {
-      d3.json(`${window.location.origin}${ASSET_PATH}/data/turnout_by_district.json`, (error, edData) => {
+      d3.json(`${window.location.origin}${ASSET_PATH}data/turnout_by_district.json`, (error, edData) => {
         if (error) {
           reject(error);
         } else {
