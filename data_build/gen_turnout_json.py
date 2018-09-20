@@ -26,7 +26,7 @@ registered_votes_files = [
 
 def get_count_voted_by_district(filename):
     """ Parse csvs from http://vote.nyc.ny.us/html/results/2014.shtml
-        Sum tally per district
+        Sum votes per district
     """
     df = pd.read_csv(filename)
     # Combine assembly district and election district (with leading zeros)
@@ -35,14 +35,14 @@ def get_count_voted_by_district(filename):
     election_districts = df.elect_dist.unique()
     # NOTE: There is a status column 'EDAD Status' that mostly had INPLAY but also has "COMBINED INTO 058/64"
     # We are ignoring this
-    df.rename(columns={'Tally': 'tally'}, inplace=True)
-    # Clean commas from tally and convert to numeric to sum
-    df['tally'] = df['tally'].astype(str).map(lambda x: ''.join([char for char in x if char != ',']))
-    df['tally'] = pd.to_numeric(df['tally'])
-    # Only sum tally for votes where unit name not in public counter, manually counted emergency, absentee/military
+    df.rename(columns={'Tally': 'votes'}, inplace=True)
+    # Clean commas from votes and convert to numeric to sum
+    df['votes'] = df['votes'].astype(str).map(lambda x: ''.join([char for char in x if char != ',']))
+    df['votes'] = pd.to_numeric(df['votes'])
+    # Only sum votes for votes where unit name not in public counter, manually counted emergency, absentee/military
     # df = df[~df['Unit Name'].isin(["Public Counter", "Manually Counted Emergency", "Absentee / Military"])]
     df = df[~df['Unit Name'].isin(["Public Counter"])]
-    counts_df = df[['elect_dist', 'tally']].groupby('elect_dist')['tally'].sum().reset_index()
+    counts_df = df[['elect_dist', 'votes']].groupby('elect_dist')['votes'].sum().reset_index()
     return counts_df, list(election_districts)
 
 def convert_registered_csv_to_df(csv_filename):
@@ -97,7 +97,8 @@ def get_count_registered_by_district(dfs, boroughs):
         df = df[['TOTAL', 'elect_dist']]
         df['TOTAL'] = df['TOTAL'].map(lambda x: ''.join([char for char in x if char != ',']))
         df['TOTAL'] = pd.to_numeric(df['TOTAL'])
-        df.rename(columns={'TOTAL': 'num_registered'}, inplace=True)
+        df.rename(columns={'TOTAL': 'voters'}, inplace=True)
+        df['voters'] = df['voters'].astype(int)
         df['borough'] = boroughs[i]
         print(boroughs[i], len(df))
         clean_dfs.append(df)
@@ -105,13 +106,12 @@ def get_count_registered_by_district(dfs, boroughs):
     ed_data = pd.concat(clean_dfs)
     return ed_data, list(election_districts)
 
-def get_voter_turnout(year='2016', election_name="presidential"):
+def get_voter_turnout(year='2016'):
     """ From year yyyy return df of voter turnout
         include percent voted, grade, rank, #voters, #registered
     """
     # Get count voted by district as df
     voted_count_df, election_districts_voted = get_count_voted_by_district('data/' + count_votes_file + year)
-    voted_count_df['election'] = election_name
     # Get number registered by district as df (csv_filename = '2014_csv/BronxED_nov14.csv')
     registered_files = ['data/' + year + '_csv/' + fn + year[-2:] + '.csv' for fn in registered_votes_files]
     reg_dfs = [convert_registered_csv_to_df(file) for file in registered_files]
@@ -136,29 +136,28 @@ def get_voter_turnout(year='2016', election_name="presidential"):
     # Compute percent
     turnout_df = registered_count_df.merge(voted_count_df, on='elect_dist', how='outer')
     # filter out inactive districts for which data is less reliable
-    turnout_df = turnout_df[turnout_df.tally > 0]
-    turnout_df = turnout_df[turnout_df.num_registered > 100]
-    turnout_df['ratio'] = turnout_df['tally'] / turnout_df['num_registered']
-    turnout_df['percent'] = turnout_df['ratio']*100
-    turnout_df['percent'] = turnout_df['percent'].round()
-
+    turnout_df = turnout_df[turnout_df.votes > 0]
+    turnout_df = turnout_df[turnout_df.voters > 100]
+    turnout_df['percent'] = 100*(turnout_df['votes'] / turnout_df['voters'])
+    turnout_df['percent'] = turnout_df['percent'].round(1)
+    turnout_df['voters'] = turnout_df['voters'].astype(int)
     # what percent of the borough overall voted:
     # for borough in turnout_df.borough.unique():
-    #     number_of_voters_in_borough = turnout_df[turnout_df.borough==borough].tally.sum()
-    #     number_registered_in_borough = turnout_df[turnout_df.borough==borough].num_registered.sum()
+    #     number_of_voters_in_borough = turnout_df[turnout_df.borough==borough].votes.sum()
+    #     number_registered_in_borough = turnout_df[turnout_df.borough==borough].voters.sum()
     #     print(borough, number_of_voters_in_borough/number_registered_in_borough)
 
     return turnout_df
 
 
-turnout_df = get_voter_turnout('2014', 'gubernatorial')
+turnout_df = get_voter_turnout('2014')
 
 # rank by borough
-turnout_df.sort_values(['borough', 'ratio'], inplace=True, ascending=[True, False])
-turnout_df['rank_by_borough'] = turnout_df.groupby('borough').cumcount() + 1
+turnout_df.sort_values(['borough', 'percent'], inplace=True, ascending=[True, False])
+turnout_df['boro_rank'] = turnout_df.groupby('borough').cumcount() + 1
 
 # get rank
-turnout_df.sort_values('ratio', inplace=True, ascending=False)
+turnout_df.sort_values('percent', inplace=True, ascending=False)
 turnout_df['rank'] = range(1, len(turnout_df) + 1)
 
 # It's important that ratio is sorted in descending order (done directly above) to assign grades
@@ -180,22 +179,19 @@ hex_codes_2 = ['#08589e', '#2b8cbe', '#4eb3d3', '#7bccc4', '#a8ddb5', '#ccebc5',
 
 # create columns for grade and color
 grades = []
-colors_option1 = []
-colors_option2 = []
+color = []
 for i, grade in enumerate(['A+', 'A', 'B', 'C', 'D', 'F', 'F-']):
     grades.extend([grade]*curved_grading_system[grade])
-    colors_option1.extend([hex_codes_1[i]]*curved_grading_system[grade])
-    colors_option2.extend([hex_codes_2[i]]*curved_grading_system[grade])
+    color.extend([hex_codes_2[i]]*curved_grading_system[grade])
 turnout_df['grade'] = grades
-turnout_df['color_option1'] = colors_option1
-turnout_df['color_option2'] = colors_option2
+turnout_df['color'] = color
 
 # ranking of borough
 # which borough got the most voters out?
-borough_tally = turnout_df[['tally', 'borough']].groupby('borough')['tally'].sum().reset_index()
-borough_voters = turnout_df[['borough', 'num_registered']].groupby('borough')['num_registered'].sum().reset_index()
-borough_ranking = borough_tally.merge(borough_voters, on='borough')
-borough_ranking['ratio'] = borough_ranking['tally']/borough_ranking['num_registered']
+borough_votes = turnout_df[['votes', 'borough']].groupby('borough')['votes'].sum().reset_index()
+borough_voters = turnout_df[['borough', 'voters']].groupby('borough')['voters'].sum().reset_index()
+borough_ranking = borough_votes.merge(borough_voters, on='borough')
+borough_ranking['ratio'] = borough_ranking['votes']/borough_ranking['voters']
 borough_ranking.sort_values('ratio', inplace=True, ascending=False)
 borough_ranking['rank'] = range(1, len(borough_ranking) + 1)
 
@@ -209,7 +205,7 @@ overall_data = dict()
 boroughs = borough_ranking.borough.unique()
 for borough in boroughs:
     # max rank for each borough
-    max_rank_borough = turnout_df[turnout_df['borough']==borough]['rank_by_borough'].max()
+    max_rank_borough = turnout_df[turnout_df['borough']==borough]['boro_rank'].max()
     # average percent per borough
     avg_percent_borough = turnout_df[turnout_df['borough']==borough]['percent'].mean()
     overall_data[borough] = {
@@ -218,18 +214,19 @@ for borough in boroughs:
     }
 
 # 2016 - district, rank, percent
-turnout_df_2016 = get_voter_turnout('2016', 'presidential')
+turnout_df_2016 = get_voter_turnout('2016')
 # citywide average as percent
 avg_percent_2016 = turnout_df_2016.percent.mean()
-turnout_df_2016.sort_values('ratio', inplace=True, ascending=False)
+turnout_df_2016.sort_values('percent', inplace=True, ascending=False)
 turnout_df_2016['2016_rank'] = range(1, len(turnout_df_2016) + 1)
 # max rank for whole city 2016
 max_rank_overall_2016 = turnout_df_2016['2016_rank'].max()
 turnout_df_2016.rename(columns={'percent': '2016_percent'}, inplace=True)
 turnout_df_2016 = turnout_df_2016[['elect_dist', '2016_rank', '2016_percent']]
 # add columns 2016_rank, 2016_percent to turnout df
+turnout_df_2016['2016_rank'] = turnout_df_2016['2016_rank'].astype(str)
 turnout_df = turnout_df.merge(turnout_df_2016, on='elect_dist', how='left')
-turnout_df[['2016_rank', '2016_percent']] = turnout_df[['2016_rank', '2016_percent']].fillna('Not Available')
+turnout_df[['2016_rank', '2016_percent']] = turnout_df[['2016_rank', '2016_percent']].fillna('N/A')
 
 # Make json file
 turnout_dict = turnout_df.to_dict(orient='records')

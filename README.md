@@ -44,7 +44,7 @@ example:
 "57023": {
     "voters": 1143,
     "elect_dist": "57023",
-    "boro": "Brooklyn",
+    "borough": "Brooklyn",
     "votes": 53,
     "percent": 5.0,
     "boro_rank": 1589,
