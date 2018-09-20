@@ -20,7 +20,8 @@ module.exports = {
         loader: "babel-loader",
         options: {
           presets: ['@babel/preset-env'],
-          plugins: [require('@babel/plugin-proposal-object-rest-spread')]        }
+          plugins: [require('@babel/plugin-proposal-object-rest-spread')]
+        }
       },
       {
         test: /\.hbs$/,
