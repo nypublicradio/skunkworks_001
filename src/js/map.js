@@ -108,10 +108,12 @@ class Map {
 
     if (this.district) {
       var thisPath = this.path(d);
-      // var selected = this.selectedDistrictLayer.selectAll('path')
-      //   .data([d])
-      //   .enter().append('path')
-      //     .attr('d', thisPath);
+
+      this.selectedDistrictLayer.selectAll('path')
+        .data([d])
+        .enter().append('path')
+        .attr('d', thisPath);
+        
       document.querySelector('.selected-map-layer path').setAttribute('d', thisPath);
     }
 
