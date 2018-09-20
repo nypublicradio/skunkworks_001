@@ -5,14 +5,14 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 
-const ASSET_PATH = process.env.AWS_S3_KEY ? `/${process.env.AWS_S3_KEY}/` : '/';
+const ROOT_PATH = process.env.AWS_S3_KEY ? `/${process.env.AWS_S3_KEY}/` : '/';
 
 module.exports = {
   entry: ['@babel/polyfill', './src/js/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
-    publicPath: ASSET_PATH,
+    publicPath: ROOT_PATH,
   },
   module: {
     rules: [
@@ -33,7 +33,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      ASSET_PATH: JSON.stringify(ASSET_PATH),
+      ROOT_PATH: JSON.stringify(ROOT_PATH),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/static/index.html'),

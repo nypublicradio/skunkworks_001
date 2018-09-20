@@ -1,4 +1,4 @@
-/*global require google ASSET_PATH d3*/
+/*global require google ROOT_PATH d3*/
 import Map from './map';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       loadAddressEntryView();
     }
-    d3.json(`${window.location.origin}${ASSET_PATH}data/districts.geojson`);
-    d3.json(`${window.location.origin}${ASSET_PATH}data/turnout_by_district.json`);
+    d3.json(`${window.location.origin}${ROOT_PATH}data/districts.geojson`);
+    d3.json(`${window.location.origin}${ROOT_PATH}data/turnout_by_district.json`);
   }
 
   function loadAddressEntryView() {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let mainTemplate = require("./templates/main.hbs");
     let mainEl = $('main');
     insertTemplate(mainEl, mainTemplate({
-      assetPath: ASSET_PATH,
+      assetPath: ROOT_PATH,
     }));
     bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
   }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function findDistrictByCoords(lat, lng) {
     return new Promise((resolve, reject) => {
       console.log(lat, lng);
-      d3.json(`${window.location.origin}${ASSET_PATH}data/districts.geojson`, (error, mapData) => {
+      d3.json(`${window.location.origin}${ROOT_PATH}data/districts.geojson`, (error, mapData) => {
         if (error) {
           reject(error);
         };
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function getDistrictData(electDist) {
     return new Promise((resolve, reject) => {
-      d3.json(`${window.location.origin}${ASSET_PATH}data/turnout_by_district.json`, (error, edData) => {
+      d3.json(`${window.location.origin}${ROOT_PATH}data/turnout_by_district.json`, (error, edData) => {
         if (error) {
           reject(error);
         } else {
@@ -154,12 +154,12 @@ document.addEventListener('DOMContentLoaded', function () {
     let districtDetailsTemplate = require("./templates/district-details.hbs");
     getDistrictData(districtId).then(district => {
       if(currentView) {
-        window.history.pushState(district, '', `${window.location.origin}/${district.elect_dist}/`);
+        window.history.pushState(district, '', `${window.location.origin}${ROOT_PATH}${district.elect_dist}/`);
       }
       $('.election-district').innerText = districtId;
       insertTemplate(detailsEl, districtDetailsTemplate({
         ...district,
-        assetPath: ASSET_PATH,
+        assetPath: ROOT_PATH,
       }));
       bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
     });
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let mainEl = $('main');
     insertTemplate(mainEl, districtMapTemplate({
       ...district,
-      assetPath: ASSET_PATH,
+      assetPath: ROOT_PATH,
     }));
 
     let map = new Map(loadDistrictDetails);
