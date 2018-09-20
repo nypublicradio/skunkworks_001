@@ -1,0 +1,95 @@
+defaults: &defaults
+  docker:
+    - image: circleci/node:10
+
+node_key: &node_key
+  key: node-{{ checksum "package.json" }}
+
+restore_node: &restore_node
+  - restore_cache:
+      <<: *node_key
+
+save_node: &save_node
+  - save_cache:
+      <<: *node_key
+      paths:
+        - node_modules
+
+deploy_static: &deploy_static
+  <<: *defaults
+  steps:
+    - checkout
+    - <<: *restore_node
+    - run:
+        name: install aws
+        command: |
+          sudo apt-get -y -qq update
+          sudo apt-get -y -qq install python3.4-dev
+          curl -O https://bootstrap.pypa.io/get-pip.py
+          python3.4 get-pip.py --user
+          export PATH=~/.local/bin:$PATH
+          pip install awscli --upgrade --user
+
+    - deploy:
+        name: Upload to S3
+        command: |
+          npm run build
+          export PATH=~/.local/bin:$PATH
+          aws s3 sync ./dist/ s3://$AWS_BUCKET/$AWS_S3_KEY --acl public-read --cache-control max-age=3600
+          aws s3 cp ./dist/index.html s3://$AWS_BUCKET/$AWS_S3_KEY/index.html --acl public-read --cache-control max-age=0
+
+version: 2
+
+jobs:
+  build-static:
+    <<: *defaults
+
+    steps:
+      - checkout
+
+      - <<: *restore_node
+      - run:
+          name: install node deps
+          command: |
+            if [ ! -d node_modules ]; then
+              npm ci
+            fi
+      - <<: *save_node
+
+  deploy-demo:
+    environment:
+      AWS_BUCKET: gothamist-project-demo
+    <<: *deploy_static
+
+  deploy-prod:
+    environment:
+      AWS_BUCKET: gothamist-project-prod
+    <<: *deploy_static
+
+workflows:
+  version: 2
+
+  deploy-demo:
+    jobs:
+      - build-static:
+          filters:
+            branches:
+              only: master
+      - deploy-demo:
+          requires:
+            - build-static
+
+  deploy-prod:
+    jobs:
+      - build-static:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+/
+      - deploy-demo:
+          requires:
+            - build-static
+          filters:
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+/

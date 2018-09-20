@@ -3,7 +3,6 @@ dist
 node_modules
 npm-debug.log
 .sass-cache
-package-lock.json
 yarn.lock
 /src/static/[0-9]*/
 ghostdriver.log
