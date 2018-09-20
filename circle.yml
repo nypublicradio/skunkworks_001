@@ -36,6 +36,7 @@ deploy_static: &deploy_static
           npm run build
           export PATH=~/.local/bin:$PATH
           aws s3 sync ./dist/ s3://$AWS_BUCKET/$AWS_S3_KEY --acl "public-read"
+          aws s3 sync ./dist/index.html s3://$AWS_BUCKET/$AWS_S3_KEY --acl "public-read" --cache-control "max-age=0"
 
 version: 2
 
