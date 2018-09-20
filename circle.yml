@@ -68,13 +68,13 @@ jobs:
 workflows:
   version: 2
 
-  deploy-staging:
+  deploy-demo:
     jobs:
       - build-static:
           filters:
             branches:
               only: master
-      - deploy-staging:
+      - deploy-demo:
           requires:
             - build-static
 
@@ -86,7 +86,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+/
-      - deploy-staging:
+      - deploy-demo:
           requires:
             - build-static
           filters:
