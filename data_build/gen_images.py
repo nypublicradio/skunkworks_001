@@ -1,7 +1,13 @@
 import json
 import os
 import os.path
+import sys
 import time
+
+import asyncio
+import time
+from pyppeteer import launch
+
 
 from PIL import Image, ImageDraw, ImageFont
 from selenium import webdriver
@@ -43,32 +49,53 @@ grey = (223, 223, 223)
 charcoal = (51, 51, 51)
 blue = (30, 102, 202)
 
-def save_screenshot(district):
-    depot = DepotManager.get()
-    driver = webdriver.PhantomJS()
-    driver.set_window_size(1024, 768) # set the window size that you need
-    driver.get('http://localhost:3000/{}/'.format(district))
-    time.sleep(5)
-    driver.save_screenshot('./image_generation_parts/screenshot.png')
+
+async def take_screenshot(district):
+    browser = await launch(headless=True)
+    page = await browser.newPage()
+    await page.goto(
+        'http://localhost:3000/{}'.format(district),
+        {
+            # 'networkIdleTimeout': 5000,
+            # 'waitUntil': 'networkidle',
+            'timeout': 0
+        }
+
+    )
+    time.sleep(3)
+    await page.screenshot(
+        {
+            'path': image_dir + '/ed_map_screenshots/map_{}.png'.format(district),
+            'clip': {
+                'x': 0 ,
+                'y': 177,
+                'width': 800 ,
+                'height': 349
+            }
+        }
+    )
+    await browser.close()
 
 
-def save_cropped_map_image(district):
-    save_screenshot(district)
-    # add map
-    map_pic = Image.open(image_dir + 'screenshot.png').convert("RGBA")
-    area = (113, 166, 913, 526)
-    cropped_img = map_pic.crop(area)
-    # resize map image
-    basewidth = 800
-    wpercent = (basewidth/float(cropped_img.size[0]))
-    hsize = int((float(cropped_img.size[1])*float(wpercent)))
-    cropped_img = cropped_img.resize((basewidth, hsize), Image.ANTIALIAS)
-    cropped_img.save(image_dir + '/ed_map_screenshots/map_{}.png'.format(district))
+def take_screenshots(districts):
+    tasks = []
+    loop = asyncio.new_event_loop()
+    for district in districts:
+        tasks.append(loop.create_task(take_screenshot(district)))
+
+    loop.run_until_complete(asyncio.wait(tasks))
+    loop.close()
 
 
-def draw_boxplots(district, district_percent, overall_percent, base_image, corner_x, corner_y):
+def save_boxplots(district, district_percent, overall_percent):
+    """ Generates a bar plot for district and saves image to the district folder
+    """
+    background = Image.open(image_dir + "background.png")
+    chart_background = background.resize((844, 310))
+    corner_x, corner_y = 21, 77
+
     # Draw box plots
-    draw = ImageDraw.Draw(base_image)
+    draw = ImageDraw.Draw(chart_background)
 
     box_w, box_h = 800, 70
     color_width1 = 8*district_percent
@@ -84,7 +111,7 @@ def draw_boxplots(district, district_percent, overall_percent, base_image, corne
         corner_y + box_h
     ), fill=charcoal)
     # add percent text
-    draw = ImageDraw.Draw(base_image)
+    draw = ImageDraw.Draw(chart_background)
     font = ImageFont.truetype(image_dir + "OpenSans-Regular.ttf", 24)
     district_percent_text = '%g'%(round(district_percent, 1))
     draw.text((corner_x + color_width1 -10, corner_y - 75), "{}%".format(district_percent_text), charcoal, font=font)
@@ -102,34 +129,41 @@ def draw_boxplots(district, district_percent, overall_percent, base_image, corne
         corner2_y + box_h + 35
     ), fill=charcoal)
     # add percent text
-    draw = ImageDraw.Draw(base_image)
+    draw = ImageDraw.Draw(chart_background)
     font = ImageFont.truetype(image_dir + "OpenSans-Regular.ttf", 24)
     overall_percent_text = '%g'%(round(overall_percent, 1))
     draw.text((corner_x + color_width2 - 10, corner2_y + 108), "{}%".format(overall_percent_text), charcoal, font=font)
+    # save file
+    directory = '../src/static/{}'.format(district)
+    chart_background.save(directory + '/{}_plots.png'.format(district))
 
 
 def draw_and_save_img(district, grade, district_percent, overall_percent):
+    """ Gernerates the share image and saves image to the district folder
+    """
+    directory = '../src/static/{}'.format(district)
+
     # Add emoji_image
     background = Image.open(image_dir + "background.png")
     emoji_img = Image.open(image_dir + "Emoji_Grade_Images/-g-All-{}.png".format(grade)).convert("RGBA")
     background.paste(emoji_img, (130, 230), emoji_img)
 
-    # get map image and add to background
+    # Get map image and add to background
     map_pic = Image.open(image_dir + '/ed_map_screenshots/map_{}.png'.format(district))
     background.paste(map_pic, (670, 250), map_pic)
 
-    #Add static text
+    # Add static text
     my_district_text = Image.open(image_dir + "my_district_text.png").convert("RGBA")
     comparing_text = Image.open(image_dir + "comparing_turnout_text.png").convert("RGBA")
     background.paste(comparing_text, (100, 730), comparing_text)
     background.paste(my_district_text, (1345, 763), my_district_text)
 
-    corner_x = 533
-    corner_y = 760
-    draw_boxplots(district, district_percent, overall_percent, background, corner_x, corner_y)
+    # Get box plot image and add to background
+    plots_pic = Image.open(directory + '/{}_plots.png'.format(district))
+    background.paste(plots_pic, (512, 683), plots_pic)
 
     draw = ImageDraw.Draw(background)
-    # draw divider line
+    # Draw divider line
     draw.rectangle((
         102,
         675,
@@ -137,51 +171,70 @@ def draw_and_save_img(district, grade, district_percent, overall_percent):
         677
     ), fill=grey)
 
-    # create folder for district if there isn't one already
+    # Create folder for district if there isn't one already
     directory = '../src/static/{}'.format(district)
     if not os.path.exists(directory):
         os.makedirs(directory)
-    background.save(directory + '/share_image.png')
+    background.save(directory + '/{}_share_image.png'.format(district))
 
-with open('turnout_by_district.json', 'r') as f:
+with open('./parsed_data/turnout_by_district.json', 'r') as f:
     turnout_data = json.loads(f.read())
-    overall_percent = float(turnout_data['overall_data']['avg_percent_2014'])
+overall_percent = float(turnout_data['overall_data']['avg_percent_2014'])
 
-# iterate through all districts
-# for district in turnout_data:
+# Iterate through all districts in turnout_data:
 districts = [x for x in turnout_data.keys() if x!= 'overall_data']
 districts.sort()
 
 
+
+# STEP 1
+# Generate map screenshots
+map_image_needed = []
 for district in districts:
-    district_percent = turnout_data[district]['percent']
     directory = '../src/static/{}'.format(district)
+    # Make folders if they don't exist
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
-    # Generate map screenshots to be used in share images
-    # It is a good idea to visually QA the image icons and make sure they images look good
-    # before adding map screenshots to share images
-    if not os.path.isfile(image_dir + '/ed_map_screenshots/map_{}.png'.format(district)):
-        save_cropped_map_image(district)
+    # Get a list of districts that need map screenshots
+    if not os.path.isfile(image_dir + 'ed_map_screenshots/map_{}.png'.format(district)):
+        map_image_needed.append(district)
 
-    # Generate box plots
-    # Saved as a separate file for use on district url and in share image
+# Generate map screenshots to be used in share images
+# It is a good idea to visually QA the image icons and make sure they images look good
+# before adding map screenshots to share images (STEP 4)
+batch_size = 10
+for i in range(0, len(map_image_needed), batch_size):
+    print(map_image_needed[i: i+batch_size])
+    take_screenshots(map_image_needed[i: i+batch_size])
+
+
+# STEP 2
+
+# for district in districts[:5]:
+#     district_percent = turnout_data[district]['percent']
+
+    # if not os.path.isfile(image_dir + 'ed_map_screenshots/map_{}.png'.format(district)):
+    #     print(district)
+    #     # Check that k has been reset - runs every time in case code is updated while script is running
+    #     with open('../src/js/map.js', 'r') as f:
+    #         map_file = f.read()
+    #     k = map_file.split("k =")[1].split(";")[0].strip(" ")
+    #     if k != '2.2':
+    #         sys.exit("Make sure to reset k = 2.2 in map.js file")
+    #     save_cropped_map_image(district)
+
+    # # STEP 3
+    # # Generate box plots
+    # # Saved as a separate file for use on district url and in share image
     # if not os.path.isfile(directory + '/{}_plots.png'.format(district)):
-    #     background = Image.open(image_dir + "background.png")
-    #     chart_background = background.resize((844, 310))
-    #     # save boxplots image
-    #     draw_boxplots(district, district_percent, overall_percent, chart_background, 21, 77)
+    #     save_boxplots(district, district_percent, overall_percent)
 
-    #     if not os.path.exists(directory):
-    #         os.makedirs(directory)
-    #     chart_background.save(directory + '/{}_plots.png'.format(district))
-    #     print(district, "saved plots")
-
-    # if not os.path.isfile('../src/static/{}/share_image.png'.format(district)):
-    #     print(district, "adding share image")
-    #     grade = turnout_data[district]['grade']
-    #     grade = grade.replace("+", "Plus")
-    #     grade = grade.replace("-", "Minus")
-
-    #     save_screenshot(district)
+    # # STEP 4
+    # # Generate and save share images
+    # if not os.path.isfile(directory + '/{}_share_image.png'.format(district)):
+    #     print(district)
+    #     grade = turnout_data[district]['grade'].replace("+", "Plus").replace("-", "Minus")
+    #     print(grade)
     #     draw_and_save_img(district, grade, district_percent, overall_percent)
 
