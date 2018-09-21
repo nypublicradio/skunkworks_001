@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
       d3.json(`${window.location.origin}${ROOT_PATH}data/turnout_by_district.json`, (error, edData) => {
         if (error) {
           reject(error);
+        } else if (!edData[electDist]) {
+          reject({error: 'no data', message: `Not enough data for district ${electDist}`});
         } else {
           let data = edData[electDist];
           data.emoji = data.grade && data.grade.toLowerCase() || '';
