@@ -91,7 +91,7 @@ class Map {
         var ed = d.properties.elect_dist;
         var hex_color = '#fff';
         if (ed_data[ed]){
-          hex_color = ed_data[ed].color_option2;
+          hex_color = ed_data[ed].color;
         }
         return hex_color;
       }
