@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
       lookupAddress(address).then(result => {
         getDistrict(result.lat, result.lng).then(district => {
           loadDistrictDetailView(district);
+        }).catch(error => {
+          if (error.error === 'no data') {
+            $(errors).innerHTML = error.message;
+          }
         });
         $(form).classList.remove('loading');
       }).catch(error => {
