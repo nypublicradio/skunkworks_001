@@ -18,7 +18,7 @@
     "watch:css": "onchange src/scss/**.scss -i -- npm run build:css",
     "watch:static": "onchange src/static/** -i -- npm run build:static",
     "watch": "run-p serve watch:*",
-    "serve": "browser-sync dist",
+    "serve": "browser-sync start --config bs-config.js",
     "clean": "rm -r dist; mkdir dist"
   },
   "author": "",
