@@ -13,5 +13,12 @@ module.exports = {
   },
   "rules": {
     "semi": 2
+  },
+  "globals": {
+    "require": true,
+    "google": true,
+    "ROOT_PATH": true,
+    "d3": true,
+    "neighbs": true,
   }
 }

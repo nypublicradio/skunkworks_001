@@ -1,4 +1,3 @@
-/* global d3 neighbs ROOT_PATH */
 class Map {
   constructor(changeDistrict) {
     this.features = [];
@@ -113,7 +112,7 @@ class Map {
         .data([d])
         .enter().append('path')
         .attr('d', thisPath);
-        
+
       document.querySelector('.selected-map-layer path').setAttribute('d', thisPath);
     }
 

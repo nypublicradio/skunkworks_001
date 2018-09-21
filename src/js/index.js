@@ -1,4 +1,3 @@
-/*global require google ROOT_PATH d3*/
 import Map from './map';
 
 document.addEventListener('DOMContentLoaded', function () {
