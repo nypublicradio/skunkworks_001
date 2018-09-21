@@ -71,8 +71,12 @@ document.addEventListener('DOMContentLoaded', function () {
               $(multiples).appendChild(link);
             });
           });
-        } else {
+        } else if (error.error === 'out of bounds') {
+          $(errors).innerText = 'Please use an address in the 5 boroughs';
+        } else if (error.error === 'no results') {
           $(errors).innerText = 'Invalid Address';
+        } else {
+          $(errors).innerText = `Something unexpected occurred. Got status: ${error.error}`;
         }
         $(form).classList.remove('loading');
       });
@@ -134,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (results.length === 0) {
           reject({error: 'no results'});
         } else if (status !== 'OK') {
-          reject({error: `bad status: ${status}`});
+          reject({error: status});
         } else if (results.length > 1) {
           reject({error: 'multiple locations', results});
         } else if (!inNYC(results[0])) {
