@@ -39,6 +39,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src/static/index.html'),
       hash: true,
       inject: false,
+      baseURL: process.env.BASE_URL || '',
     }),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['css/style.css', 'data/neighb_coords.js'],
