@@ -4,9 +4,6 @@
 
 `npm run watch`
 
-
-
-
 ## Generating Data
 
 The voter turnout data comes from two sources<br/>
@@ -123,8 +120,16 @@ To draw the map, we use a geojson file exported from: https://data.cityofnewyork
 To reduce filesize, we truncate longitude and latitude coordinates from 15 to 6 decimal places<br/>
 "the sixth decimal place in one decimal degree has 111,111/10^6 = about 1/9 meter = about 4 inches of precision"
 
-## Environment Variables
+## Building
+
+First make a copy of the the `.env.sample` file as `.env`:
+```
+$ cp .env.sample. env
+```
+
 These variables are used in the build process to prepare the static output for different environments.
+
+Build with `$ npm run build` to output a build ready for an environment based on the values you use for the envvars below.
 
 Key Name | Description
 --- | ---
