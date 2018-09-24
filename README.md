@@ -122,3 +122,11 @@ For each district, the index.html file varies slightly - these files are generat
 To draw the map, we use a geojson file exported from: https://data.cityofnewyork.us/City-Government/Election-Districts/h2n3-98hq<br/>
 To reduce filesize, we truncate longitude and latitude coordinates from 15 to 6 decimal places<br/>
 "the sixth decimal place in one decimal degree has 111,111/10^6 = about 1/9 meter = about 4 inches of precision"
+
+## Environment Variables
+These variables are used in the build process to prepare the static output for different environments.
+
+Key Name | Description
+--- | ---
+`AWS_S3_KEY` | The root-relative file path to assets. In development this can be left blank.
+`BASE_URL` | The protocol and domain from which this app is served. In development this can be left blank.
