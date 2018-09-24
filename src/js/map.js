@@ -2,7 +2,7 @@ const DEFAULT_OPTIONS = {
   selector: '#map',
 };
 
-class Map {
+class ElectionMap {
   constructor(changeDistrict, options = {}) {
     options = {...DEFAULT_OPTIONS, ...options};
     this.features = [];
@@ -155,4 +155,4 @@ class Map {
   }
 }
 
-export default Map;
+export default ElectionMap;
