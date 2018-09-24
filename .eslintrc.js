@@ -21,5 +21,6 @@ module.exports = {
     "IS_SCREENSHOTTING": true,
     "d3": true,
     "neighbs": true,
+    "Turnout": true,
   }
 }
