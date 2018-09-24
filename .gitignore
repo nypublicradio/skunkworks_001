@@ -8,3 +8,4 @@ yarn.lock
 ghostdriver.log
 .venv
 screenshot.png
+.env
