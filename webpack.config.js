@@ -8,13 +8,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 
 const ROOT_PATH = process.env.AWS_S3_KEY ? `/${process.env.AWS_S3_KEY}/` : '/';
+const BASE_URL = process.env.BASE_URL || '';
 
 module.exports = {
   entry: ['@babel/polyfill', './src/js/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
-    publicPath: ROOT_PATH,
+    publicPath: `${BASE_URL}${ROOT_PATH}`,
   },
   module: {
     rules: [
@@ -36,13 +37,15 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       ROOT_PATH: JSON.stringify(ROOT_PATH),
+      BASE_URL: JSON.stringify(BASE_URL),
       IS_SCREENSHOTTING: JSON.stringify(process.env.IS_SCREENSHOTTING),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/static/index.html'),
       hash: true,
       inject: false,
-      baseURL: process.env.BASE_URL || '',
+      baseURL: BASE_URL,
+      rootPath: ROOT_PATH,
       isScreenshotting: process.env.IS_SCREENSHOTTING,
     }),
     new HtmlWebpackIncludeAssetsPlugin({

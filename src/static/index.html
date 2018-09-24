@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/brands.css" integrity="sha384-rf1bqOAj3+pw6NqYrtaE1/4Se2NBwkIfeYbsFdtiR6TQz0acWiwJbv1IM/Nt/ite" crossorigin="anonymous">
   <link rel="preload" as="style" href="https://use.fontawesome.com/releases/v5.3.1/css/fontawesome.css"/>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/fontawesome.css" integrity="sha384-1rquJLNOM3ijoueaaeS5m+McXPJCGdr5HcA03/VHXxcp2kX2sUrQDmFc3jR5i/C7" crossorigin="anonymous">
-  <link rel="preload" href="https://fonts.googleapis.com/css?family=Montserrat:600|Open+Sans:400,400i,600" as="style">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:600|Open+Sans:400,400i,600">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Montserrat:400,600|Open+Sans:400,400i,600" as="style">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,600|Open+Sans:400,400i,600">
 
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <% for (var js in htmlWebpackPlugin.files.js) { %>
@@ -22,16 +22,16 @@
   <% } %>
 
   <meta property="og:type"          content="website" />
-  <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %>/{{id}}" />
+  <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}" />
   <meta property="og:title"         content="Does Your Block Vote?" />
-  <meta property="og:image"         content="<%= htmlWebpackPlugin.options.baseURL %>/{{id}}/image.png" />
+  <meta property="og:image"         content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}/image.png" />
   <meta property="og:description"   content="http://samples.ogp.me/390580850990722" />
 
   <meta name="twitter:card"         content="summary_large_image">
   <meta name="twitter:site"         content="@gothamist">
   <meta name="twitter:title"        content="Does your block vote?">
   <meta name="twitter:description"  content="">
-  <meta name="twitter:image"        content="<%= htmlWebpackPlugin.options.baseURL %>/{{id}}/image.png">
+  <meta name="twitter:image"        content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}/image.png">
 
 </head>
 <% if (htmlWebpackPlugin.options.isScreenshotting) { %>

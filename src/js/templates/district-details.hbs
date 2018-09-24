@@ -1,30 +1,36 @@
+<div class="district-ranking__sharing">
+  <p class="sharing__heading">Share</p>
+  <div class="sharing__icons">
+    <a href="https://www.facebook.com/sharer.php?u={{shareUrl}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com/intent/tweet?url={{shareUrl}}&amp;text={{shareTitle}}&amp;via=@gothamist" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="mailto:?subject={{shareTitle}}&amp;body={{shareText}}" target="_blank"><i class="fas fa-envelope"></i></a>
+    <a href="https://reddit.com/submit?url={{shareUrl}}&amp;title={{shareTitle}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-reddit-alien"></i></a>
+  </div>
+</div>
+
 <section class="tab-contents active" data-tab="summary">
   <div class="district-ranking">
-    <div class="district-ranking__scores">
-      <div class="district-ranking__grade">
-        {{grade}}
+    <div class="district-ranking__context-container">
+      <div class="district-ranking__turnout-text">
+        <p>% Turnout</p>
       </div>
-      <div class="district-ranking__emoji">
-        <img class="district-ranking__emoji-image" alt="Gothamist."
-src="{{assetPath}}i/grade_emoji_{{emoji}}@2x.png" width=80 height=80
-srcset="{{assetPath}}i/grade_emoji_{{emoji}}.png 1x,
-        {{assetPath}}i/grade_emoji_{{emoji}}@2x.png 2x,
-        {{assetPath}}i/grade_emoji_{{emoji}}@3x.png 3x">
+      <div class="district-ranking__context-image-container">
+        <img class="district-ranking__context-img" alt="Vote rank graph for election district #{{elect_dist}}" src="{{elect_dist}}_plots.png" />
+      </div>
+      <div class="district-ranking__context-text">
+        <p>My District</p>
+        <p>Citywide</p>
       </div>
     </div>
     <p class="district-ranking__text">
 Based on the last gubernatorial election, your district <b>ranked {{rank}} out of 5681 districts</b> for voting across the city: <b>{{percent}}% of registered voters in your district voted, compared to 23% city-wide.</b></p>
 
-<p class="district-ranking__text">Your district ranked #{{rank_by_borough}} out of _{{tktk}}_ in {{borough}}, where on average _{{tktk}}_% of registered voters turned out.  In the last presidential election, your district was ranked {{2016_rank}} out of _{{tktk}}_ with {{2016_percent}}% of registered voters casting ballots.</p>
-  </div>
-  <div class="district-ranking__sharing">
-    <h2 class="sharing__heading">Share Your Score</h2>
-    <div class="sharing__icons">
-      <a href="https://twitter.com/intent/tweet?url={{shareUrl}}&amp;text={{shareTitle}}&amp;via=@gothamist" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
-      <a href="https://www.facebook.com/sharer.php?u={{shareUrl}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-facebook-f fa-2x"></i></a>
-      <a href="mailto:?subject={{shareTitle}}&amp;body={{shareText}}" target="_blank"><i class="fas fa-envelope fa-2x"></i></a>
-      <a href="https://reddit.com/submit?url={{shareUrl}}&amp;title={{shareTitle}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-reddit-alien fa-2x"></i></a>
-    </div>
+<p class="district-ranking__text">Your district ranked #{{boro_rank}} out
+  of {{borough_data_2014.max_rank}} in {{borough}}, where on average
+  {{borough_data_2014.avg_percent}}% of registered voters turned out.  In the last presidential
+  election, your district was ranked {{2016_rank}} out of
+  {{borough_data_2016.max_rank}} with {{2016_percent}}% of registered voters
+  casting ballots.</p>
   </div>
 
 

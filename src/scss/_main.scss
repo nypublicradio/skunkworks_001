@@ -65,6 +65,13 @@ main {
   cursor: pointer;
 }
 
+h1.district-map-title {
+  font-size: 45px;
+  font-weight: 400;
+  color: #333333;
+  font-family: 'Montserrat', sans-serif;
+}
+
 .district-details__eyebrow-link {
   display: block;
   color: $blue;
@@ -121,7 +128,25 @@ main {
   display: flex;
 
   margin: 0 auto 45px auto;
-  max-width: 200px;
+  max-width: 320px;
+}
+
+.district-ranking__your-rank {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.district-ranking__letter {
+  width: 46px;
+  height: 53px;
+  font-family: Montserrat;
+  font-size: 45px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.18;
+  letter-spacing: normal;
+  color: #333333;
 }
 
 .district-ranking__grade {
@@ -129,6 +154,41 @@ main {
   font-size: 45px;
   font-weight: 600;
   line-height: 80px;
+}
+
+.district-ranking__sharing {
+  display: flex;
+  max-width: 221px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.district-ranking__context-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.district-ranking__turnout-text {
+  margin-top: -8px;
+}
+
+.district-ranking__context-image-container {
+  flex: 0 1 300px;
+}
+
+.district-ranking__context-img {
+  width: 100%;
+}
+
+.district-ranking__context-text {
+  display: flex;
+  flex-direction: column;
+  margin-top: -8px;
+}
+
+.district-ranking__context-text p {
+  margin: 3px 0;
 }
 
 .district-ranking__emoji {
@@ -193,12 +253,21 @@ main {
 
 .sharing__heading  {
   margin-bottom: 16px;
+  margin-right: 20px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  text-align: center;
+  color: #000000;
+
 }
 .sharing__icons {
+  align-items: center;
   display: flex;
   justify-content: space-around;
-  margin: 0 auto 30px auto;
-  max-width: 400px;
+  width: 100%;
+
   a {
     color: black;
     &:hover {
