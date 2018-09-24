@@ -1,3 +1,5 @@
+import { getDistrictData } from './districts';
+
 const DEFAULT_OPTIONS = {
   selector: '#map',
 };
@@ -108,6 +110,12 @@ class ElectionMap {
 
   // When clicked, zoom in
   clicked(d) {
+    if (d && d.properties && d.properties.elect_dist) {
+      getDistrictData(d.properties.elect_dist).then(d => Turnout.router.transitionTo('district', d));
+    }
+  }
+
+  centerOn(d) {
     var x, y, k;
     this.district = d && d.properties && d.properties.elect_dist;
 
@@ -144,10 +152,13 @@ class ElectionMap {
       .attr('transform', 'translate(' + w / 2 + ',' + h / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
   }
 
-  goToDistrict(district_id){
-    this.features
-    .filter(feature => feature.properties && feature.properties.elect_dist === district_id)
-    .forEach(feature => this.clicked(feature));
+  goToDistrict(districtId) {
+    let datum = this.features
+      .find(feature => feature.properties && feature.properties.elect_dist === districtId);
+
+    if (datum) {
+      this.centerOn(datum);
+    }
   }
 }
 
