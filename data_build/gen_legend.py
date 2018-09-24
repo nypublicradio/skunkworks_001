@@ -7,14 +7,14 @@ grades = ['A+', 'A', 'B', 'C', 'D', 'F', 'F-', 'N/A']
 
 # convert hex to rgb https://www.rgbtohex.net/hextorgb/
 hex_to_rgb = {
-    '#08589e': (8,88,158),
-    '#2b8cbe': (43,140,190),
-    '#4eb3d3': (78,179,211),
-    '#7bccc4': (123,204,196),
-    '#a8ddb5': (168,221,181),
-    '#ccebc5': (204,235,197),
-    '#f0f9e8': (240,249,232),
-    '#ffffff': (255,255,255)
+    '#08589e': (8, 88, 158),
+    '#2b8cbe': (43, 140, 190),
+    '#4eb3d3': (78, 179, 211),
+    '#7bccc4': (123, 204, 196),
+    '#a8ddb5': (168, 221, 181),
+    '#ccebc5': (204, 235, 197),
+    '#f0f9e8': (240, 249, 232),
+    '#ffffff': (255, 255, 255)
 }
 
 charcoal = (51, 51, 51)
@@ -30,7 +30,10 @@ draw = ImageDraw.Draw(background)
 
 # Draw horizontal legend
 # draw outer rectangle (charcoal)
-draw.rectangle((margin, margin, margin + 8*box_size + 2*border_size, margin + box_size + 2*border_size), fill=charcoal)
+draw.rectangle(
+    (margin, margin, margin + 8*box_size + 2*border_size, margin + box_size + 2*border_size),
+    fill=charcoal
+)
 for i, color in enumerate(hex_codes_2):
     # draw colored box
     x = margin + i*(box_size) + border_size
@@ -40,6 +43,3 @@ for i, color in enumerate(hex_codes_2):
     draw.text((x + box_size/4, y + box_size + 1), grades[i], charcoal, font=font)
 
 background.save('./legend.png')
-
-
-

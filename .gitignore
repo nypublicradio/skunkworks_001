@@ -4,8 +4,9 @@ node_modules
 npm-debug.log
 .sass-cache
 yarn.lock
-/src/static/[0-9]*/
 ghostdriver.log
 .venv
 screenshot.png
 .env
+ed_map_screenshots
+district_folders_for_s3
