@@ -1,0 +1,58 @@
+.goth-header {
+  flex-basis: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #333;
+  padding: 0 16px;
+  height: 54px;
+}
+
+.goth-logo-link {
+  display: flex;
+  align-items: center;
+
+  transition: opacity 125ms ease;
+}
+
+.goth-logo-link:hover {
+  opacity: 0.6;
+}
+
+.goth-logo-link .arrow-left {
+  margin-right: 10px;
+}
+
+.goth-h-logo {
+  fill: white;
+}
+
+.goth-header__right {
+  height: 100%;
+}
+
+.goth-donate {
+  height: 100%;
+  background-color: #de1e3d;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 8px 18px;
+
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-style: oblique;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: opacity 125ms ease;
+}
+
+.goth-donate:hover {
+  opacity: 0.6;
+}
