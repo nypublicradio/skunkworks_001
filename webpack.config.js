@@ -11,6 +11,7 @@ const ROOT_PATH = process.env.AWS_S3_KEY ? `/${process.env.AWS_S3_KEY}/` : '/';
 const BASE_URL = process.env.BASE_URL || '';
 
 module.exports = {
+  mode: process.env.ENV === 'PROD' ? 'production' : 'development', // ENV is set in circle
   entry: ['@babel/polyfill', './src/js/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
