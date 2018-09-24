@@ -45,7 +45,7 @@ const DistrictRoute = {
         assetPath: ROOT_PATH,
       }));
 
-      Turnout.map = new ElectionMap();
+      Turnout.map = new ElectionMap({selector: '#map'});
       Turnout.map.init()
         .then(() => Turnout.map.goToDistrict(district.elect_dist));
       } else {

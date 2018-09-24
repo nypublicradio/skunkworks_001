@@ -3,7 +3,7 @@ const DEFAULT_OPTIONS = {
 };
 
 class ElectionMap {
-  constructor(changeDistrict, options = {}) {
+  constructor(options = {}) {
     options = {...DEFAULT_OPTIONS, ...options};
     this.features = [];
     this.width = document.querySelector(options.selector).clientWidth;
@@ -11,7 +11,6 @@ class ElectionMap {
     this.centered = null;
     this.path = null;
     this.mapLayer = null;
-    this.changeDistrict = changeDistrict;
 
     this.options = options;
   }
@@ -135,9 +134,6 @@ class ElectionMap {
       y = this.height / 2;
       k = 1;
       this.centered = null;
-    }
-    if (d && d.properties && d.properties.elect_dist) {
-      this.changeDistrict(d.properties.elect_dist);
     }
 
     // Zoom
