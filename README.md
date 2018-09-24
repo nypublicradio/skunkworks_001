@@ -112,8 +112,41 @@ This data is converted to a json file:
 
 
 ## Generating index.htmls
-For each district, the index.html file varies slightly - these files are generated with `gen_index_files.py`
-(DNE yet)
+For each district, the index.html file varies slightly - these files are generated with `gen_index_files.py`.<br/>
+The files differ for demo and prod so the script must be run twice with changes to .env.
+
+
+### For demo:
+update .env to:
+```
+AWS_S3_KEY=voter-turnout
+BASE_URL=https://demo.project.gothamist.com
+IS_SCREENSHOTTING=false
+```
+Then run:<br/>
+`npm run build`
+
+In another window:<br/>
+`cd data_build`<br/>
+`python3 gen_index_files.py`<br/>
+`aws s3 cp ./district_folders_for_s3/ s3://gothamist-project-demo/voter-turnout --recursive --exclude .DS_Store --acl public-read --cache-control max-age=0`
+
+
+### For Prod:
+update .env to:
+```
+AWS_S3_KEY=voter-turnout
+BASE_URL=https://project.gothamist.com
+IS_SCREENSHOTTING=false
+```
+Then run:<br/>
+`npm run build`
+
+In another window:<br/>
+`cd data_build`<br/>
+`python3 gen_index_files.py`<br/>
+`aws s3 cp ./district_folders_for_s3/ s3://gothamist-project-prod/voter-turnout --recursive --exclude .DS_Store --acl public-read --cache-control max-age=0`
+
 
 ## Drawing the map
 To draw the map, we use a geojson file exported from: https://data.cityofnewyork.us/City-Government/Election-Districts/h2n3-98hq<br/>
