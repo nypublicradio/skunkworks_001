@@ -1,12 +1,19 @@
+const DEFAULT_OPTIONS = {
+  selector: '#map',
+};
+
 class Map {
-  constructor(changeDistrict) {
+  constructor(changeDistrict, options = {}) {
+    options = {...DEFAULT_OPTIONS, ...options};
     this.features = [];
-    this.width = document.querySelector('svg').clientWidth;
+    this.width = document.querySelector(options.selector).clientWidth;
     this.height = 360;
     this.centered = null;
     this.path = null;
     this.mapLayer = null;
     this.changeDistrict = changeDistrict;
+
+    this.options = options;
   }
   init(lat=-73.999914, lon=40.726932) {
     return new Promise((resolve, reject) => {
@@ -37,7 +44,7 @@ class Map {
         .projection(this.projection);
 
       // Set svg width & height
-      var svg = d3.select('svg')
+      var svg = d3.select(this.options.selector)
         .attr('width', width)
         .attr('height', height);
 

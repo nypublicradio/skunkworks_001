@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
       assetPath: ROOT_PATH,
     }));
 
-    let map = new Map(loadDistrictDetails);
+    let map = new Map(loadDistrictDetails, {selector: '#map'});
     map.init()
     .then(() => map.goToDistrict(district.elect_dist));
   }
