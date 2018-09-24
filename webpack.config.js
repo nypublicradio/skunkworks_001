@@ -43,6 +43,7 @@ module.exports = {
       hash: true,
       inject: false,
       baseURL: process.env.BASE_URL || '',
+      isScreenshotting: process.env.IS_SCREENSHOTTING,
     }),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['css/style.css', 'data/neighb_coords.js'],

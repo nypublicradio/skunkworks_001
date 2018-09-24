@@ -30,3 +30,10 @@ text {
   fill: #404040;
   text-transform: uppercase;
 }
+
+.is-screenshotting text {
+  font-size: 15px;
+  font-weight: 575;
+  text-shadow: 2px 0 rgba(255,255,255, 0.5), 0 2px rgba(255,255,255, 0.5), 2px 0 rgba(255,255,255, 0.5), 0 -2px rgba(255,255,255, 0.5);
+  fill: black;
+}

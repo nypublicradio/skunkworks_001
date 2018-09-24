@@ -34,7 +34,11 @@
   <meta name="twitter:image"        content="<%= htmlWebpackPlugin.options.baseURL %>/{{id}}/image.png">
 
 </head>
+<% if (htmlWebpackPlugin.options.isScreenshotting) { %>
+<body class="is-screenshotting">
+<% } else { %>
 <body>
+<% } %>
   <main></main>
   <footer class='footer'>
     <div class='footer__data-credits'>Data provided by Lorem Ipsum Dolor</div>
