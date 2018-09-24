@@ -121,7 +121,7 @@ class Map {
       var centroid = this.path.centroid(d);
       x = centroid[0];
       y = centroid[1];
-      k = 4;
+      k = IS_SCREENSHOTTING ? 2.2 : 4;
       this.centered = d;
     } else {
       x = this.width / 2;
@@ -137,7 +137,7 @@ class Map {
     let w = this.width;
     let h = this.height;
     this.g.transition()
-      .duration(750)
+      .duration(IS_SCREENSHOTTING ? 0 : 750)
       .attr('transform', 'translate(' + w / 2 + ',' + h / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
   }
 

@@ -134,4 +134,5 @@ Build with `$ npm run build` to output a build ready for an environment based on
 Key Name | Description
 --- | ---
 `AWS_S3_KEY` | The root-relative file path to assets. In development this can be left blank.
-`BASE_URL` | The protocol and domain from which this app is served. In development this can be left blank.
+`BASE_URL` | The protocol and domain from which this app is served. Used for metadata only. In development this can be left blank.
+`IS_SCREENSHOTTING` | Used to control some run-time settings when generating screenshots for share images. In development this can be left blank.

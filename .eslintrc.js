@@ -18,6 +18,7 @@ module.exports = {
     "require": true,
     "google": true,
     "ROOT_PATH": true,
+    "IS_SCREENSHOTTING": true,
     "d3": true,
     "neighbs": true,
   }

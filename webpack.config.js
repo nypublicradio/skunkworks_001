@@ -36,6 +36,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       ROOT_PATH: JSON.stringify(ROOT_PATH),
+      IS_SCREENSHOTTING: JSON.stringify(process.env.IS_SCREENSHOTTING),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/static/index.html'),
