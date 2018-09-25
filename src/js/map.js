@@ -21,19 +21,12 @@ class ElectionMap {
       var width = this.width,
           height = this.height;
 
-      var default_coordinates = [lat, lon];
-      if (lat && lon) {
-      this.projection = d3.geoMercator()
-        .scale(450000)
-        .center([lat, lon])
-        .translate([width / 2, height / 2]);
-      } else {
-
+      // NYC
+      var default_coordinates = [-73.999914, 40.726932];
       this.projection = d3.geoMercator()
         .scale(450000)
         .center(default_coordinates)
         .translate([width / 2, height / 2]);
-      }
 
       this.path = d3.geoPath()
         .projection(this.projection);
@@ -87,17 +80,16 @@ class ElectionMap {
           .on('click', this.clicked.bind(this));
 
         resolve(this);
+
+        svg.call(d3.zoom()
+          .scaleExtent([.3, 1])
+          .on("zoom", zoomed));
+
+        function zoomed() {
+          g.attr("transform", d3.event.transform);
+        }
       });
-
-      svg.call(d3.zoom()
-        .scaleExtent([.3, 1])
-        .on("zoom", zoomed));
-
-      function zoomed() {
-        g.attr("transform", d3.event.transform);
-      }
      });
-    });
   }
 
 
