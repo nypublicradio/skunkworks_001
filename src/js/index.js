@@ -1,10 +1,15 @@
 import Router from 'router_js';
+import fetch from 'unfetch';
+
 import {
   IndexRoute,
   DistrictRoute
 } from './routes';
 
-const Turnout = window.Turnout = {};
+const Turnout = window.Turnout = {
+  geoData: fetch(`${BASE_URL}${ROOT_PATH}data/districts.geojson`).then(r => r.json()),
+  districts: fetch(`${BASE_URL}${ROOT_PATH}data/turnout_by_district.json`).then(r => r.json()),
+};
 
 const handlers = {
   index: IndexRoute,
