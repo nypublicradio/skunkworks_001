@@ -76,13 +76,13 @@ main {
 }
 
 h1.district-map-title {
-  font-size: 45px;
+  font-size: 38px;
   font-weight: 400;
   color: #333333;
   font-family: $font-montserrat;
 
   @media screen and (max-width: 600px) {
-      font-size: 24px;
+    font-size: 24px;
   }
 }
 

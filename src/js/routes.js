@@ -42,12 +42,17 @@ const DistrictRoute = {
   },
 
   setup(district) {
+    let ad = district.elect_dist.slice(0, 2);
+    let ed = district.elect_dist.slice(2).replace('0', '');
     let emoji = require('./templates/emoji.hbs')({emoji: district.emoji});
+
     if (!Turnout.map) {
       let districtMapTemplate = require("./templates/district-map.hbs");
       insertTemplate($('main'), districtMapTemplate({
         ...district,
         emoji,
+        ad,
+        ed,
         assetPath: ROOT_PATH,
       }));
 
@@ -57,6 +62,9 @@ const DistrictRoute = {
     } else {
       insertTemplate($('#emoji'), emoji);
       $('#grade').textContent = district.grade;
+      $('#election-district').textContent = ed;
+      $('#assembly-district').textContent = ad;
+
       Turnout.map.goToDistrict(district.elect_dist);
     }
 
@@ -68,11 +76,9 @@ const DistrictRoute = {
   },
 
   loadDistrictDetails(districtId) {
-    let detailsEl = $('.district-details');
     let districtDetailsTemplate = require("./templates/district-details.hbs");
     getDistrictData(districtId).then(district => {
-      $('.election-district').innerText = districtId;
-      insertTemplate(detailsEl, districtDetailsTemplate({
+      insertTemplate($('.district-details'), districtDetailsTemplate({
         ...district,
         assetPath: ROOT_PATH,
       }));
