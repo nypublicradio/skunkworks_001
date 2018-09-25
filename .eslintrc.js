@@ -17,10 +17,11 @@ module.exports = {
   "globals": {
     "require": true,
     "google": true,
-    "ROOT_PATH": true,
-    "IS_SCREENSHOTTING": true,
     "d3": true,
     "neighbs": true,
     "Turnout": true,
+    "BASE_URL": true,
+    "ROOT_PATH": true,
+    "IS_SCREENSHOTTING": true,
   }
 }
