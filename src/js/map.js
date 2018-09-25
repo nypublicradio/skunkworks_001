@@ -1,9 +1,11 @@
+import { getDistrictData } from './districts';
+
 const DEFAULT_OPTIONS = {
   selector: '#map',
 };
 
-class Map {
-  constructor(changeDistrict, options = {}) {
+class ElectionMap {
+  constructor(options = {}) {
     options = {...DEFAULT_OPTIONS, ...options};
     this.features = [];
     this.width = document.querySelector(options.selector).clientWidth;
@@ -11,7 +13,6 @@ class Map {
     this.centered = null;
     this.path = null;
     this.mapLayer = null;
-    this.changeDistrict = changeDistrict;
 
     this.options = options;
   }
@@ -109,6 +110,12 @@ class Map {
 
   // When clicked, zoom in
   clicked(d) {
+    if (d && d.properties && d.properties.elect_dist) {
+      getDistrictData(d.properties.elect_dist).then(d => Turnout.router.transitionTo('district', d));
+    }
+  }
+
+  centerOn(d) {
     var x, y, k;
     this.district = d && d.properties && d.properties.elect_dist;
 
@@ -136,9 +143,6 @@ class Map {
       k = 1;
       this.centered = null;
     }
-    if (d && d.properties && d.properties.elect_dist) {
-      this.changeDistrict(d.properties.elect_dist);
-    }
 
     // Zoom
     let w = this.width;
@@ -148,11 +152,14 @@ class Map {
       .attr('transform', 'translate(' + w / 2 + ',' + h / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
   }
 
-  goToDistrict(district_id){
-    this.features
-    .filter(feature => feature.properties && feature.properties.elect_dist === district_id)
-    .forEach(feature => this.clicked(feature));
+  goToDistrict(districtId) {
+    let datum = this.features
+      .find(feature => feature.properties && feature.properties.elect_dist === districtId);
+
+    if (datum) {
+      this.centerOn(datum);
+    }
   }
 }
 
-export default Map;
+export default ElectionMap;
