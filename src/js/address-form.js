@@ -68,7 +68,7 @@ export function bindAddressFormEvents(form, errors, multiples) {
           .then(district => {
             let link = document.createElement('a');
             link.innerText = result.formatted_address;
-            link.href = `/${district.elect_dist}`;
+            link.href = `${ROOT_PATH}${district.elect_dist}`;
             $(multiples).appendChild(link);
           });
         });
