@@ -46,6 +46,7 @@
   "dependencies": {
     "route-recognizer": "^0.3.4",
     "router_js": "^3.0.0",
-    "rsvp": "^4.8.4"
+    "rsvp": "^4.8.4",
+    "unfetch": "^4.0.1"
   }
 }
