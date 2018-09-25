@@ -14,6 +14,16 @@
   stroke-width: 2px;
 }
 
+.map-wrapper {
+  position: relative;
+}
+
+.map-legend {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
 .map {
   display: block;
   margin: 0 auto 22px auto;
