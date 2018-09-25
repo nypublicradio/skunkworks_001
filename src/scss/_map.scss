@@ -31,6 +31,15 @@
   height: 360px;
   opacity: .9;
   max-width: 800px;
+
+  path {
+    cursor: pointer;
+    transition: opacity 125ms ease;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
 }
 
 text {
