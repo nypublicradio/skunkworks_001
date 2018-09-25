@@ -38,7 +38,7 @@ export function getDistrictData(electDist) {
     } else {
       let data = edData[electDist];
       data.emoji = data.grade && data.grade.toLowerCase() || '';
-      data.borough_data_2014 = edData["overall_data"]["by_borough_2014"][data.borough]
+      data.borough_data_2014 = edData["overall_data"]["by_borough_2014"][data.borough];
       resolve(data);
     }
   }
