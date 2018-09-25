@@ -185,3 +185,4 @@ Key Name | Description
 `BASE_URL` | The protocol and domain from which this app is served. Used for metadata only. In development this can be left blank.
 `IS_SCREENSHOTTING` | Used to control some run-time settings when generating screenshots for share images. In development this can be left blank.
 `GA_TRACKING_ID` | The GA ID for pageviews
+`AWS_CLOUDFRONT` | Distribution ID. Used by Circle CI to invalidate the cloud front cache on deploy
