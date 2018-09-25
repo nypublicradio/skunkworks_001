@@ -20,6 +20,8 @@ module.exports = {
     "d3": true,
     "neighbs": true,
     "Turnout": true,
+    "gtag": true,
+    "GA_TRACKING_ID": true,
     "BASE_URL": true,
     "ROOT_PATH": true,
     "IS_SCREENSHOTTING": true,

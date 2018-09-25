@@ -4,6 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Does Your Block Vote? | Gothamist & WNYC</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.GA_TRACKING_ID %>"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '<%= htmlWebpackPlugin.options.GA_TRACKING_ID %>', {send_page_view: false});
+  </script>
+
   <% for (var css in htmlWebpackPlugin.files.css) { %>
   <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet" type="text/css">
   <% } %>

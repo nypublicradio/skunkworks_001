@@ -40,6 +40,7 @@ module.exports = {
       ROOT_PATH: JSON.stringify(ROOT_PATH),
       BASE_URL: JSON.stringify(BASE_URL),
       IS_SCREENSHOTTING: JSON.stringify(process.env.IS_SCREENSHOTTING),
+      GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/static/index.html'),
@@ -49,6 +50,7 @@ module.exports = {
       baseURL: BASE_URL,
       rootPath: ROOT_PATH,
       isScreenshotting: process.env.IS_SCREENSHOTTING,
+      GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     }),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['css/style.css', 'data/neighb_coords.js'],

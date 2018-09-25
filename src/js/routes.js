@@ -24,6 +24,10 @@ const IndexRoute = {
       assetPath: ROOT_PATH,
     }));
     bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+
+    gtag('config', GA_TRACKING_ID, {
+      page_title: 'Does Your Block Vote?',
+    });
   },
 };
 
@@ -53,6 +57,10 @@ const DistrictRoute = {
       }
 
       this.loadDistrictDetails(district.elect_dist);
+
+      gtag('config', GA_TRACKING_ID, {
+        page_title: `District ${district.elect_dist}`,
+      });
     },
 
     loadDistrictDetails(districtId) {
