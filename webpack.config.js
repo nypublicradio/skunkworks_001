@@ -45,6 +45,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src/static/index.html'),
       hash: true,
       inject: false,
+      deploy: !!process.env.ENV, // renders index share data if deploying
       baseURL: BASE_URL,
       rootPath: ROOT_PATH,
       isScreenshotting: process.env.IS_SCREENSHOTTING,

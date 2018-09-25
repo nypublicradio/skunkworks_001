@@ -24,14 +24,22 @@
   <meta property="og:type"          content="website" />
   <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}" />
   <meta property="og:title"         content="Does Your Block Vote?" />
-  <meta property="og:image"         content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}/image.png" />
+  <% if (htmlWebpackPlugin.options.deploy) { %>
+  <meta property="og:image"         content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>index_share_image.png" />
+  <% } else { %>
+  <meta property="og:image"         content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}/{{id}}_share_image.png" />
+  <% } %>
   <meta property="og:description"   content="http://samples.ogp.me/390580850990722" />
 
   <meta name="twitter:card"         content="summary_large_image">
   <meta name="twitter:site"         content="@gothamist">
   <meta name="twitter:title"        content="Does your block vote?">
   <meta name="twitter:description"  content="">
-  <meta name="twitter:image"        content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}/image.png">
+  <% if (htmlWebpackPlugin.options.deploy) { %>
+  <meta name="twitter:image"        content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>index_share_image.png">
+  <% } else { %>
+  <meta name="twitter:image"        content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}/{{id}}_share_image.png">
+  <% } %>
 
 </head>
 <% if (htmlWebpackPlugin.options.isScreenshotting) { %>
