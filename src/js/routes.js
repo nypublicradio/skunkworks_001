@@ -53,29 +53,29 @@ const DistrictRoute = {
       Turnout.map = new ElectionMap({selector: '#map'});
       Turnout.map.init()
         .then(() => Turnout.map.goToDistrict(district.elect_dist));
-      } else {
-        Turnout.map.goToDistrict(district.elect_dist);
-      }
-
-      this.loadDistrictDetails(district.elect_dist);
-
-      gtag('config', GA_TRACKING_ID, {
-        page_title: `District ${district.elect_dist}`,
-      });
-    },
-
-    loadDistrictDetails(districtId) {
-      let detailsEl = $('.district-details');
-      let districtDetailsTemplate = require("./templates/district-details.hbs");
-      getDistrictData(districtId).then(district => {
-        $('.election-district').innerText = districtId;
-        insertTemplate(detailsEl, districtDetailsTemplate({
-          ...district,
-          assetPath: ROOT_PATH,
-        }));
-        bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
-      });
+    } else {
+      Turnout.map.goToDistrict(district.elect_dist);
     }
+
+    this.loadDistrictDetails(district.elect_dist);
+
+    gtag('config', GA_TRACKING_ID, {
+      page_title: `District ${district.elect_dist}`,
+    });
+  },
+
+  loadDistrictDetails(districtId) {
+    let detailsEl = $('.district-details');
+    let districtDetailsTemplate = require("./templates/district-details.hbs");
+    getDistrictData(districtId).then(district => {
+      $('.election-district').innerText = districtId;
+      insertTemplate(detailsEl, districtDetailsTemplate({
+        ...district,
+        assetPath: ROOT_PATH,
+      }));
+      bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+    });
+  }
 };
 
 
