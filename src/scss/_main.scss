@@ -79,24 +79,45 @@ h1.district-map-title {
   font-size: 45px;
   font-weight: 400;
   color: #333333;
-  font-family: 'Montserrat', sans-serif;
+  font-family: $font-montserrat;
+
+  @media screen and (max-width: 600px) {
+      font-size: 24px;
+  }
 }
 
 .district-details__eyebrow-link {
-  display: block;
-  color: $blue;
+  display: flex;
+  color: #333;
   margin: 30px auto 24px auto;
-  width: 219px;
-  border: double 4px #333333;
+  width: 100%;
   font-size: 16px;
-  font-family: Montserrat;
-  font-weight: 600;
+  font-family: $font-montserrat;
+  font-weight: 400;
   text-align: center;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.district-details__eyebrow-link .gothamist-logo-mini {
+  margin-right: 10px;
+}
+
+.district-details__eyebrow-link:before, .district-details__eyebrow-link:after {
+  background-image: linear-gradient(to bottom,black,black 2px,transparent 2px,transparent 10px,black 10px,black 12px,transparent 12px,transparent 20px,black 20px,black 22px);
+  content: '';
+  flex: 1;
+  height: 22px;
+  margin: 0 30px;
+
+  @media screen and (max-width: 800px) {
+    margin: 0 12px;
+  }
 }
 
 .district-details h1 {
-  font-family: Montserrat;
+  font-family: $font-montserrat;
   font-size: 24px;
   font-weight: 600;
   line-height: 1.33;
@@ -134,35 +155,47 @@ h1.district-map-title {
 }
 
 .district-ranking__scores {
-  justify-content: space-between;
+  justify-content: center;
   display: flex;
-
   margin: 0 auto 45px auto;
-  max-width: 320px;
+	align-items: center;
 }
 
 .district-ranking__your-rank {
   font-size: 28px;
   font-weight: 600;
+  margin-right: 10px;
+
+  @media screen and (max-width: 600px) {
+    font-size: 18px;
+  }
 }
 
 .district-ranking__letter {
   width: 46px;
   height: 53px;
-  font-family: Montserrat;
+  font-family: $font-montserrat;
   font-size: 45px;
   font-weight: 600;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.18;
   letter-spacing: normal;
+  margin-right: 10px;
   color: #333333;
+
+  @media screen and (max-width: 600px) {
+    font-size: 45px;
+  }
 }
 
 .district-ranking__grade {
-  font-family: Montserrat;
+  align-items: center;
+  display: flex;
+  font-family: $font-montserrat;
   font-size: 45px;
   font-weight: 600;
+  justify-content: space-between;
   line-height: 80px;
 }
 
@@ -180,11 +213,13 @@ h1.district-map-title {
 }
 
 .district-ranking__turnout-text {
+  font-weight: 600;
   margin-top: -8px;
 }
 
 .district-ranking__context-image-container {
-  flex: 0 1 300px;
+  flex: 1 0 200px;
+  max-width: 400px;
 }
 
 .district-ranking__context-img {
@@ -194,17 +229,28 @@ h1.district-map-title {
 .district-ranking__context-text {
   display: flex;
   flex-direction: column;
+  font-weight: 600;
   margin-top: -8px;
 }
 
-.district-ranking__context-text p {
+.district-ranking__turnout-text p, .district-ranking__context-text p {
   margin: 3px 0;
+
+	@media screen and (max-width: 600px) {
+    font-size: 12px;
+	}
 }
 
-.district-ranking__emoji {
-
+.district-ranking__emoji-image {
+	@media screen and (max-width: 600px) {
+		width: 52px;
+		height: 52px;
+	}
 }
 
+.district-ranking__text {
+  @include wrapper;
+}
 
 .extra-credit {
   background: $lightgray;
@@ -225,7 +271,7 @@ h1.district-map-title {
 }
 .extra-credit__list-item::before {
   content: counter(extra-credit) ". ";
-  font-family: Montserrat;
+  font-family: $font-montserrat;
   font-size: 24px;
   font-weight: 600;
   line-height: 1.21;
@@ -238,7 +284,7 @@ h1.district-map-title {
 }
 
 .email-updates__description {
-  margin: 0 16px 20px;
+  @include wrapper;
 }
 
 
@@ -258,6 +304,7 @@ h1.district-map-title {
 }
 
 .email-form__optin-message {
+  @include wrapper;
   margin: 0;
 }
 
