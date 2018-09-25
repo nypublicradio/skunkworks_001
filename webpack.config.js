@@ -39,7 +39,7 @@ module.exports = {
     new webpack.DefinePlugin({
       ROOT_PATH: JSON.stringify(ROOT_PATH),
       BASE_URL: JSON.stringify(BASE_URL),
-      IS_SCREENSHOTTING: JSON.stringify(process.env.IS_SCREENSHOTTING),
+      IS_SCREENSHOTTING: process.env.IS_SCREENSHOTTING,
       GA_TRACKING_ID: JSON.stringify(process.env.GA_TRACKING_ID),
     }),
     new HtmlWebpackPlugin({
