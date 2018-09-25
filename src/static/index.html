@@ -22,7 +22,11 @@
   <% } %>
 
   <meta property="og:type"          content="website" />
+  <% if (htmlWebpackPlugin.options.deploy) { %>
+  <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>" />
+  <% } else { %>
   <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}" />
+  <% } %>
   <meta property="og:title"         content="Does Your Block Vote?" />
   <% if (htmlWebpackPlugin.options.deploy) { %>
   <meta property="og:image"         content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>index_share_image.png" />
