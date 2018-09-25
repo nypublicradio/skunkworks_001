@@ -37,6 +37,7 @@ const DistrictRoute = {
   },
 
   model({ districtId }) {
+    window.scrollTo(0, 0);
     return getDistrictData(districtId);
   },
 
