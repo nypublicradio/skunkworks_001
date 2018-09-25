@@ -17,15 +17,9 @@ class ElectionMap {
     this.options = options;
   }
   init(lat=-73.999914, lon=40.726932) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       var width = this.width,
           height = this.height;
-
-      // from turnout_by_district, get color and fill for all districts
-      var ed_data;
-      d3.json(`${window.location.origin}${ROOT_PATH}data/turnout_by_district.json`, (error, edData) => {
-        ed_data = edData;
-      });
 
       var address_coordinates = [lat, lon];
       if (lat && lon) {
@@ -75,35 +69,25 @@ class ElectionMap {
           .attr('font-size','6pt');
 
       // Load map data
-      d3.json(`${window.location.origin}${ROOT_PATH}data/districts.geojson`, (error, mapData) => {
+      Promise.all([
+        Turnout.districts,
+        Turnout.geoData,
+      ]).then(([edData, mapData]) => {
         this.features = mapData.features;
 
         // Draw each ed as a path
         this.mapLayer.selectAll('path')
-            .data(this.features)
+          .data(this.features)
           .enter().append('path')
-            .attr('d', this.path)
-            .attr('vector-effect', 'non-scaling-stroke')
-            .style('fill', fillFn)
-            .on('click', this.clicked.bind(this));
+          .attr('d', this.path)
+          .attr('vector-effect', 'non-scaling-stroke')
+          .style('fill', ({properties: {elect_dist}}) => {
+            return edData[elect_dist] ? edData[elect_dist].color : '#fff';
+          })
+          .on('click', this.clicked.bind(this));
 
-        if (error) {
-          reject(error);
-        } else {
-          resolve(this);
-        }
+        resolve(this);
       });
-
-      // Get ed color
-      function fillFn(d){
-        var ed = d.properties.elect_dist;
-        var hex_color = '#fff';
-        if (ed_data[ed]){
-          hex_color = ed_data[ed].color;
-        }
-        return hex_color;
-      }
-
     });
   }
 
