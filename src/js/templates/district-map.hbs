@@ -13,15 +13,9 @@
 
 <div class="district-ranking__scores">
   <div class="district-ranking__grade">
-    <span class="district-ranking__your-rank">Your Grade:</span> <span class="district-ranking__letter">{{grade}}</span>
+    <span class="district-ranking__your-rank">Your Grade:</span> <span class="district-ranking__letter" id="grade">{{grade}}</span>
   </div>
-  <div class="district-ranking__emoji">
-    <img class="district-ranking__emoji-image" alt="Gothamist."
-                                               src="{{assetPath}}i/grade_emoji_{{emoji}}@2x.png" width=80 height=80
-                                               srcset="{{assetPath}}i/grade_emoji_{{emoji}}.png 1x,
-                                               {{assetPath}}i/grade_emoji_{{emoji}}@2x.png 2x,
-                                               {{assetPath}}i/grade_emoji_{{emoji}}@3x.png 3x">
-  </div>
+  <div class="district-ranking__emoji" id="emoji">{{{emoji}}}</div>
 </div>
 
 <div class="map-wrapper">

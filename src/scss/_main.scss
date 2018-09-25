@@ -172,17 +172,14 @@ h1.district-map-title {
 }
 
 .district-ranking__letter {
-  width: 46px;
-  height: 53px;
   font-family: $font-montserrat;
   font-size: 45px;
   font-weight: 600;
   font-style: normal;
   font-stretch: normal;
-  line-height: 1.18;
   letter-spacing: normal;
-  margin-right: 10px;
   color: #333333;
+  text-align: center;
 
   @media screen and (max-width: 600px) {
     font-size: 45px;
@@ -196,7 +193,7 @@ h1.district-map-title {
   font-size: 45px;
   font-weight: 600;
   justify-content: space-between;
-  line-height: 80px;
+  margin-right: 10px;
 }
 
 .district-ranking__sharing {
@@ -242,10 +239,11 @@ h1.district-map-title {
 }
 
 .district-ranking__emoji-image {
-	@media screen and (max-width: 600px) {
-		width: 52px;
-		height: 52px;
-	}
+  display: block;
+  @media screen and (max-width: 600px) {
+    width: 52px;
+    height: 52px;
+  }
 }
 
 .district-ranking__text {

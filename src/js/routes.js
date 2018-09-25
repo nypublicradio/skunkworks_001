@@ -42,11 +42,12 @@ const DistrictRoute = {
   },
 
   setup(district) {
+    let emoji = require('./templates/emoji.hbs')({emoji: district.emoji});
     if (!Turnout.map) {
       let districtMapTemplate = require("./templates/district-map.hbs");
-      let mainEl = $('main');
-      insertTemplate(mainEl, districtMapTemplate({
+      insertTemplate($('main'), districtMapTemplate({
         ...district,
+        emoji,
         assetPath: ROOT_PATH,
       }));
 
@@ -54,6 +55,8 @@ const DistrictRoute = {
       Turnout.map.init()
         .then(() => Turnout.map.goToDistrict(district.elect_dist));
     } else {
+      insertTemplate($('#emoji'), emoji);
+      $('#grade').textContent = district.grade;
       Turnout.map.goToDistrict(district.elect_dist);
     }
 
