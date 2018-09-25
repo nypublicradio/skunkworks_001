@@ -18,8 +18,8 @@ const router = Turnout.router = new Router({
 });
 
 router.map(function(match) {
-  match('/').to('index');
-  match('/:districtId').to('district');
+  match(`${ROOT_PATH}`).to('index');
+  match(`${ROOT_PATH}:districtId`).to('district');
 });
 
 window.addEventListener('popstate', () => router.handleURL(window.location.pathname));
