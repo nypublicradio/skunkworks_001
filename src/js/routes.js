@@ -46,7 +46,7 @@ const DistrictRoute = {
 
   setup(district) {
     let ad = district.elect_dist.slice(0, 2);
-    let ed = district.elect_dist.slice(2).replace('0', '');
+    let ed = district.elect_dist.slice(2);
     let emoji = EmojiTemplate({emoji: district.emoji, assetPath: ROOT_PATH});
 
     if (!Turnout.map) {
