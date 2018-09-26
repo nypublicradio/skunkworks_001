@@ -44,7 +44,7 @@ const DistrictRoute = {
   setup(district) {
     let ad = district.elect_dist.slice(0, 2);
     let ed = district.elect_dist.slice(2).replace('0', '');
-    let emoji = require('./templates/emoji.hbs')({emoji: district.emoji});
+    let emoji = require('./templates/emoji.hbs')({emoji: district.emoji, assetPath: ROOT_PATH});
 
     if (!Turnout.map) {
       let districtMapTemplate = require("./templates/district-map.hbs");
