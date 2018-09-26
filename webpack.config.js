@@ -41,6 +41,7 @@ module.exports = {
       BASE_URL: JSON.stringify(BASE_URL),
       IS_SCREENSHOTTING: process.env.IS_SCREENSHOTTING ? true : false,
       GA_TRACKING_ID: JSON.stringify(process.env.GA_TRACKING_ID),
+      SIGNUP_ENDPOINT: JSON.stringify(process.env.SIGNUP_ENDPOINT),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/static/index.html'),
