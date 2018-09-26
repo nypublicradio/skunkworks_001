@@ -1,17 +1,16 @@
-import asyncio
 import json
+import math
 import os
+import subprocess
 import sys
-import time
 
 from PIL import Image, ImageDraw, ImageFont
-from pyppeteer import launch
 
 
 """
 This is a script to generate the images used for sharing.
 Images are saved as district_folders_for_s3/<district_number>/share_image.png
-The map view of the district is generated using phantomjs and selenium
+The map view of the district is generated using gen_map_screenshot.py
 to screenshot a cropped map displayed on the url:
 http://localhost:3000/<district_number>/
 for each district.
@@ -25,18 +24,6 @@ npm install
 npm run build
 npm run watch
 
-Make the following changes to map.js
-
-    // .duration(750)                               <-- change duration value
-    .duration(0)
-
-    if (d && this.centered !== d) {
-      var centroid = this.path.centroid(d);
-      x = centroid[0];
-      y = centroid[1];
-      // k = 4;                                     <-- change magnification factor
-      k = 2.2;
-
 python3 gen_images.py
 """
 
@@ -46,35 +33,6 @@ grey = (223, 223, 223)
 charcoal = (51, 51, 51)
 blue = (30, 102, 202)
 
-
-async def take_screenshot(district):
-    browser = await launch(headless=True)
-    page = await browser.newPage()
-    await page.goto(
-        'http://localhost:3000/{}'.format(district),
-        {'timeout': 0}
-    )
-    time.sleep(3)
-    await page.screenshot(
-        {
-            'path': image_dir + '/ed_map_screenshots/map_{}.png'.format(district),
-            'clip': {
-                'x': 0,
-                'y': 177,
-                'width': 800,
-                'height': 349
-            }
-        }
-    )
-    # Note : Values for x, y, width, and height may change
-    #        if placement of the map changes on page
-    await browser.close()
-
-
-def take_screenshots(districts):
-    loop = asyncio.get_event_loop()
-    futures = [asyncio.ensure_future(take_screenshot(district)) for district in districts]
-    loop.run_until_complete(asyncio.gather(*futures))
 
 def save_boxplots(district, district_percent, overall_percent):
     """ Generates a bar plot for district and saves image to the district folder
@@ -176,55 +134,67 @@ def draw_and_save_img(district, grade, district_percent, overall_percent):
         os.makedirs(directory)
     background.save(directory + '/{}_share_image.png'.format(district))
 
+
+# Get turnout data (from gen_turnout_json.py run)
+# To be used for percent plots and grade
 with open('./parsed_data/turnout_by_district.json', 'r') as f:
     turnout_data = json.loads(f.read())
 overall_percent = float(turnout_data['overall_data']['avg_percent_2014'])
 
-# Iterate through all districts in turnout_data:
 districts = [x for x in turnout_data.keys() if x != 'overall_data']
 districts.sort()
 
-
 # STEP 1
 # Generate map screenshots
+# Map screenshots are saved in a seperate folder ed_map_screenshots
+# This allows them to be easily QAed (visually / manually) *recommended
+
+# Make directory to save images (if it doesn't already exist)
+ed_map_screenshots_dir = image_dir + 'ed_map_screenshots'
+if not os.path.exists(ed_map_screenshots_dir):
+    os.makedirs(ed_map_screenshots_dir)
+
+# Create a list of districts that need map images
 map_image_needed = []
+for district in districts:
+    # Get a list of districts that need map screenshots
+    if not os.path.isfile(ed_map_screenshots_dir + '/map_{}.png'.format(district)):
+        map_image_needed.append(district)
+
+# # It is a good idea to visually QA the image icons and make sure they images look good
+# # before adding map screenshots to share images (STEP 4)
+
+# Every run of gen_map_screenshots will add 100 images
+# get number of run times:
+rerun_count = math.ceil(len(map_image_needed)/100)
+# Because of a bug in the pyppeteer library that does not properly close browser
+# If we run for all districts, we get an error "Too Many Open Files"
+# A workaround is to run an external script in batches
+if len(map_image_needed) > 0:
+    print("Running script to generate screenshots of map...")
+for i in range(rerun_count):
+    subprocess.call(["python3", "gen_map_screenshot.py"])
+    print("Finished batch {part} out of {whole}".format(part=i+1, whole=rerun_count))
+
+
+# Now generate percent plots and share images
 for district in districts:
     directory = output_dir + district
     # Make folders if they don't exist
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    # Get a list of districts that need map screenshots
-    if not os.path.isfile(image_dir + 'ed_map_screenshots/map_{}.png'.format(district)):
-        map_image_needed.append(district)
-
-# Generate map screenshots to be used in share images
-# First change style files to enhance quality of image specifically for sharing
-
-
-# It is a good idea to visually QA the image icons and make sure they images look good
-# before adding map screenshots to share images (STEP 4)
-batch_size = 10
-for i in range(0, len(map_image_needed), batch_size):
-    print(map_image_needed[i: i+batch_size])
-    take_screenshots(map_image_needed[i: i+batch_size])
-
-# for run in {1..10}; do python3 gen_images.py; done;
-
-
-for district in districts:
-    district_percent = turnout_data[district]['percent']
-
     # STEP 2
     # Generate box plots
     # Saved as a separate file for use on district url and in share image
     if not os.path.isfile(directory + '/{}_plots.png'.format(district)):
+        district_percent = turnout_data[district]['percent']
         save_boxplots(district, district_percent, overall_percent)
 
     # STEP 3
     # Generate and save share images
     if not os.path.isfile(directory + '/{}_share_image.png'.format(district)):
-        print(district)
         grade = turnout_data[district]['grade'].replace("+", "Plus").replace("-", "Minus")
-        print(grade)
+        district_percent = turnout_data[district]['percent']
         draw_and_save_img(district, grade, district_percent, overall_percent)
+        print("Share image complete for ", district)
