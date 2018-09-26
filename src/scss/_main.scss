@@ -81,7 +81,7 @@ h1.district-map-title {
   color: #333333;
   font-family: $font-montserrat;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     font-size: 24px;
   }
 }
@@ -166,7 +166,7 @@ h1.district-map-title {
   font-weight: 600;
   margin-right: 10px;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     font-size: 18px;
   }
 }
@@ -181,7 +181,7 @@ h1.district-map-title {
   color: #333333;
   text-align: center;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     font-size: 45px;
   }
 }
@@ -234,7 +234,7 @@ h1.district-map-title {
 .district-ranking__turnout-text p, .district-ranking__context-text p {
   margin: 3px 0;
 
-	@media screen and (max-width: 600px) {
+	@media screen and (max-width: 800px) {
     font-size: 12px;
 	}
 }
@@ -242,7 +242,7 @@ h1.district-map-title {
 .district-ranking__emoji-image {
   display: block;
   margin-left: 20px;
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 52px;
     height: 52px;
   }
@@ -257,13 +257,13 @@ h1.district-map-title {
   padding: 24px 16px;
   margin-bottom: 40px;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     display: flex;
   }
 }
 
 .extra-credit__heading {
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     text-align: left;
     font-family: $font-montserrat;
   }
@@ -274,7 +274,7 @@ h1.district-map-title {
   counter-reset: extra-credit;
   padding-left: 40px;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     margin-top: 0px;
     margin-bottom: 0px;
     flex: 0 0 407px;
@@ -331,7 +331,7 @@ h1.district-map-title {
 }
 
 @supports (display: grid) {
-  @media screen and (min-width: 600px){
+  @media screen and (min-width: 800px){
     .email-updates {
       display: grid;
       grid-template:
