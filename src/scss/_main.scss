@@ -207,6 +207,7 @@ h1.district-map-title {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 10px;
 }
 
 .district-ranking__turnout-text {
@@ -254,12 +255,29 @@ h1.district-map-title {
   background: $lightgray;
   padding: 24px 16px;
   margin-bottom: 40px;
+
+  @media screen and (min-width: 600px) {
+    display: flex;
+  }
+}
+
+.extra-credit__heading {
+  @media screen and (min-width: 600px) {
+    text-align: left;
+    font-family: $font-montserrat;
+  }
 }
 
 .extra-credit__list {
   list-style: none;
   counter-reset: extra-credit;
   padding-left: 40px;
+
+  @media screen and (min-width: 600px) {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    flex: 0 0 407px;
+  }
 }
 .extra-credit__list-item {
   counter-increment: extra-credit;
@@ -275,6 +293,11 @@ h1.district-map-title {
   line-height: 1.21;
   position: absolute;
   left: -30px;
+}
+
+.extra-credit .email-form__optin {
+  font-size: 12px;
+  margin-top: -5px;
 }
 
 .email-updates__heading {
@@ -306,6 +329,35 @@ h1.district-map-title {
   margin: 0;
 }
 
+@supports (display: grid) {
+  @media screen and (min-width: 600px){
+    .email-updates {
+      display: grid;
+      grid-template:
+      "title     form"
+      "description form"
+    }
+
+    .email-updates h2 {
+      text-align: left;
+      margin-bottom: -5px;
+    }
+
+    .email-updates__heading {
+      grid-area: title;
+    }
+
+    .email-updates__description {
+      grid-area: description;
+    }
+
+    .email-updates form {
+      grid-area: form;
+    }
+  }
+}
+
+
 .sharing__heading  {
   margin-bottom: 16px;
   margin-right: 20px;
@@ -317,6 +369,7 @@ h1.district-map-title {
   color: #000000;
 
 }
+
 .sharing__icons {
   align-items: center;
   display: flex;
@@ -349,4 +402,27 @@ h1.district-map-title {
 
 .footer__data-credits {
   margin-bottom: 8px;
+}
+
+.election-hub-callout {
+  @include wrapper;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.election-hub-callout__question-mark {
+  font-family: $font-montserrat;
+  font-size: 24px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.separator {
+  @include wrapper;
+
+  background-image: linear-gradient(to bottom,black,black 2px,transparent 2px,transparent 10px,black 10px,black 12px,transparent 12px,transparent 20px,black 20px,black 22px);
+  height: 22px;
+  margin: 40px auto;
 }
