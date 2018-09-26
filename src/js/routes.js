@@ -26,7 +26,25 @@ const IndexRoute = {
     insertTemplate($('main'), MainTemplate({
       assetPath: ROOT_PATH,
     }));
-    bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+    bindAddressFormEvents({
+      form: '.address-form__form',
+      errors: '.address-form__errors',
+      multiples: '.address-form__multiples',
+      fields: [{
+        name: 'address',
+        selector: '#address-form__address-input',
+        message: 'Please enter an address.',
+      }, {
+        name: 'email',
+        selector: '#address-form__email-input',
+        message: 'Please enter an email.',
+      }, {
+        name: 'legal',
+        selector: '#legal',
+        message: 'Please agree to the terms',
+        validation: el => el.checked,
+      }]
+    });
 
     gtag('config', GA_TRACKING_ID, {
       page_title: 'Does Your Block Vote?',
@@ -83,7 +101,30 @@ const DistrictRoute = {
         ...district,
         assetPath: ROOT_PATH,
       }));
-      bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
+      bindAddressFormEvents({
+        form: '#address-form',
+        errors: '#address-errors',
+        multiples: '.address-form__multiples',
+        fields: [{
+          name: 'address',
+          selector: '#address-form__address-input',
+          message: 'Please enter an address.',
+        }]
+      });
+      bindAddressFormEvents({
+        form: '#email-form',
+        errors: '#email-errors',
+        fields: [{
+          name: 'email',
+          selector: '#address-form__email-input',
+          message: 'Please enter an email.',
+        }, {
+          name: 'legal',
+          selector: '#legal',
+          message: 'Please agree to the terms',
+          validation: el => el.checked,
+        }]
+      });
     });
   }
 };

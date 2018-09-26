@@ -25,5 +25,6 @@ module.exports = {
     "BASE_URL": true,
     "ROOT_PATH": true,
     "IS_SCREENSHOTTING": true,
+    "SIGNUP_ENDPOINT": true,
   }
 }

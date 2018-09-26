@@ -39,17 +39,17 @@
   </div>
 
 
-  <form class="address-form__form">
+  <form class="address-form__form address-form__form--oneline" id="address-form">
     <label class="address-form__label" for="address-form__input">View A Different Address</label>
     <div class="address-form__input-wrapper">
-      <input id="address-form__input" class="address-form__input" placeholder="123 Broadway, New York, NY">
+      <input id="address-form__address-input" class="address-form__input" placeholder="123 Broadway, New York, NY">
       <button type="submit" id="address-form__button" class="address-form__button"><img class="address-form__button-image" alt="Submit."
   src="{{assetPath}}i/arrow_right@2x.png" width=23 height=16
   srcset="{{assetPath}}i/arrow_right.png 1x,
           {{assetPath}}i/arrow_right@2x.png 2x,
           {{assetPath}}i/arrow_right@3x.png 3x"></button>
     </div>
-    <div class="address-form__errors"></div>
+    <div class="address-form__errors" id="address-errors"></div>
     <div class="address-form__multiples"></div>
   </form>
 
@@ -58,27 +58,25 @@
   <ol class="extra-credit__list">
     <li class="extra-credit__list-item"><b>Share your block&apos;s grade</b> on social media with a messaging encouraging your neighbors to vote on Tuesday, November 6.</li>
     <li class="extra-credit__list-item"><b>Submit your email</b> and we'll send you an email after the general election showing if your block's turnout improved, along with more tips to turn out voters if it didn't.</li>
-    <form action="https://nypublicradio.us5.list-manage.com/subscribe/post?u=4109fdd323aaac7078eadaa8f&amp;id=9f4c9b9202" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate disabled>
-      <div id="mc_embed_signup_scroll">
+    <form class="address-form__form address-form__form--oneline" id="email-form">
+      <div class="address-form__input-wrapper">
+        <input id="address-form__email-input" class="address-form__input" placeholder="You@Email.com">
+        <button type="submit" id="address-form__button" class="address-form__button"><img class="address-form__button-image" alt="Submit."
+    src="{{assetPath}}i/arrow_right@2x.png" width=23 height=16
+    srcset="{{assetPath}}i/arrow_right.png 1x,
+            {{assetPath}}i/arrow_right@2x.png 2x,
+            {{assetPath}}i/arrow_right@3x.png 3x"></button>
+      </div>
 
-        <div class="email-form__input-wrapper">
-          <input type="email" value="" name="EMAIL" class="required email email-form__input" id="mce-EMAIL" placeholder="you@email.com" aria-label="Email address">
-          <button type="submit" id="mc-embedded-subscribe" class="email-form__button"><img class="email-form__button-image" alt="Submit."
-                                                                                                                            src="{{assetPath}}i/arrow_right@2x.png" width=23 height=16
-                                                                                                                            srcset="{{assetPath}}i/arrow_right.png 1x,
-                                                                                                                            {{assetPath}}i/arrow_right@2x.png 2x,
-                                                                                                                            {{assetPath}}i/arrow_right@3x.png 3x"></button>
-        </div>
-        <input type="hidden" value="{{id}}" name="DISTRICT">
-        <div id="mce-responses" class="clear">
-          <div class="response" id="mce-error-response" style="display:none"></div>
-          <div class="response" id="mce-success-response" style="display:none"></div>
-        </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4109fdd323aaac7078eadaa8f_9f4c9b9202" tabindex="-1" value=""></div>
-        <label for="optin" class="email-form__optin">
-          <input type="checkbox" name="optin" id="optin" class="email-form__optin-checkbox">
-          <p class="email-form__optin-message">By submitting your information, you're agreeing to receive communications from New York Public Radio in accordance with our <a href="https://www.wnyc.org/terms/">Terms of Use</a>.</p>
+      <div class="checkbox-wrapper">
+        <input type="checkbox" class="checkbox__input" id="legal">
+        <label for="legal" class="checkbox__label">
+          <div class="checkbox__label-text">
+            By submitting your information, you're agreeing to receive communications from New York Public Radio in accordance with our <a href="https://www.wnyc.org/terms/" target="-_blank">Terms of Use</a>.
+          </div>
         </label>
+      </div>
+      <div class="address-form__errors" id="email-errors"></div>
     </form>
     <li class="extra-credit__list-item"><b>Print out this flier</b> to hand out at your next block party, hang in your window, or slip under doors.</li>
     <li class="extra-credit__list-item"><b>Learn about your local races</b> and all election coverage at our <a href="https://elections.wnyc.org/" target="_blank">Elections Hub</a>, and talk to your neighbors and ask them to vote. Studies show that people who publically commit to voting usually do.</li>
