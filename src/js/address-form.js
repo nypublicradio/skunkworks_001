@@ -44,8 +44,8 @@ export function bindAddressFormEvents(form, errors, multiples) {
 
   $(form).addEventListener('submit', e => {
     $(form).classList.add('loading');
-    $(errors).innerHTML = '';
-    $(multiples).innerHTML = '';
+    $(errors).textContent = '';
+    $(multiples).textContent = '';
     e.preventDefault();
     let address = $('.address-form__input').value;
     lookupAddress(address, geocoder).then(result => {
@@ -53,31 +53,31 @@ export function bindAddressFormEvents(form, errors, multiples) {
         Turnout.router.transitionTo('district', district);
       }).catch(error => {
         if (error.error === 'no data') {
-          $(errors).innerHTML = error.message;
+          $(errors).textContent = error.message;
         }
       });
       $(form).classList.remove('loading');
     }).catch(error => {
       if(error.error === 'multiple locations') {
-        $(multiples).innerHTML = '';
+        $(multiples).textContent = '';
         let question = document.createElement('p');
-        question.innerText = 'Did you mean...';
+        question.textContent = 'Did you mean...';
         $(multiples).appendChild(question);
         error.results.forEach(result => {
           getDistrict(result.geometry.location.lat(), result.geometry.location.lng())
           .then(district => {
             let link = document.createElement('a');
-            link.innerText = result.formatted_address;
+            link.textContent = result.formatted_address;
             link.href = `${ROOT_PATH}${district.elect_dist}`;
             $(multiples).appendChild(link);
           });
         });
       } else if (error.error === 'out of bounds') {
-        $(errors).innerText = 'Please use an address in the 5 boroughs';
+        $(errors).textContent = 'Please use an address in the 5 boroughs';
       } else if (error.error === 'no results') {
-        $(errors).innerText = 'Invalid Address';
+        $(errors).textContent = 'Invalid Address';
       } else {
-        $(errors).innerText = `Something unexpected occurred. Got status: ${error.error}`;
+        $(errors).textContent = `Something unexpected occurred. Got status: ${error.error}`;
       }
       $(form).classList.remove('loading');
     });
