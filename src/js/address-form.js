@@ -1,3 +1,5 @@
+import fetch from 'unfetch';
+
 import { $ } from './dom';
 import {
   getDistrict
@@ -38,49 +40,101 @@ function lookupAddress(address, geocoder) {
   });
 }
 
+function insertErrorMessages(messages = [], el) {
+  function insertMessage(message) {
+    let li = document.createElement('li');
+    li.textContent = message;
+    ul.appendChild(li);
+  }
+  let ul = document.createElement('ul');
+  messages.forEach(insertMessage);
+  $(el).appendChild(ul);
+}
 
-export function bindAddressFormEvents(form, errors, multiples) {
+function checkForErrors(fields) {
+  let errors = [];
+  fields.forEach(field => {
+    let valid;
+    let el = $(field.selector);
+    if (field.validation) {
+      valid = field.validation(el);
+    } else {
+      valid = !!el.value;
+    }
+    if (!valid) {
+      errors.push(field.message);
+    }
+  });
+  return errors;
+}
+
+export function bindAddressFormEvents(options) {
   const geocoder = new google.maps.Geocoder();
+  let { errors, multiples, fields, form } = options;
 
   $(form).addEventListener('submit', e => {
-    $(form).classList.add('loading');
-    $(errors).textContent = '';
-    $(multiples).textContent = '';
     e.preventDefault();
-    let address = $('.address-form__input').value;
-    lookupAddress(address, geocoder).then(result => {
-      getDistrict(result.lat, result.lng).then(district => {
-        Turnout.router.transitionTo('district', district);
-      }).catch(error => {
-        if (error.error === 'no data') {
-          $(errors).textContent = error.message;
-        }
-      });
-      $(form).classList.remove('loading');
-    }).catch(error => {
-      if(error.error === 'multiple locations') {
-        $(multiples).textContent = '';
-        let question = document.createElement('p');
-        question.textContent = 'Did you mean...';
-        $(multiples).appendChild(question);
-        error.results.forEach(result => {
-          getDistrict(result.geometry.location.lat(), result.geometry.location.lng())
-          .then(district => {
-            let link = document.createElement('a');
-            link.textContent = result.formatted_address;
-            link.href = `${ROOT_PATH}${district.elect_dist}`;
-            $(multiples).appendChild(link);
-          });
+
+    if (errors) {
+      $(errors).textContent = '';
+    }
+    if (multiples) {
+      $(multiples).textContent = '';
+    }
+
+    let errorMessages = checkForErrors(fields);
+
+    if (errorMessages.length) {
+      insertErrorMessages(errorMessages, errors);
+      return;
+    }
+
+    $(form).classList.add('loading');
+
+    let emailField = fields.find(field => field.name === 'email');
+    let addressField = fields.find(field => field.name === 'address');
+
+    if (emailField) {
+      let email = $(emailField.selector).value;
+      fetch(SIGNUP_ENDPOINT, {method: 'POST', body: JSON.stringify({email, timestamp: new Date()})});
+    }
+
+    if (addressField) {
+      let address = $(addressField.selector).value;
+      lookupAddress(address, geocoder).then(result => {
+        getDistrict(result.lat, result.lng).then(district => {
+          Turnout.router.transitionTo('district', district);
+        }).catch(error => {
+          if (error.error === 'no data') {
+            $(errors).textContent = error.message;
+          }
         });
-      } else if (error.error === 'out of bounds') {
-        $(errors).textContent = 'Please use an address in the 5 boroughs';
-      } else if (error.error === 'no results') {
-        $(errors).textContent = 'Invalid Address';
-      } else {
-        $(errors).textContent = `Something unexpected occurred. Got status: ${error.error}`;
-      }
-      $(form).classList.remove('loading');
-    });
+        $(form).classList.remove('loading');
+      }).catch(error => {
+        if(error.error === 'multiple locations') {
+          $(multiples).textContent = '';
+          let question = document.createElement('p');
+          question.textContent = 'Did you mean...';
+          $(multiples).appendChild(question);
+          error.results.forEach(result => {
+            getDistrict(result.geometry.location.lat(), result.geometry.location.lng())
+            .then(district => {
+              let link = document.createElement('a');
+              link.textContent = result.formatted_address;
+              link.href = `${ROOT_PATH}${district.elect_dist}`;
+              $(multiples).appendChild(link);
+            });
+          });
+        } else if (error.error === 'out of bounds') {
+          $(errors).textContent = 'Please use an address in the 5 boroughs';
+        } else if (error.error === 'no results') {
+          $(errors).textContent = 'Invalid Address';
+        } else {
+          $(errors).textContent = `Something unexpected occurred. Got status: ${error.error}`;
+        }
+        $(form).classList.remove('loading');
+      });
+    }
     return false;
   });
 }
