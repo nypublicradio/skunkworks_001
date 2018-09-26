@@ -3,6 +3,11 @@ import { bindAddressFormEvents } from './address-form';
 import { getDistrictData } from './districts';
 import ElectionMap from './map';
 
+import EmojiTemplate from './templates/emoji.hbs';
+import MapTemplate from './templates/district-map.hbs';
+import MainTemplate from './templates/main.hbs';
+import DistrictTemplate from './templates/district-details.hbs';
+
 function insertTemplate(targetElement, templateString, id='') {
   let wrapper = document.createElement('div');
   wrapper.id = id;
@@ -18,9 +23,7 @@ const IndexRoute = {
   setup() {
     // clear old map if it exists
     Turnout.map = null;
-    let mainTemplate = require("./templates/main.hbs");
-    let mainEl = document.querySelector('main');
-    insertTemplate(mainEl, mainTemplate({
+    insertTemplate($('main'), MainTemplate({
       assetPath: ROOT_PATH,
     }));
     bindAddressFormEvents('.address-form__form','.address-form__errors','.address-form__multiples');
@@ -44,11 +47,10 @@ const DistrictRoute = {
   setup(district) {
     let ad = district.elect_dist.slice(0, 2);
     let ed = district.elect_dist.slice(2).replace('0', '');
-    let emoji = require('./templates/emoji.hbs')({emoji: district.emoji, assetPath: ROOT_PATH});
+    let emoji = EmojiTemplate({emoji: district.emoji, assetPath: ROOT_PATH});
 
     if (!Turnout.map) {
-      let districtMapTemplate = require("./templates/district-map.hbs");
-      insertTemplate($('main'), districtMapTemplate({
+      insertTemplate($('main'), MapTemplate({
         ...district,
         emoji,
         ad,
@@ -76,9 +78,8 @@ const DistrictRoute = {
   },
 
   loadDistrictDetails(districtId) {
-    let districtDetailsTemplate = require("./templates/district-details.hbs");
     getDistrictData(districtId).then(district => {
-      insertTemplate($('.district-details'), districtDetailsTemplate({
+      insertTemplate($('.district-details'), DistrictTemplate({
         ...district,
         assetPath: ROOT_PATH,
       }));
