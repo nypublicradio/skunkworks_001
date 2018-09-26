@@ -15,9 +15,20 @@ main {
   margin: auto;
 }
 
-.gothamist-logo {
-  display: block;
-  margin: 0 auto 24px;
+.gothamist-logo-separator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.gothamist-logo-separator:before, .gothamist-logo-separator:after {
+  background-image: linear-gradient(to bottom,black,black 2px,transparent 2px,transparent 10px,black 10px,black 12px,transparent 12px,transparent 20px,black 20px,black 22px);
+  content: '';
+  flex: 1;
+  height: 22px;
+  margin: 0 12px;
 }
 
 .address-form {
