@@ -37,7 +37,7 @@ main {
 }
 .address-form__form {
   background-color: $lightgray;
-  margin: 16px;
+  margin: 32px 16px;
   padding: 18px 18px 33px 18px;
 }
 .address-form__label {
@@ -93,7 +93,7 @@ h1.district-map-title {
   width: 100%;
   font-size: 16px;
   font-family: $font-montserrat;
-  font-weight: 400;
+  font-weight: 600;
   text-align: center;
   cursor: pointer;
   align-items: center;
@@ -253,7 +253,7 @@ h1.district-map-title {
 }
 
 .extra-credit {
-  background: $lightgray;
+  background: #f7f7f7;
   padding: 24px 16px;
   margin-bottom: 40px;
 
