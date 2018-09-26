@@ -81,13 +81,13 @@ class ElectionMap {
 
         resolve(this);
 
-        svg.call(d3.zoom()
-          .scaleExtent([.3, 1])
-          .on("zoom", zoomed));
+        // svg.call(d3.zoom()
+        //   .scaleExtent([.3, 1])
+        //   .on("zoom", zoomed));
 
-        function zoomed() {
-          g.attr("transform", d3.event.transform);
-        }
+        // function zoomed() {
+        //   g.attr("transform", d3.event.transform);
+        // }
       });
      });
   }
