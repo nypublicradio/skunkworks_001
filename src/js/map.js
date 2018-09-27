@@ -1,5 +1,3 @@
-import { getDistrictData } from './districts';
-
 const DEFAULT_OPTIONS = {
   selector: '#map',
 };
@@ -54,8 +52,9 @@ class ElectionMap {
       this.mapLayer = g.append('g')
         .classed('map-layer', true);
 
-      this.selectedDistrictLayer = g.append('g')
-          .classed('selected-map-layer', true);
+      g.append('g')
+        .classed('selected-map-layer', true)
+      .append('path');
 
       // Label neighborhoods using neighb_coords.js file
       this.g.selectAll("text")
@@ -77,21 +76,11 @@ class ElectionMap {
           .attr('d', this.path)
           .attr('vector-effect', 'non-scaling-stroke')
           .style('fill', ({properties: {elect_dist}}) => {
-            return edData[elect_dist] ? edData[elect_dist].color : '#fff';
-          })
-          .on('click', this.clicked.bind(this));
+            return Turnout.districts[elect_dist] ? Turnout.districts[elect_dist].color : '#fff';
+          });
 
         resolve(this);
-
-        // svg.call(d3.zoom()
-        //   .scaleExtent([.3, 1])
-        //   .on("zoom", zoomed));
-
-        // function zoomed() {
-        //   g.attr("transform", d3.event.transform);
-        // }
       });
-     });
   }
 
 
@@ -116,14 +105,9 @@ class ElectionMap {
     this.district = d && d.properties && d.properties.elect_dist;
 
     if (this.district) {
-      var thisPath = this.path(d);
-
-      this.selectedDistrictLayer.selectAll('path')
+      d3.select('.selected-map-layer path')
         .data([d])
-        .enter().append('path')
-        .attr('d', thisPath);
-
-      document.querySelector('.selected-map-layer path').setAttribute('d', thisPath);
+        .attr('d', this.path(d));
     }
 
     // Compute centroid of the selected path
