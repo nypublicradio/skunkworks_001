@@ -8,21 +8,19 @@ function findDistrictByCoords(lat, lng) {
 }
 
 export function getDistrict(lat, lng) {
-  return findDistrictByCoords(lat, lng)
-    .then(getDistrictData);
+  let district = findDistrictByCoords(lat, lng);
+  if (!district) {
+    return {error: 'out of bounds', message: "Out of bounds"};
+  } else {
+    return getDistrictData(district);
+  }
 }
 
 export function getDistrictData(electDist) {
-  return new Promise((resolve, reject) => {
-    Turnout.districts.then(edData => {
-      if (!edData[electDist]) {
-        reject({error: 'no data', message: `Not enough data for district ${electDist}`});
-      } else {
-        let data = edData[electDist];
-        data.emoji = data.grade && data.grade.toLowerCase() || '';
-        data.borough_data_2014 = edData["overall_data"]["by_borough_2014"][data.borough];
-        resolve(data);
-      }
-    });
-  });
+  let district = Turnout.districts[electDist];
+  if (!district) {
+    return {error: 'no data', message: `Not enough data for district ${electDist}`};
+  } else {
+    return district;
+  }
 }
