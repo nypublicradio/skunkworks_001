@@ -34,15 +34,15 @@ const IndexRoute = {
         name: 'address',
         selector: '#address-form__address-input',
         message: 'Please enter an address.',
-      }, {
-        name: 'email',
-        selector: '#address-form__email-input',
-        message: 'Please enter an email.',
-      }, {
-        name: 'legal',
-        selector: '#legal',
-        message: 'Please agree to the terms',
-        validation: el => el.checked,
+      // }, {
+      //   name: 'email',
+      //   selector: '#address-form__email-input',
+      //   message: 'Please enter an email.',
+      // }, {
+      //   name: 'legal',
+      //   selector: '#legal',
+      //   message: 'Please agree to the terms',
+      //   validation: el => el.checked,
       }]
     });
 
