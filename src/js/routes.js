@@ -96,7 +96,8 @@ const DistrictRoute = {
   },
 
   loadDistrictDetails(districtId) {
-    getDistrictData(districtId).then(district => {
+    let district = Turnout.districts[districtId];
+    if (district) {
       insertTemplate($('.district-details'), DistrictTemplate({
         ...district,
         assetPath: ROOT_PATH,
@@ -125,7 +126,7 @@ const DistrictRoute = {
           validation: el => el.checked,
         }]
       });
-    });
+    }
   }
 };
 
