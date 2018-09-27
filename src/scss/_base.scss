@@ -40,3 +40,10 @@ h6 {
   text-align: center;
   margin: 0;
 }
+
+p, li {
+  @media screen and (min-width: 800px) {
+    font-size: 18px;
+    line-height: 27px;
+  }
+}
