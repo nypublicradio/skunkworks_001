@@ -1,16 +1,10 @@
 function findDistrictByCoords(lat, lng) {
-  return new Promise((resolve, reject) => {
-    Turnout.geoData.then(mapData => {
-      let districts = mapData.features.filter(feature => {
-        return d3.geoContains(feature, [lng, lat]);
-      });
-      if (districts.length > 0) {
-        resolve(districts[0].properties["elect_dist"]);
-      } else {
-        reject({error: 'no district', message: `No district found for coordinates ${lat}, ${lng}`});
-      }
-    });
-  });
+  let { districts:district } = Turnout.wherewolf.find([lng, lat]);
+  if (!district) {
+    return false;
+  } else {
+    return district.elect_dist;
+  }
 }
 
 export function getDistrict(lat, lng) {
