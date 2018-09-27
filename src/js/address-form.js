@@ -102,13 +102,15 @@ export function bindAddressFormEvents(options) {
     if (addressField) {
       let address = $(addressField.selector).value;
       lookupAddress(address, geocoder).then(result => {
-        getDistrict(result.lat, result.lng).then(district => {
+        let district = getDistrict(result.lat, result.lng);
+        if (!district.error) {
           Turnout.router.transitionTo('district', district);
-        }).catch(error => {
+        } else {
+          let { error } = district;
           if (error.error === 'no data') {
             $(errors).textContent = error.message;
           }
-        });
+        }
         $(form).classList.remove('loading');
       }).catch(error => {
         if(error.error === 'multiple locations') {
@@ -117,13 +119,11 @@ export function bindAddressFormEvents(options) {
           question.textContent = 'Did you mean...';
           $(multiples).appendChild(question);
           error.results.forEach(result => {
-            getDistrict(result.geometry.location.lat(), result.geometry.location.lng())
-            .then(district => {
-              let link = document.createElement('a');
-              link.textContent = result.formatted_address;
-              link.href = `${ROOT_PATH}${district.elect_dist}`;
-              $(multiples).appendChild(link);
-            });
+            let district = getDistrict(result.geometry.location.lat(), result.geometry.location.lng());
+            let link = document.createElement('a');
+            link.textContent = result.formatted_address;
+            link.href = `${ROOT_PATH}${district.elect_dist}`;
+            $(multiples).appendChild(link);
           });
         } else if (error.error === 'out of bounds') {
           $(errors).textContent = 'Please use an address in the 5 boroughs';
