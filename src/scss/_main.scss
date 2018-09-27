@@ -81,7 +81,10 @@ main {
   margin-bottom: 15px;
 
   &::placeholder {
-    color: #333;
+    opacity: 0.2;
+    font-size: 14px;
+    font-style: italic;
+    color: #333333;
   }
 }
 
