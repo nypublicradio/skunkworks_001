@@ -68,11 +68,7 @@ class ElectionMap {
           .attr('font-size','6pt');
 
       // Load map data
-      Promise.all([
-        Turnout.districts,
-        Turnout.geoData,
-      ]).then(([edData, mapData]) => {
-        this.features = mapData.features;
+        this.features = Turnout.geoData.features;
 
         // Draw each ed as a path
         this.mapLayer.selectAll('path')
