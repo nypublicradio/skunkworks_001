@@ -96,9 +96,18 @@ class ElectionMap {
 
 
   // When clicked, zoom in
-  clicked(d) {
-    if (d && d.properties && d.properties.elect_dist) {
-      getDistrictData(d.properties.elect_dist).then(d => Turnout.router.transitionTo('district', d));
+  clicked() {
+    let el = d3.event.target;
+    if (!el) {
+      return;
+    }
+    let data = d3.select(el).datum();
+    if (!data) {
+      return;
+    }
+    let district = Turnout.districts[data.properties.elect_dist];
+    if (district) {
+      Turnout.router.transitionTo('district', district);
     }
   }
 
