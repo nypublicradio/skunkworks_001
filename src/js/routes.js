@@ -57,8 +57,11 @@ const DistrictRoute = {
     return { districtId: district.elect_dist };
   },
 
-  model({ districtId }) {
+  beforeModel() {
     window.scrollTo(0, 0);
+  },
+  
+  model({ districtId }) {
     return getDistrictData(districtId);
   },
 
