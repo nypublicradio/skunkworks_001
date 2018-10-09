@@ -91,9 +91,13 @@ const DistrictRoute = {
   loadDistrictDetails(districtId) {
     let district = Turnout.districts[districtId];
     if (district) {
+      let { protocol, host, pathname } = window.location;
       insertTemplate($('.district-details'), DistrictTemplate({
         ...district,
         assetPath: ROOT_PATH,
+        shareUrl: `${protocol}//${host}${pathname}`,
+        shareTitle: "Does Your Block Vote?",
+        shareText: "Voter turnout varies dramatically from one block to another in New York City. Find out if your neighbors vote -- and how to get them to the polls if they don't."
       }));
       bindAddressFormEvents({
         form: '#address-form',

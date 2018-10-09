@@ -1,10 +1,10 @@
 <div class="district-ranking__sharing">
   <p class="sharing__heading">Share</p>
   <div class="sharing__icons">
-    <a href="https://www.facebook.com/sharer.php?u={{shareUrl}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-facebook-f"></i></a>
-    <a href="https://twitter.com/intent/tweet?url={{shareUrl}}&amp;text={{shareTitle}}&amp;via=@gothamist" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-twitter"></i></a>
-    <a href="mailto:?subject={{shareTitle}}&amp;body={{shareText}}" target="_blank"><i class="fas fa-envelope"></i></a>
-    <a href="https://reddit.com/submit?url={{shareUrl}}&amp;title={{shareTitle}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-reddit-alien"></i></a>
+    <a href="https://www.facebook.com/sharer.php?u={{encode-url shareUrl "?utm_medium=social&utm_source=fb&utm_campaign=dbv"}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com/intent/tweet?url={{encode-url shareUrl "?utm_medium=social&utm_source=tw&utm_campaign=dbv"}}&text={{encode-url shareTitle}}&via=gothamist" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="mailto:?subject={{encode-url shareTitle}}&body={{encode-url shareText}}" target="_blank"><i class="fas fa-envelope"></i></a>
+    <a href="https://reddit.com/submit?url={{encode-url shareUrl "?utm_medium=social&utm_source=rd&utm_campaign=dbv"}}&title={{shareTitle}}" rel="nofollow noopener noreferrer" target="_blank"><i class="fab fa-reddit-alien"></i></a>
   </div>
 </div>
 
