@@ -126,9 +126,9 @@ export function bindAddressFormEvents(options) {
             $(multiples).appendChild(link);
           });
         } else if (error.error === 'out of bounds') {
-          $(errors).textContent = 'Please use an address in the 5 boroughs';
+          $(errors).textContent = 'Please enter a valid NYC address';
         } else if (error.error === 'no results') {
-          $(errors).textContent = 'Invalid Address';
+          $(errors).textContent = 'Please enter a valid NYC address';
         } else {
           $(errors).textContent = `Something unexpected occurred. Got status: ${error.error}`;
         }
