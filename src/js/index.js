@@ -2,10 +2,13 @@ import Router from 'router_js';
 import fetch from 'unfetch';
 import Wherewolf from 'wherewolf';
 
+import { $, insertTemplate } from './dom';
 import {
   IndexRoute,
   DistrictRoute
 } from './routes';
+
+import LoadingTemplate from './templates/loading.hbs';
 
 const Turnout = window.Turnout = {};
 
@@ -28,6 +31,7 @@ router.map(function(match) {
 window.addEventListener('popstate', () => router.handleURL(window.location.pathname));
 
 document.addEventListener('DOMContentLoaded', function () {
+  insertTemplate($('main'), LoadingTemplate());
   Promise.all([
     fetch(`${BASE_URL}${ROOT_PATH}data/districts.geojson`).then(r => r.json()),
     fetch(`${BASE_URL}${ROOT_PATH}data/turnout_by_district.json`).then(r => r.json()),

@@ -514,3 +514,52 @@ h1.district-map-title {
 i.fab, i.fas {
   font-size: 24px;
 }
+
+.loading-icon {
+  max-width: 175px;
+  margin: auto;
+}
+
+.loading-text {
+  text-align: center;
+}
+
+.gothamist-buildings {
+  .building {
+    animation-name: fade;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }
+
+  .building:nth-child(1) {
+    animation-delay: 0;
+  }
+
+  .building:nth-child(2) {
+    animation-delay: 250ms;
+  }
+
+  .building:nth-child(3) {
+    animation-delay: 500ms;
+  }
+
+  .building:nth-child(4) {
+    animation-delay: 750ms;
+  }
+
+  .building:nth-child(5) {
+    animation-delay: 1s;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
