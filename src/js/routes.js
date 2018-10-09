@@ -1,4 +1,4 @@
-import { $ } from './dom';
+import { $, insertTemplate } from './dom';
 import { bindAddressFormEvents } from './address-form';
 import { getDistrictData } from './districts';
 import ElectionMap from './map';
@@ -8,16 +8,6 @@ import MapTemplate from './templates/district-map.hbs';
 import MainTemplate from './templates/main.hbs';
 import DistrictTemplate from './templates/district-details.hbs';
 
-function insertTemplate(targetElement, templateString, id='') {
-  let wrapper = document.createElement('div');
-  wrapper.id = id;
-  wrapper.innerHTML = templateString;
-  if (targetElement.childNodes.length === 0) {
-    targetElement.appendChild(wrapper);
-  } else {
-    targetElement.replaceChild(wrapper, targetElement.firstChild);
-  }
-}
 
 const IndexRoute = {
   setup() {
@@ -60,7 +50,7 @@ const DistrictRoute = {
   beforeModel() {
     window.scrollTo(0, 0);
   },
-  
+
   model({ districtId }) {
     return getDistrictData(districtId);
   },
