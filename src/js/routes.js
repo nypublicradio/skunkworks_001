@@ -87,7 +87,7 @@ const DistrictRoute = {
       insertTemplate($('.district-details'), DistrictTemplate({
         ...district,
         assetPath: ROOT_PATH,
-        shareUrl: `https://${BASE_URL}${ROOT_PATH}${district.elect_dist}`,
+        shareUrl: `${BASE_URL}${ROOT_PATH}${district.elect_dist}`,
         shareTitle: "Does Your Block Vote?",
         shareText: "Voter turnout varies dramatically from one block to another in New York City. Find out if your neighbors vote -- and how to get them to the polls if they don't."
       }));
