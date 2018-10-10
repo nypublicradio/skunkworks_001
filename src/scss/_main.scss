@@ -7,6 +7,10 @@
   @media only screen and (min-height: 800px) {
     min-height: 100vh;
   }
+
+  &.is-loading {
+    min-height: 100vh;
+  }
 }
 
 main {

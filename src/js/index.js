@@ -31,6 +31,7 @@ router.map(function(match) {
 window.addEventListener('popstate', () => router.handleURL(window.location.pathname));
 
 document.addEventListener('DOMContentLoaded', function () {
+  $('.page').classList.add('is-loading');
   insertTemplate($('main'), LoadingTemplate());
   Promise.all([
     fetch(`${BASE_URL}${ROOT_PATH}data/districts.geojson`).then(r => r.json()),
@@ -47,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     Wherewolf.add('districts', Turnout.geoData.features);
     Turnout.wherewolf = Wherewolf;
 
+    $('.page').classList.remove('is-loading');
     router.handleURL(window.location.pathname);
   });
 });
