@@ -19,7 +19,7 @@ const IndexRoute = {
   setup() {
     // clear old map if it exists
     Turnout.map = null;
-    insertTemplate($('main'), MainTemplate({
+    insertTemplate($('#main-wrapper'), MainTemplate({
       assetPath: ROOT_PATH,
     }), 'index');
     bindAddressFormEvents({
@@ -65,7 +65,7 @@ const DistrictRoute = {
     let emoji = EmojiTemplate({emoji: district.emoji, assetPath: ROOT_PATH});
 
     if (!Turnout.map) {
-      insertTemplate($('main'), MapTemplate({
+      insertTemplate($('#main-wrapper'), MapTemplate({
         ...district,
         emoji,
         ad,

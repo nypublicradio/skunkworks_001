@@ -32,7 +32,7 @@ window.addEventListener('popstate', () => router.handleURL(window.location.pathn
 
 document.addEventListener('DOMContentLoaded', function() {
   $('.page').classList.add('is-loading');
-  insertTemplate($('main'), LoadingTemplate());
+  insertTemplate($('#main-wrapper'), LoadingTemplate());
   Promise.all([
     fetch(`${BASE_URL}${ROOT_PATH}data/districts.geojson`).then(r => r.json()),
     fetch(`${BASE_URL}${ROOT_PATH}data/turnout_by_district.json`).then(r => r.json()),
