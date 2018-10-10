@@ -30,7 +30,7 @@ router.map(function(match) {
 
 window.addEventListener('popstate', () => router.handleURL(window.location.pathname));
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   $('.page').classList.add('is-loading');
   insertTemplate($('main'), LoadingTemplate());
   Promise.all([
