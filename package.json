@@ -7,7 +7,7 @@
   "scripts": {
     "autoprefixer": "postcss -u autoprefixer -r dist/css/*",
     "bundle": "webpack --config webpack.config.js",
-    "scss": "node-sass --output-style compressed -o dist/css src/scss",
+    "scss": "node-sass --functions sass-scripts.js --output-style compressed -o dist/css src/scss",
     "lint": "eslint src/js || true",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:js": "run-s lint bundle",
