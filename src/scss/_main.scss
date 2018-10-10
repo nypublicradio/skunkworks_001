@@ -30,8 +30,16 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 680px;
-  margin: 0 auto;
+  max-width: 670px;
+  margin: 0 12px;
+
+  @media only screen and (min-width: 670px) {
+    margin: 0 auto;
+  }
+
+  .gothamist-logo {
+    margin: 0 12px;
+  }
 }
 
 .gothamist-logo-separator:before, .gothamist-logo-separator:after {
@@ -39,27 +47,46 @@ main {
   content: '';
   flex: 1;
   height: 22px;
-  margin: 0 12px;
 }
 
 .address-form {
-  padding-top: 11px;
+  @media only screen and (min-width: 670px) {
+    max-width: 670px;
+    margin: 0 auto;
+  }
 }
 
 .address-form__heading {
+  color: #333;
   font-family: $font-montserrat;
   font-weight: 600;
   font-size: 28px;
   line-height: 1.29;
-  margin-bottom: 8px;
+  margin: 0 18px 8px;
+
+  @media only screen and (min-width: 800px) {
+    font-size: 45px;
+    line-height: 1.18;
+  }
 }
 .address-form__subheading {
-  margin-bottom: 24px;
+  color: #333;
+  font-size: 14px;
+  margin: 0 36px 24px;
   text-align: center;
+
+  @media only screen and (min-width: 800px) {
+    font-size: 18px;
+    line-height: 1.5;
+    margin: 0 0 24px;
+  }
 }
 .address-form__form {
-  background-color: $lightgray;
-  margin: 32px 16px;
+  background-color: rgb(240, 240, 240);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-bottom: 16px;
   padding: 42px 18px 33px 18px;
 }
 .address-form__label {
@@ -74,16 +101,36 @@ main {
   max-width: 300px;
 }
 
+.address-form__button {
+  cursor: pointer;
+}
+
 .address-form__form--oneline .address-form__input-wrapper {
   @include one-line-form;
   margin-bottom: 12px;
 }
 
+.address-form__form--stacked {
+  @media only screen and (min-width: 670px) {
+    padding: 64px 79px;
+  }
+}
+
+.address-form__form--stacked .address-form__input-wrapper {
+  margin: 0 auto;
+
+  @media only screen and (min-width: 670px) {
+    display: flex;
+    max-width: 512px;
+  }
+}
+
 .address-form__form--stacked .address-form__input {
+  appearance: none;
+
   display: block;
   color: #333;
   width: 100%;
-  appearance: none;
   padding: 12px;
   background: white;
   border: 2px solid #ddd;
@@ -97,6 +144,16 @@ main {
     font-size: 14px;
     font-style: italic;
     color: #333333;
+  }
+
+  @media only screen and (min-width: 670px) {
+    margin: 0;
+
+    &::placeholder {
+      font-size: 18px;
+      opacity: 0.6;
+      line-height: 1.5;
+    }
   }
 }
 
@@ -115,7 +172,9 @@ main {
   background-color: black;
   padding: 12px;
 
-  margin-bottom: 12px;
+  @media only screen and (min-width: 670px) {
+    flex-basis: 153px;
+  }
 }
 
 .address-form__errors {
@@ -493,11 +552,24 @@ h1.district-map-title {
 }
 
 .election-hub-callout {
-  @include wrapper;
+  width: 300px;
+  margin: 0 auto 24px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media only screen and (min-width: 670px) {
+    width: 90%;
+  }
+
+   > p {
+     margin: 0;
+   }
+
+   a {
+     color: #1e66de;
+   }
 }
 
 .election-hub-callout__question-mark {
@@ -505,6 +577,12 @@ h1.district-map-title {
   font-size: 24px;
   font-weight: 600;
   margin-right: 10px;
+  flex-basis: 45px;
+  text-align: center;
+
+  @media only screen and (min-width: 670px) {
+    font-size: 36px;
+  }
 }
 
 .separator {
@@ -512,7 +590,7 @@ h1.district-map-title {
 
   background-image: linear-gradient(to bottom,black,black 2px,transparent 2px,transparent 10px,black 10px,black 12px,transparent 12px,transparent 20px,black 20px,black 22px);
   height: 22px;
-  margin: 40px auto;
+  margin: 40px auto 24px;
 }
 
 i.fab, i.fas {
@@ -520,7 +598,7 @@ i.fab, i.fas {
 }
 
 .loading-icon {
-  max-width: 175px;
+  max-width: 75px;
   margin: auto;
 }
 
