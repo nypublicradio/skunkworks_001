@@ -26,8 +26,20 @@
 
 main {
   flex-basis: 100%;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.main-wrapper {
   max-width: 800px;
   margin: auto;
+}
+
+.index {
+  background-image: url(imagePath("i/city-map.png"));
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .city-map {
@@ -94,9 +106,6 @@ main {
 }
 .address-form__form {
   background-color: rgb(240, 240, 240);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
   margin-bottom: 16px;
   padding: 42px 18px 33px 18px;
 }
@@ -564,7 +573,7 @@ h1.district-map-title {
 
 .election-hub-callout {
   width: 300px;
-  margin: 0 auto 24px;
+  margin: 0 auto;
 
   display: flex;
   justify-content: center;
