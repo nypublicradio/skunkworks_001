@@ -55,6 +55,7 @@ module.exports = {
       rootPath: ROOT_PATH,
       isScreenshotting: process.env.IS_SCREENSHOTTING,
       GA_TRACKING_ID: process.env.GA_TRACKING_ID,
+      GA_PROJECT_ID: process.env.GA_PROJECT_ID,
     }),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['css/style.css', 'data/neighb_coords.js'],

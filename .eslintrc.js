@@ -22,6 +22,7 @@ module.exports = {
     "Turnout": true,
     "gtag": true,
     "GA_TRACKING_ID": true,
+    "GA_PROJECT_ID": true,
     "BASE_URL": true,
     "ROOT_PATH": true,
     "IS_SCREENSHOTTING": true,
