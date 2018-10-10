@@ -15,7 +15,7 @@ const IndexRoute = {
     Turnout.map = null;
     insertTemplate($('main'), MainTemplate({
       assetPath: ROOT_PATH,
-    }));
+    }), 'index');
     bindAddressFormEvents({
       form: '.address-form__form',
       errors: '.address-form__errors',
@@ -59,7 +59,7 @@ const DistrictRoute = {
         ad,
         ed,
         assetPath: ROOT_PATH,
-      }));
+      }), 'district-map');
 
       Turnout.map = new ElectionMap({selector: '#map'});
       Turnout.map.init()

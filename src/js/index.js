@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     Wherewolf.add('districts', Turnout.geoData.features);
     Turnout.wherewolf = Wherewolf;
 
-    $('.page').classList.remove('is-loading');
-    router.handleURL(window.location.pathname);
+    router.handleURL(window.location.pathname)
+      .then(() => setTimeout(() => $('.page').classList.remove('is-loading'), 0));
   });
 });

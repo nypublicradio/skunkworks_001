@@ -10,7 +10,18 @@
 
   &.is-loading {
     min-height: 100vh;
+
+    #index,
+    #district-map {
+      opacity: 0;
+    }
   }
+}
+
+#index,
+#district-map {
+  opacity: 1;
+  transition: opacity 500ms ease;
 }
 
 main {
