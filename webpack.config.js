@@ -45,6 +45,7 @@ module.exports = {
       IS_SCREENSHOTTING: process.env.IS_SCREENSHOTTING ? true : false,
       GA_TRACKING_ID: JSON.stringify(process.env.GA_TRACKING_ID),
       SIGNUP_ENDPOINT: JSON.stringify(process.env.SIGNUP_ENDPOINT),
+      GA_PROJECT_ID: JSON.stringify(process.env.GA_PROJECT_ID),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/static/index.html'),
@@ -55,7 +56,6 @@ module.exports = {
       rootPath: ROOT_PATH,
       isScreenshotting: process.env.IS_SCREENSHOTTING,
       GA_TRACKING_ID: process.env.GA_TRACKING_ID,
-      GA_PROJECT_ID: process.env.GA_PROJECT_ID,
     }),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['css/style.css', 'data/neighb_coords.js'],
