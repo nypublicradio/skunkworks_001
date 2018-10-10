@@ -38,6 +38,7 @@ const IndexRoute = {
 
     gtag('config', GA_TRACKING_ID, {
       page_title: 'Does Your Block Vote?',
+      dimension1: GA_PROJECT_ID,
     });
   },
 };
@@ -85,6 +86,7 @@ const DistrictRoute = {
 
     gtag('config', GA_TRACKING_ID, {
       page_title: `District ${district.elect_dist}`,
+      dimension1: GA_PROJECT_ID,
     });
   },
 
