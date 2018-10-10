@@ -10,6 +10,12 @@ import DistrictTemplate from './templates/district-details.hbs';
 
 
 const IndexRoute = {
+  enter() {
+    $('main').classList.add('index');
+  },
+  exit() {
+    $('main').classList.remove('index');
+  },
   setup() {
     // clear old map if it exists
     Turnout.map = null;
@@ -35,6 +41,12 @@ const IndexRoute = {
 };
 
 const DistrictRoute = {
+  enter() {
+    $('main').classList.add('district');
+  },
+  exit() {
+    $('main').classList.remove('district');
+  },
   serialize(district) {
     return { districtId: district.elect_dist };
   },
