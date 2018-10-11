@@ -86,6 +86,7 @@ class ElectionMap {
 
   // When clicked, zoom in
   clicked() {
+    d3.event.preventDefault();
     let el = d3.event.target;
     if (!el) {
       return;
