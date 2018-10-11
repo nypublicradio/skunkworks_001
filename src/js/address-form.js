@@ -107,9 +107,9 @@ export function bindAddressFormEvents(options) {
         if (!district.error) {
           Turnout.router.transitionTo('district', district);
         } else {
-          let { error } = district;
-          if (error.error === 'no data') {
-            $(errors).textContent = error.message;
+          let { error, message } = district;
+          if (error === 'no data') {
+            $(errors).textContent = message;
           }
         }
         $(form).classList.remove('loading');

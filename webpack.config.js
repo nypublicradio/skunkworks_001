@@ -13,6 +13,7 @@ const BASE_URL = process.env.BASE_URL || '';
 module.exports = {
   mode: process.env.ENV ? 'production' : 'development', // ENV is set in circle
   entry: ['@babel/polyfill', './src/js/index.js'],
+  devtool: 'eval-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
