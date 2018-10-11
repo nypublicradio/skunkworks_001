@@ -32,6 +32,10 @@ main {
   flex: 1;
   padding-top: 24px;
   padding-bottom: 24px;
+
+  &.district {
+    padding-bottom: 48px;
+  }
 }
 
 .main-wrapper {
@@ -129,6 +133,10 @@ main {
   background-color: rgb(240, 240, 240);
   margin: 0 16px;
   padding: 42px 18px 33px 18px;
+
+  &--oneline {
+    margin: 0 0 24px;
+  }
 }
 .address-form__label {
   margin-bottom: 8px;
@@ -154,6 +162,7 @@ main {
 .address-form__form--stacked {
   @media only screen and (min-width: 670px) {
     padding: 64px 79px;
+    margin: 0;
   }
 }
 
@@ -421,14 +430,23 @@ h1.district-map-title {
   }
 }
 
-.district-ranking__text {
-  @include wrapper;
+.district-results {
+  margin: 0 16px;
+  max-width: 680px;
+
+  @media only screen and (min-width: 670px) {
+    margin: 0 auto;
+  }
+
+  a {
+    color: #1e66de;
+  }
 }
 
 .extra-credit {
   background: #f7f7f7;
   padding: 24px 16px;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 
   @media screen and (min-width: 800px) {
     display: flex;
@@ -443,6 +461,10 @@ h1.district-map-title {
 
   .address-form__input-wrapper {
     max-width: none;
+  }
+
+  a {
+    color: #1e66de;
   }
 }
 
@@ -487,17 +509,28 @@ h1.district-map-title {
   margin-top: -5px;
 }
 
+.email-updates {
+  padding: 0 15px;
+}
+
 .email-updates__heading {
-  margin: 0 16px 16px;
+  margin: 0 0 16px;
 }
 
 .email-updates__description {
-  @include wrapper;
+  text-align: center;
+  font-size: 14px;
+
+  @media only screen and (min-width: 670px) {
+    text-align: left;
+    line-height: 1.57;
+    padding-right: 16px;
+  }
 }
 
 
 .email-form__input-wrapper {
-  margin: 0 16px 16px;
+  margin-bottom: 16px;
   @include one-line-form;
 }
 
@@ -507,13 +540,17 @@ h1.district-map-title {
 }
 
 .email-form__optin {
-  margin: 20px;
   display: flex;
 }
 
 .email-form__optin-message {
-  @include wrapper;
   margin: 0;
+  font-size: 12px;
+  line-height: 1.33;
+
+  a {
+    color: #1e66de;
+  }
 }
 
 @supports (display: grid) {
@@ -576,13 +613,26 @@ h1.district-map-title {
 
   color: rgba(0, 0, 0, 0.6);
   background: $lightgray;
-  padding: 16px;
+  padding: 50px 16px 75px;
   font-size: 12px;
   line-height: 1.67;
   text-align: center;
 
   a {
     color: inherit;
+  }
+}
+
+.footer__disclaimer {
+  display: none;
+
+  font-size: 14px;
+  font-style: oblique;
+  max-width: 670px;
+  margin: 0 auto 14px;
+
+  .district + .footer & {
+    display: block;
   }
 }
 
@@ -602,7 +652,11 @@ h1.district-map-title {
   align-items: center;
 
   @media only screen and (min-width: 670px) {
-    width: 90%;
+    width: 100%;
+
+    .district & {
+      font-size: 14px;
+    }
   }
 
    > p {
@@ -628,11 +682,22 @@ h1.district-map-title {
 }
 
 .separator {
-  @include wrapper;
-
   background-image: linear-gradient(to bottom,black,black 2px,transparent 2px,transparent 10px,black 10px,black 12px,transparent 12px,transparent 20px,black 20px,black 22px);
   height: 22px;
-  margin: 40px auto 24px;
+  margin: 40px 16px 24px;
+
+  @media only screen and (min-width: 670px) {
+    margin-left: 0;
+    margin-right: 0;
+
+    .district & {
+      margin-bottom: 40px;
+    }
+  }
+
+  .district & {
+    margin-top: 24px;
+  }
 }
 
 i.fab, i.fas {
