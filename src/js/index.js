@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
       let district = districts[key];
       district.emoji = district.grade && district.grade.toLowerCase() || '';
       district.borough_data_2014 = districts["overall_data"]["by_borough_2014"][district.borough];
-      district.max_rank_2016 = districts["overall_data"]["max_rank_2016"]
+      district.max_rank_2016 = districts["overall_data"]["max_rank_2016"];
     });
     Turnout.geoData = geoData;
     Turnout.districts = districts;

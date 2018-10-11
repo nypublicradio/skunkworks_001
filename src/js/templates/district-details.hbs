@@ -32,10 +32,12 @@
       {{borough_data_2014.max_rank}} in {{borough}}, where an average of
       {{borough_data_2014.avg_percent}}% registered voters turned out.
     </p>
-    <p class="district-ranking__text">Comparatively, your district ranked
-      {{2016_rank}} out of {{max_rank_2016}} in the 2016 presidential
-      election, with {{2016_percent}}% of registered voters casting ballots.
-    </p>
+    {{#if (is-not-equal 2016_rank "N/A")}}
+      <p class="district-ranking__text">Comparatively, your district ranked
+        {{2016_rank}} out of {{max_rank_2016}} in the 2016 presidential
+        election, with {{2016_percent}}% of registered voters casting ballots.
+      </p>
+    {{/if}}
 
     <p class="district-ranking__text">To learn about 2018 Primary turnout, see our coverage <a href="http://gothamist.com/2018/09/14/ny_voter_turnout_primary.php" target="_blank">here</a>.</p>
   </div>
