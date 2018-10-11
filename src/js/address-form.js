@@ -100,6 +100,7 @@ export function bindAddressFormEvents(options) {
     }
 
     if (addressField) {
+      $(form).querySelector('button').setAttribute('disabled', true);
       let address = $(addressField.selector).value;
       lookupAddress(address, geocoder).then(result => {
         let district = getDistrict(result.lat, result.lng);
@@ -133,7 +134,8 @@ export function bindAddressFormEvents(options) {
           $(errors).textContent = `Something unexpected occurred. Got status: ${error.error}`;
         }
         $(form).classList.remove('loading');
-      });
+      })
+      .finally(() => $(form).querySelector('button').removeAttribute('disabled'));
     }
     return false;
   });

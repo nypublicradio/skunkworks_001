@@ -152,6 +152,16 @@ main {
 
 .address-form__button {
   cursor: pointer;
+  transition: opacity 125ms ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+
+  &[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 .address-form__form--oneline .address-form__input-wrapper {
@@ -183,7 +193,7 @@ main {
   width: 100%;
   padding: 12px;
   background: white;
-  border: 2px solid #ddd;
+  border: none;
   border-radius: 0;
   font-size: 14px;
   line-height: 1.5;
@@ -629,10 +639,15 @@ h1.district-map-title {
   font-size: 14px;
   font-style: oblique;
   max-width: 670px;
-  margin: 0 auto 14px;
+  margin: 0 auto 8px;
+  line-height: 24px;
 
   .district + .footer & {
     display: block;
+  }
+
+  &:last-of-type {
+    margin-bottom: 32px;
   }
 }
 
