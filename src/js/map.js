@@ -40,11 +40,7 @@ class ElectionMap {
         .attr('width', width)
         .attr('height', height);
 
-      if ('ontouchend' in window) {
-        svg.on('touchend', this.clicked);
-      } else {
-        svg.on('click', this.clicked);
-      }
+      svg.on('click', this.clicked);
 
 
       var g = this.g = svg.append('g');
