@@ -2,7 +2,7 @@
 
 .page {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 
   @media only screen and (min-height: 800px) {
     min-height: 100vh;
@@ -25,12 +25,17 @@
 }
 
 main {
-  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 1;
   padding-top: 24px;
   padding-bottom: 24px;
 }
 
 .main-wrapper {
+  position: relative;
   max-width: 800px;
   margin: auto;
 }
@@ -40,6 +45,19 @@ main {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(white, 0.6);
+    z-index: 0;
+  }
 }
 
 .city-map {
@@ -85,17 +103,20 @@ main {
   font-weight: 600;
   font-size: 28px;
   line-height: 1.29;
-  margin: 0 18px 8px;
+  margin: 0 18px 16px;
 
   @media only screen and (min-width: 800px) {
     font-size: 45px;
     line-height: 1.18;
   }
 }
+
 .address-form__subheading {
+  background-color: white;
   color: #333;
   font-size: 14px;
   margin: 0 36px 24px;
+  padding: 5px;
   text-align: center;
 
   @media only screen and (min-width: 800px) {
@@ -106,7 +127,7 @@ main {
 }
 .address-form__form {
   background-color: rgb(240, 240, 240);
-  margin-bottom: 16px;
+  margin: 0 16px;
   padding: 42px 18px 33px 18px;
 }
 .address-form__label {
@@ -157,10 +178,9 @@ main {
   border-radius: 0;
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 
   &::placeholder {
-    opacity: 0.2;
     font-size: 14px;
     font-style: italic;
     color: #333333;
@@ -560,7 +580,6 @@ h1.district-map-title {
   font-size: 12px;
   line-height: 1.67;
   text-align: center;
-  margin-top: auto;
 
   a {
     color: inherit;
@@ -572,6 +591,9 @@ h1.district-map-title {
 }
 
 .election-hub-callout {
+  background-color: white;
+
+  padding: 8px;
   width: 300px;
   margin: 0 auto;
 
