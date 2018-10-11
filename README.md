@@ -139,7 +139,7 @@ In another window:
 ```bash
 $ cd data_build
 $ python3 gen_index_files.py
-$ aws s3 cp ./district_folders_for_s3/ s3://gothamist-project-demo/voter-turnout --recursive --exclude .DS_Store --acl public-read --cache-control max-age=0
+$ aws s3 cp ./district_folders_for_s3/ s3://gothamist-project-demo/voter-turnout --recursive --exclude .DS_Store --acl public-read --cache-control max-age=0 --content-type text/html
 ```
 
 ### For Prod:
@@ -158,7 +158,7 @@ In another window:<br/>
 ```bash
 $ cd data_build
 $ python3 gen_index_files.py
-$ aws s3 cp ./district_folders_for_s3/ s3://gothamist-project-prod/voter-turnout --recursive --exclude .DS_Store --acl public-read --cache-control max-age=0
+$ aws s3 cp ./district_folders_for_s3/ s3://gothamist-project-prod/voter-turnout --recursive --exclude .DS_Store --acl public-read --cache-control max-age=0 --content-type text/html
 ```
 
 ## Drawing the map
