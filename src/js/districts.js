@@ -19,7 +19,7 @@ export function getDistrict(lat, lng) {
 export function getDistrictData(electDist) {
   let district = Turnout.districts[electDist];
   if (!district) {
-    return {error: 'no data', message: `Not enough data for district ${electDist}`};
+    return {error: 'no data', message: `Sorry, there are not enough registered voters in your district to calculate a statistical rating. Try another NYC address.`};
   } else {
     return district;
   }
