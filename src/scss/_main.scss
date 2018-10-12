@@ -643,9 +643,16 @@ h1.district-map-title {
   .district + .footer & {
     display: block;
   }
+}
 
-  &:last-of-type {
-    margin-bottom: 32px;
+ul.footer__disclaimer {
+  font-style: normal;
+  padding: 0;
+  list-style: none;
+  margin-bottom: 32px;
+
+  li {
+    font-size: 14px;
   }
 }
 
