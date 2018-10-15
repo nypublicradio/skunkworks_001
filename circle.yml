@@ -98,7 +98,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+/
-      - deploy-demo:
+      - deploy-prod:
           requires:
             - build-static
           filters:
