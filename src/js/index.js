@@ -52,4 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
     router.handleURL(window.location.pathname)
       .then(() => setTimeout(() => $('.page').classList.remove('is-loading'), 0));
   });
+
+  // Removes target="_blank" from submit forms to allow for iOS form submission
+  // with blue "Go" button
+  document.addEventListener('submit', function(e) {
+    if(navigator.userAgent.match(/(iPod|iPhone|iPad)/i)) {
+      e.target.setAttribute('target','');
+    }
+  });
 });
