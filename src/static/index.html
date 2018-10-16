@@ -14,10 +14,11 @@
     gtag('config', '<%= htmlWebpackPlugin.options.GA_TRACKING_ID %>', {send_page_view: false});
   </script>
 
+  <link rel="icon" href="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>favicon.ico" />
+
   <% if (htmlWebpackPlugin.options.deploy) { %>
   <link rel="canonical" href="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>" />
   <% } else { %>
-  <link rel="icon" href="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>favicon.ico" />
   <link rel="canonical" href="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}" />
   <% } %>
 
