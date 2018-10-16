@@ -92,6 +92,7 @@ const DistrictRoute = {
     transition.then(() => {
       gtag('config', GA_TRACKING_ID, {
         page_title: `District ${model.elect_dist}`,
+        page_location: `${BASE_URL}${ROOT_PATH}${model.elect_dist}`,
         dimension1: GA_PROJECT_ID,
       });
     });
