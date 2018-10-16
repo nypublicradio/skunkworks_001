@@ -257,6 +257,16 @@ main {
 .address-form__multiples p {
   margin-bottom: 12px;
 }
+.address-form__multiples .no-results {
+  font-size: 14px;
+  line-height: 18px;
+
+  span {
+   display: block;
+   color: $red;
+  }
+}
+
 .address-form__multiples a {
   color: $blue;
   font-size: 14px;

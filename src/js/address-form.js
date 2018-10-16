@@ -121,10 +121,22 @@ export function bindAddressFormEvents(options) {
           $(multiples).appendChild(question);
           error.results.forEach(result => {
             let district = getDistrict(result.geometry.location.lat(), result.geometry.location.lng());
-            let link = document.createElement('a');
-            link.textContent = result.formatted_address;
-            link.href = `${ROOT_PATH}${district.elect_dist}`;
-            $(multiples).appendChild(link);
+            if (district.error) {
+              let p = document.createElement('p');
+              let message = document.createElement('span');
+
+              message.innerText = 'Thre are not enough registered voters in this district';
+              p.innerText = result.formatted_address;
+
+              p.classList.add('no-results');
+              p.appendChild(message);
+              $(multiples).append(p);
+            } else {
+              let link = document.createElement('a');
+              link.textContent = result.formatted_address;
+              link.href = `${ROOT_PATH}${district.elect_dist}`;
+              $(multiples).appendChild(link);
+            }
           });
         } else if (error.error === 'out of bounds') {
           $(errors).textContent = 'Please enter a valid NYC address';
