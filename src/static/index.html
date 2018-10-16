@@ -14,6 +14,13 @@
     gtag('config', '<%= htmlWebpackPlugin.options.GA_TRACKING_ID %>', {send_page_view: false});
   </script>
 
+  <% if (htmlWebpackPlugin.options.deploy) { %>
+  <link rel="canonical" href="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>" />
+  <% } else { %>
+  <link rel="icon" href="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>favicon.ico" />
+  <link rel="canonical" href="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}" />
+  <% } %>
+
   <% for (var css in htmlWebpackPlugin.files.css) { %>
   <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet" type="text/css">
   <% } %>
@@ -31,7 +38,7 @@
   <% if (htmlWebpackPlugin.options.deploy) { %>
   <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>" />
   <% } else { %>
-  <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}/" />
+  <meta property="og:url"           content="<%= htmlWebpackPlugin.options.baseURL %><%= htmlWebpackPlugin.options.rootPath %>{{id}}" />
   <% } %>
   <meta property="og:title"         content="Does Your Block Vote? | Gothamist + WNYC" />
   <% if (htmlWebpackPlugin.options.deploy) { %>
