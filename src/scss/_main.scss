@@ -1,5 +1,9 @@
 @import 'mixins';
 
+.gtm__click-tracking > * {
+  pointer-events: none;
+}
+
 .page {
   display: flex;
   flex-direction: column;
