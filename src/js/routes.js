@@ -33,10 +33,8 @@ const IndexRoute = {
       }]
     });
 
-    gtag('config', GA_TRACKING_ID, {
-      page_title: 'Does Your Block Vote?',
-      dimension1: GA_PROJECT_ID,
-    });
+    document.title = 'Does Your Block Vote?';
+    window.dataLayer.push({event: 'pageview'});
   },
 };
 
@@ -90,11 +88,8 @@ const DistrictRoute = {
 
   afterModel(model, transition) {
     transition.then(() => {
-      gtag('config', GA_TRACKING_ID, {
-        page_title: `District ${model.elect_dist}`,
-        page_location: `${BASE_URL}${ROOT_PATH}${model.elect_dist}`,
-        dimension1: GA_PROJECT_ID,
-      });
+      document.title = `District ${model.elect_dist}`;
+      window.dataLayer.push({event: 'pageview'});
     });
   },
 
