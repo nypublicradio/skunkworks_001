@@ -86,10 +86,14 @@ const DistrictRoute = {
     }
 
     this.loadDistrictDetails(district.elect_dist);
+  },
 
-    gtag('config', GA_TRACKING_ID, {
-      page_title: `District ${district.elect_dist}`,
-      dimension1: GA_PROJECT_ID,
+  afterModel(model, transition) {
+    transition.then(() => {
+      gtag('config', GA_TRACKING_ID, {
+        page_title: `District ${model.elect_dist}`,
+        dimension1: GA_PROJECT_ID,
+      });
     });
   },
 
