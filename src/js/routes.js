@@ -35,6 +35,13 @@ const IndexRoute = {
         selector: '#address-form__email-input',
         message: 'Please enter an email.',
         validation: () => true
+      }, {
+        name: 'legal',
+        selector: '#legal',
+        message: 'Please confirm you agree to the terms.',
+        validation: (el) => {
+          return el.checked;
+        }
       }]
     });
 
