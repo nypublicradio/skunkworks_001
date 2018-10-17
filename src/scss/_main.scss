@@ -184,7 +184,6 @@ main {
   margin: 0 auto;
 
   @media only screen and (min-width: 670px) {
-    display: flex;
     max-width: 512px;
   }
 }
@@ -239,6 +238,16 @@ main {
   @media only screen and (min-width: 670px) {
     flex-basis: 153px;
   }
+}
+
+#address-form__address-input, #address-form__email-input, #address-form__button {
+  margin-bottom: 10px;
+}
+
+#address-form__button, .checkbox-wrapper {
+  max-width: 325px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .address-form__errors {

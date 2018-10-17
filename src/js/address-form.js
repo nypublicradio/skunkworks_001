@@ -96,7 +96,9 @@ export function bindAddressFormEvents(options) {
 
     if (emailField) {
       let email = $(emailField.selector).value;
-      fetch(SIGNUP_ENDPOINT, {method: 'POST', body: JSON.stringify({email, timestamp: new Date()})});
+      if (email) {
+        fetch(SIGNUP_ENDPOINT, {method: 'POST', body: JSON.stringify({email, timestamp: new Date()})});
+      }
     }
 
     if (addressField) {

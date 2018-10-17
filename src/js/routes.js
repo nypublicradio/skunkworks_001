@@ -30,6 +30,11 @@ const IndexRoute = {
         name: 'address',
         selector: '#address-form__address-input',
         message: 'Please enter an address.',
+      }, {
+        name: 'email',
+        selector: '#address-form__email-input',
+        message: 'Please enter an email.',
+        validation: () => true
       }]
     });
 
