@@ -5,9 +5,10 @@ const DEFAULT_OPTIONS = {
 class ElectionMap {
   constructor(options = {}) {
     options = {...DEFAULT_OPTIONS, ...options};
+    let node = document.querySelector(options.selector);
     this.features = [];
-    this.width = document.querySelector(options.selector).clientWidth;
-    this.height = 360;
+    this.width = node ? node.getBoundingClientRect().width : 600;
+    this.height = node ? node.getBoundingClientRect().height : 360;
     this.centered = null;
     this.path = null;
     this.mapLayer = null;
