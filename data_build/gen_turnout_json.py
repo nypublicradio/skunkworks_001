@@ -163,14 +163,47 @@ def add_grades(turnout_df):
     # It's important that ratio is sorted in descending order (done directly above) to assign grades
     # compute grades based on a curve
     scale = len(turnout_df)
+
+    # curved_grading_system = {
+    #     'A+': round(.05*scale),
+    #     'A': round(.15*scale) - round(.05*scale),
+    #     'B': round(.35*scale) - round(.15*scale),
+    #     'C': round(.55*scale) - round(.35*scale),
+    #     'D': round(.75*scale) - round(.55*scale),
+    #     'F': round(.90*scale) - round(.75*scale),
+    #     'F-': scale - round(.90*scale),
+    # }
+    # Note: The original grading system was generated on a curve using the code above.
+    # To make the grading system consistent between multiple years, we'll hardcode the scale from 2014
+    # When we run for 2018 midterms for example, we'll want districts that show improvement
+    # since 2014 to receive higher grades than they did in 2014
+    # (using the same scale guarantees this desired behavior)
+
+    # 2014 grading system by percent
+    # A+ : 37.2 - 71.6%
+    # A: 31.6  - 37.1%
+    # B: 25.5 - 31.5%
+    # C: 21.2 - 25.5%
+    # D: 17.3 - 21.2%
+    # F: 14.2- 17.3%
+    # F-: .9 - 14.2%
+    grade_distribution = {
+        'num_A+': len(turnout_df[turnout_df.percent>=37.2]),
+        'num_A_and_up': len(turnout_df[turnout_df.percent>=31.6]),
+        'num_B_and_up': len(turnout_df[turnout_df.percent>=25.5]),
+        'num_C_and_up': len(turnout_df[turnout_df.percent>=21.2]),
+        'num_D_and_up': len(turnout_df[turnout_df.percent>=17.3]),
+        'num_F_and_up': len(turnout_df[turnout_df.percent>=14.2]),
+        'num_F-': len(turnout_df[turnout_df.percent<14.2])
+    }
     curved_grading_system = {
-        'A+': round(.05*scale),
-        'A': round(.15*scale) - round(.05*scale),
-        'B': round(.35*scale) - round(.15*scale),
-        'C': round(.55*scale) - round(.35*scale),
-        'D': round(.75*scale) - round(.55*scale),
-        'F': round(.90*scale) - round(.75*scale),
-        'F-': scale - round(.90*scale),
+        'A+': grade_distribution['num_A+'],
+        'A': grade_distribution['num_A_and_up'] - grade_distribution['num_A+'],
+        'B': grade_distribution['num_B_and_up'] - grade_distribution['num_A_and_up'],
+        'C': grade_distribution['num_C_and_up'] - grade_distribution['num_B_and_up'],
+        'D': grade_distribution['num_D_and_up'] - grade_distribution['num_C_and_up'],
+        'F': grade_distribution['num_F_and_up'] - grade_distribution['num_D_and_up'],
+        'F-': grade_distribution['num_F-']
     }
     # dark blue - pale yellow : color scheme
     # from http://colorbrewer2.org/?type=sequential&scheme=YlGnBu&n=3#type=sequential&scheme=YlGnBu&n=7
